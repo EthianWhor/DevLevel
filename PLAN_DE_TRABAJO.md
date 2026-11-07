@@ -158,7 +158,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 - [ ] Desplegar el backend en Render y anotar la URL pública en el README — Hecho por: ______ · Commit: ______
 
 **Tatiana**
-- [ ] Leer este plan y marcar esta casilla como aceptado, con un commit propio — Hecho por: ______ · Commit: ______
+- [x] Leer este plan y marcar esta casilla como aceptado, con un commit propio — Hecho por: Tatiana Mayorga· Commit: ______
 - [ ] Crear la app en `movil/` (Expo SDK 57 + TypeScript + expo-router) y configurar EAS (`eas.json` con perfiles `development` y `preview`) — Hecho por: ______ · Commit: ______
 - [ ] Crear el tema Retro-Logic en `movil/src/theme/` (colores, tipografías Space Grotesk, Inter y JetBrains Mono, espaciados) — Hecho por: ______ · Commit: ______
 - [ ] Crear los componentes base accesibles: botón principal, tarjeta y barra de progreso segmentada (con `accessibilityRole`, `accessibilityLabel` y área táctil ≥ 48 dp) — Hecho por: ______ · Commit: ______
