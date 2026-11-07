@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevLevel - Challenge</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#006a70",
+                      "on-tertiary-fixed": "#002022",
+                      "on-secondary-container": "#003e1c",
+                      "surface-container-high": "#2e2a1e",
+                      "inverse-on-surface": "#343024",
+                      "surface-container": "#231f14",
+                      "primary-fixed": "#ffe16d",
+                      "on-secondary-fixed-variant": "#005227",
+                      "tertiary-fixed": "#79f5ff",
+                      "surface-bright": "#3d392c",
+                      "secondary-fixed": "#6dfe9c",
+                      "on-primary-fixed": "#221b00",
+                      "on-surface": "#eae2cf",
+                      "on-error": "#690005",
+                      "secondary-container": "#00b55d",
+                      "tertiary-fixed-dim": "#00dbe8",
+                      "surface-container-lowest": "#110e05",
+                      "level-up-gold": "#FACC15",
+                      "surface-container-low": "#1f1b10",
+                      "outline-variant": "#4d4732",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-container": "#705e00",
+                      "on-tertiary": "#00363a",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "border-pixel": "#1E293B",
+                      "surface-variant": "#393528",
+                      "primary": "#fff6df",
+                      "surface": "#161308",
+                      "error-container": "#93000a",
+                      "health-red": "#EF4444",
+                      "on-primary-fixed-variant": "#544600",
+                      "mana-blue": "#3B82F6",
+                      "tertiary": "#defcff",
+                      "error": "#ffb4ab",
+                      "on-secondary": "#003919",
+                      "surface-tint": "#e9c400",
+                      "on-secondary-fixed": "#00210c",
+                      "tertiary-container": "#00f1ff",
+                      "surface-dim": "#161308",
+                      "primary-container": "#ffd700",
+                      "inverse-primary": "#705d00",
+                      "inverse-surface": "#eae2cf",
+                      "surface-container-highest": "#393528",
+                      "on-background": "#eae2cf",
+                      "outline": "#999077",
+                      "on-surface-variant": "#d0c6ab",
+                      "background": "#161308",
+                      "village-light": "#F8FAFC",
+                      "secondary": "#4de082",
+                      "xp-green": "#22C55E",
+                      "secondary-fixed-dim": "#4de082",
+                      "on-primary": "#3a3000",
+                      "dungeon-black": "#0F172A",
+                      "primary-fixed-dim": "#e9c400"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "40px",
+                      "margin-mobile": "20px",
+                      "pixel-unit": "4px",
+                      "gutter": "16px",
+                      "container-padding": "12px"
+              },
+              "fontFamily": {
+                      "label-pixel": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-lg-mobile": [
+                              "Space Grotesk"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Space Grotesk"
+                      ],
+                      "headline-md": [
+                              "Space Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "label-pixel": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .bevel-container {
+            border: 2px solid theme('colors.border-pixel');
+        }
+        .bevel-button {
+            border: 2px solid theme('colors.border-pixel');
+            border-bottom-width: 4px;
+            transition: transform 0.1s, border-bottom-width 0.1s;
+        }
+        .bevel-button:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+            margin-bottom: 2px;
+        }
+        .command-console {
+            background-color: theme('colors.surface-container-lowest');
+            color: theme('colors.secondary');
+        }
+        .blinking-cursor::after {
+            content: '_';
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- TopAppBar Component (from JSON) -->
+<header class="w-full top-0 sticky z-40 border-b-4 border-border-pixel bg-surface-container-low text-primary flex items-center justify-between px-margin-mobile h-20 w-full max-w-screen-xl mx-auto md:px-margin-desktop">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-border-pixel">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="A pixel-art style avatar of a fantasy hero, vibrant colors, clear lines, 8-bit retro gaming aesthetic, small profile picture format." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSldAY-pwHVy0g1IVKXXXVEdfs3Ll3XM6WIQDau_gMLmXh67w-aiM5AxMOWZXjGTgIl8f-Uqt2wn0HvxcoW_Nex2jZkDatljTwc-JBYc6RqW-vvU3Bom8AnvntF8ouaRmumuO50FzSqJnDqUsZFRT0jW1CWOF6zaVkmEuLfieRV9gK8yZJeBGSXV2u-FkgUD7rETjwrBLgbeTnmbT0zbMqgZ74QJUj2ZMnmcWT9Sys9DKCz-xIO9wgPw"/>
+</div>
+<h1 class="font-headline-md text-headline-md md:font-headline-lg md:text-headline-lg font-bold tracking-tight">DevLevel</h1>
+</div>
+<div class="flex items-center">
+<span class="font-label-pixel text-label-pixel text-level-up-gold mr-4 hidden md:block">Lvl 5</span>
+<button aria-label="Energy" class="w-10 h-10 flex items-center justify-center rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-level-up-gold" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+</div>
+</header>
+<!-- Main Challenge Layout -->
+<main class="flex-1 flex flex-col md:flex-row w-full max-w-screen-xl mx-auto p-margin-mobile md:p-margin-desktop gap-gutter md:h-[calc(100vh-80px)] pb-24 md:pb-margin-desktop">
+<!-- Left/Top Section: Visual Scene (Combat/Puzzle) -->
+<section class="w-full md:w-1/2 flex flex-col gap-4 h-64 md:h-full shrink-0">
+<div class="flex justify-between items-center bg-surface-container-high p-2 rounded-t-lg border-b-2 border-border-pixel">
+<h2 class="font-label-pixel text-label-pixel text-on-surface">Dungeon: El Laberinto de Goblins</h2>
+<span class="font-label-pixel text-label-pixel text-xp-green">100 XP</span>
+</div>
+<div class="flex-1 bg-dungeon-black bevel-container rounded relative overflow-hidden flex items-center justify-center">
+<!-- Visual Scene Placeholder - representing the maze -->
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-80" data-alt="A detailed 8-bit style top-down view of a dungeon maze. Pixel art stone walls, dark corners, a small glowing hero character facing a blocked path with a goblin obstacle. Vibrant retro gaming aesthetic, high contrast between the dark dungeon and bright characters." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDT53iQ0ELEinPbAJaJsJ7CWhVzSfKOk_2qLUK4j1T6u0h2C2JUwrdLM0zpuFxuPIWFwjBxd13VmVic_pjaquj1bUDN4qGz7FrjdS4sSjfe4086kxT8jkUsXJsGR6ocB_TR0dBeb_AyGOSL0v3npLxQvMZHH-H5u9sLJrWslE11LdKM0Qo9QHQaoZt1nQSUjGvNkdriCvpJ1m3HmwbkL69ScoSJg_OUxfplB7pz7DVbDpqCeSpXNMuhtQ')"></div>
+<!-- Status Overlay (Retro game style) -->
+<div class="absolute top-4 left-4 flex flex-col gap-2 z-10">
+<div class="flex items-center gap-2 bg-surface-container/80 p-1 rounded border border-border-pixel backdrop-blur-sm">
+<span class="material-symbols-outlined text-health-red text-sm" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<div class="w-24 h-3 bg-surface-lowest border border-border-pixel rounded-sm flex">
+<!-- Segmented health bar -->
+<div class="h-full w-full bg-health-red" style="clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right/Bottom Section: Code Editor -->
+<section class="w-full md:w-1/2 flex flex-col gap-4 flex-1">
+<div class="bg-surface-container bevel-container rounded-lg flex flex-col h-full overflow-hidden">
+<!-- Editor Toolbar -->
+<div class="bg-surface-container-high p-container-padding border-b-2 border-border-pixel flex justify-between items-center">
+<div class="flex gap-2 items-center">
+<span class="material-symbols-outlined text-on-surface-variant">code</span>
+<span class="font-label-pixel text-label-pixel text-on-surface">Hechizo.logica</span>
+</div>
+<button class="p-1 hover:bg-surface-variant rounded text-on-surface-variant transition-colors" title="Reset">
+<span class="material-symbols-outlined text-sm">refresh</span>
+</button>
+</div>
+<!-- Editor Canvas (Logic Blocks/Code) -->
+<div class="flex-1 command-console p-container-padding font-label-pixel text-label-pixel overflow-y-auto space-y-3">
+<!-- Pre-filled uneditable block -->
+<div class="flex items-center gap-2 text-on-surface-variant opacity-75">
+<span class="text-secondary-fixed">Moviendo</span> adelante();
+                    </div>
+<!-- Draggable Logic Block 1 -->
+<div class="bg-surface-container-high border-t-2 border-l-2 border-r-2 border-b-4 border-border-pixel border-b-surface-variant rounded p-3 text-on-surface shadow-sm hover:translate-y-px hover:border-b-2 transition-all cursor-grab active:cursor-grabbing flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed text-lg">drag_indicator</span>
+<div>
+<span class="text-level-up-gold">SI</span> obstáculo <span class="text-level-up-gold">ENTONCES</span>
+</div>
+</div>
+<!-- Draggable Logic Block 2 (Indented) -->
+<div class="ml-6 bg-surface-container-high border-t-2 border-l-2 border-r-2 border-b-4 border-border-pixel border-b-surface-variant rounded p-3 text-on-surface shadow-sm hover:translate-y-px hover:border-b-2 transition-all cursor-grab active:cursor-grabbing flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed text-lg">drag_indicator</span>
+<div>
+                            saltar();
+                        </div>
+</div>
+<!-- Empty drop zone hint -->
+<div class="ml-6 border-2 border-dashed border-outline-variant rounded p-3 text-outline-variant flex items-center justify-center bg-surface-container-lowest/50">
+<span class="blinking-cursor">Arrastra más lógica aquí</span>
+</div>
+</div>
+<!-- Run Button Area -->
+<div class="p-container-padding bg-surface-container-highest border-t-2 border-border-pixel">
+<button class="w-full bg-level-up-gold text-on-primary-fixed bevel-button rounded-lg py-4 font-label-pixel text-label-pixel text-lg flex items-center justify-center gap-2 hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        EJECUTAR HECHIZO
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Component (from JSON) - Only visible on Mobile since this is a sub-page/challenge, we usually hide it based on rules, but keeping it per instruction to show components if needed, though strictly we should hide it. We will hide it on desktop. -->
+<nav class="fixed bottom-0 w-full z-50 h-20 border-t-4 border-border-pixel bg-surface-container text-primary-container flex justify-around items-center px-4 pb-2 md:hidden">
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant transition-colors rounded" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-pixel text-label-pixel mt-1 text-xs">Map</span>
+</a>
+<!-- Active (Spells/Challenges) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg p-2 border-b-4 border-on-primary-fixed-variant translate-y-1 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-pixel text-label-pixel mt-1 text-xs">Spells</span>
+</a>
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant transition-colors rounded" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-pixel text-label-pixel mt-1 text-xs">Hero</span>
+</a>
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant transition-colors rounded" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-pixel text-label-pixel mt-1 text-xs">Config</span>
+</a>
+</nav>
+</body></html>

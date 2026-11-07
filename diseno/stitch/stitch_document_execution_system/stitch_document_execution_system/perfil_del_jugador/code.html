@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevLevel - Player Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@600&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#006a70",
+                      "on-tertiary-fixed": "#002022",
+                      "on-secondary-container": "#003e1c",
+                      "surface-container-high": "#2e2a1e",
+                      "inverse-on-surface": "#343024",
+                      "surface-container": "#231f14",
+                      "primary-fixed": "#ffe16d",
+                      "on-secondary-fixed-variant": "#005227",
+                      "tertiary-fixed": "#79f5ff",
+                      "surface-bright": "#3d392c",
+                      "secondary-fixed": "#6dfe9c",
+                      "on-primary-fixed": "#221b00",
+                      "on-surface": "#eae2cf",
+                      "on-error": "#690005",
+                      "secondary-container": "#00b55d",
+                      "tertiary-fixed-dim": "#00dbe8",
+                      "surface-container-lowest": "#110e05",
+                      "level-up-gold": "#FACC15",
+                      "surface-container-low": "#1f1b10",
+                      "outline-variant": "#4d4732",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-container": "#705e00",
+                      "on-tertiary": "#00363a",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "border-pixel": "#1E293B",
+                      "surface-variant": "#393528",
+                      "primary": "#fff6df",
+                      "surface": "#161308",
+                      "error-container": "#93000a",
+                      "health-red": "#EF4444",
+                      "on-primary-fixed-variant": "#544600",
+                      "mana-blue": "#3B82F6",
+                      "tertiary": "#defcff",
+                      "error": "#ffb4ab",
+                      "on-secondary": "#003919",
+                      "surface-tint": "#e9c400",
+                      "on-secondary-fixed": "#00210c",
+                      "tertiary-container": "#00f1ff",
+                      "surface-dim": "#161308",
+                      "primary-container": "#ffd700",
+                      "inverse-primary": "#705d00",
+                      "inverse-surface": "#eae2cf",
+                      "surface-container-highest": "#393528",
+                      "on-background": "#eae2cf",
+                      "outline": "#999077",
+                      "on-surface-variant": "#d0c6ab",
+                      "background": "#161308",
+                      "village-light": "#F8FAFC",
+                      "secondary": "#4de082",
+                      "xp-green": "#22C55E",
+                      "secondary-fixed-dim": "#4de082",
+                      "on-primary": "#3a3000",
+                      "dungeon-black": "#0F172A",
+                      "primary-fixed-dim": "#e9c400"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "40px",
+                      "margin-mobile": "20px",
+                      "pixel-unit": "4px",
+                      "gutter": "16px",
+                      "container-padding": "12px"
+              },
+              "fontFamily": {
+                      "label-pixel": [
+                              "JetBrains Mono", "monospace"
+                      ],
+                      "headline-lg-mobile": [
+                              "Space Grotesk", "sans-serif"
+                      ],
+                      "body-lg": [
+                              "Inter", "sans-serif"
+                      ],
+                      "body-md": [
+                              "Inter", "sans-serif"
+                      ],
+                      "headline-lg": [
+                              "Space Grotesk", "sans-serif"
+                      ],
+                      "headline-md": [
+                              "Space Grotesk", "sans-serif"
+                      ]
+              },
+              "fontSize": {
+                      "label-pixel": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Brutalist Pixel & Retro RPG utilities */
+        .pixel-border {
+            border: 4px solid #1E293B; /* border-pixel */
+            box-shadow: 4px 4px 0px #0F172A; /* dungeon-black */
+        }
+        .pixel-btn-bevel {
+            border-bottom-width: 4px;
+            border-bottom-color: rgba(0,0,0,0.3);
+        }
+        .pixel-btn-bevel:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+            margin-bottom: 2px;
+        }
+        .xp-bar-segment {
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 8px,
+                rgba(0,0,0,0.3) 8px,
+                rgba(0,0,0,0.3) 12px
+            );
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f1b10; 
+            border-left: 2px solid #1E293B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FACC15; 
+            border: 2px solid #1E293B;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col pb-24 md:pb-0 overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky border-b-4 border-border-pixel bg-surface-container-low z-40 hidden md:block">
+<div class="flex items-center justify-between px-margin-mobile h-20 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-level-up-gold rounded-full border-2 border-border-pixel overflow-hidden flex items-center justify-center">
+<img class="object-cover w-full h-full" data-alt="A small 8-bit retro pixel art avatar of a tech hero wearing a futuristic visor and holding a glowing logic staff. The style is 16-bit RPG character portrait against a dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjo3ceVT0BeYCkcfXs9-wt3Fmjc3p09_uarRdnHoJMUGKYmiE58RM_oU5jBF3x4Mux5QwLAO21fSElil4hnf-O4TJBZbXJZXpjXM1SIv2W3RsEziN-NAbOSD99W_AzBK6J1Fgbgt-R97ZqTMwkb9EwiGqddym6zLhbP-vlmHu9pVwxHpa7byY0tg6b6_q2QPvcoVlygwVkWNhbAMKGPXUn3nhKqKiMCWao0W-LLoNl6DqP0OJGVGDStw"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed">DevLevel</h1>
+</div>
+<nav class="flex gap-8">
+<a class="font-label-pixel text-label-pixel text-on-surface-variant hover:bg-surface-variant px-4 py-2 rounded" href="#">Map</a>
+<a class="font-label-pixel text-label-pixel text-on-surface-variant hover:bg-surface-variant px-4 py-2 rounded" href="#">Spells</a>
+<a class="font-label-pixel text-label-pixel text-primary border-b-4 border-level-up-gold px-4 py-2 rounded" href="#">Hero</a>
+<a class="font-label-pixel text-label-pixel text-on-surface-variant hover:bg-surface-variant px-4 py-2 rounded" href="#">Config</a>
+</nav>
+<button class="text-primary dark:text-primary-fixed hover:bg-surface-variant p-2 rounded transition-transform translate-y-0.5">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</button>
+</div>
+</header>
+<!-- TopAppBar Mobile Fallback (Just Header, Nav is bottom) -->
+<header class="w-full top-0 sticky border-b-4 border-border-pixel bg-surface-container-low z-40 md:hidden flex items-center justify-between px-margin-mobile h-20">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-level-up-gold rounded-full border-2 border-border-pixel overflow-hidden flex items-center justify-center">
+<img class="object-cover w-full h-full" data-alt="A small 8-bit retro pixel art avatar of a tech hero wearing a futuristic visor and holding a glowing logic staff. The style is 16-bit RPG character portrait against a dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC1eCN_TiwjDGzcFb2vi9QBh6x9a4odNVALWai-1M9q85ZMUXfUD8FPQWKHZBAUzkJES2p1MJC4FXaQbPrORT2R2Qob_DmBal-r-6KR_mYILcRXgBKpAlMeT5sqO8_mmoptr7-8kc1d98wfdmxG67K0opZVIpI1fFAU-qAaeQ8T4YwwJ9c-xtsoRLp-wUuBTWRgYXCN6CX_QYvxu-DPwI11EpWu4Y3CVt1JJ3CrzHG9cnDwXM2dZeSiQ"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed">DevLevel</h1>
+</div>
+<button class="text-primary dark:text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-screen-xl mx-auto px-margin-mobile md:px-margin-desktop py-8 flex flex-col gap-8">
+<!-- Hero Stats Section -->
+<section class="pixel-border bg-surface-container-high p-6 md:p-8 rounded flex flex-col md:flex-row gap-8 items-center md:items-start relative overflow-hidden">
+<!-- Decorative Tech Ring Background -->
+<div class="absolute right-0 top-0 opacity-10 pointer-events-none w-64 h-64 md:w-96 md:h-96">
+<span class="material-symbols-outlined text-[200px] md:text-[300px]" data-icon="token" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+<!-- Avatar Large -->
+<div class="w-32 h-32 md:w-48 md:h-48 bg-dungeon-black rounded border-4 border-border-pixel shrink-0 relative">
+<img class="object-cover w-full h-full pixel-border" data-alt="A detailed, high-resolution 16-bit style pixel art portrait of a cyberpunk hero character. They are wearing glowing neon armor, equipped with a mechanical keyboard shield, and standing in a heroic pose. The background is a dark grid matrix." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFnpMpjDcSnaz-Qn9euHpgrr3NDOpjeOGETLLTXzyQu5mcgERWOkQvODzsSIvYDqRzAiKnvf1NmJQFGp7ERt-vKw8uGWL-R_iiUQ898PrqtBLvyBuGPnd9fi4Q3vgzlQeeplJINAFyot64vSDT_O3pSViGakNmcEKmxsEF7Qcpyq1gSOhh6_wm-c9sSvmwyNvTIhTo-ySKnJITEpghjHwVd1Px3nBBlv73U8ru9KZp38V6s_npJSUYrA"/>
+<div class="absolute -bottom-4 -right-4 bg-level-up-gold border-2 border-border-pixel rounded text-on-primary-container font-label-pixel text-label-pixel px-2 py-1 font-bold z-10">
+                    LVL 12
+                </div>
+</div>
+<!-- Stats Overview -->
+<div class="flex-grow flex flex-col gap-4 w-full z-10">
+<div class="flex flex-col md:flex-row md:justify-between md:items-end border-b-2 border-border-pixel pb-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-primary mb-1">CodeSlayer99</h2>
+<p class="font-label-pixel text-label-pixel text-level-up-gold">Class: Syntax Sorcerer</p>
+</div>
+<div class="mt-4 md:mt-0 font-label-pixel text-label-pixel text-on-surface-variant flex gap-4">
+<span><span class="text-primary">14</span> Quests</span>
+<span><span class="text-primary">8</span> Bosses</span>
+</div>
+</div>
+<!-- XP Bar -->
+<div class="w-full mt-2">
+<div class="flex justify-between font-label-pixel text-label-pixel text-on-surface-variant mb-2">
+<span>XP Progress</span>
+<span>4,200 / 5,000 to Lvl 13</span>
+</div>
+<div class="h-6 w-full bg-surface-container-lowest border-2 border-border-pixel rounded relative overflow-hidden">
+<div class="h-full bg-xp-green w-[84%] relative">
+<!-- Segmented overlay for retro feel -->
+<div class="absolute inset-0 xp-bar-segment"></div>
+</div>
+</div>
+</div>
+<!-- Health Bar (Example secondary stat) -->
+<div class="w-full">
+<div class="flex justify-between font-label-pixel text-label-pixel text-on-surface-variant mb-2">
+<span>Energy (Daily Streak)</span>
+<span>100%</span>
+</div>
+<div class="h-4 w-full bg-surface-container-lowest border-2 border-border-pixel rounded relative overflow-hidden">
+<div class="h-full bg-health-red w-full relative">
+<div class="absolute inset-0 xp-bar-segment"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Badges & Spellbook -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Badges Inventory (Logros) -->
+<section class="md:col-span-1 pixel-border bg-surface-container p-6 rounded flex flex-col gap-6 h-full">
+<div class="flex items-center gap-2 border-b-2 border-border-pixel pb-4">
+<span class="material-symbols-outlined text-level-up-gold" data-icon="military_tech" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<h3 class="font-headline-md text-headline-md text-primary">Relics</h3>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<!-- Badge Item -->
+<div class="aspect-square bg-surface-container-lowest border-2 border-border-pixel rounded flex items-center justify-center p-2 hover:bg-surface-variant transition-colors cursor-pointer group relative">
+<img class="object-contain w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform" data-alt="A tiny 32x32 pixel art icon of a flaming sword. Bright vibrant reds, oranges and yellows against a transparent/dark background. Clean retro gaming aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSqklyXfjDTq5eKOFC0hCbJhCxgaI3xo1yXQ1bIXjwkMOgsU_1WOl2K_D3t-If_D8oYVJ_zswPOLZtl6Y7m1I-6l6-UAnQ2NKDj8b2MJTNmUKOy8vKYCCjfApOMmNWNMRyjjA8hxo9gpbzVq5l_6-1N80VOWxBr6x5MFRgDvkFHcO1MFDOhRlLbAba4DpECeIWJC-EU9SQhSNHfCnjiItW00NR3dqF1USrtCDLMV3wyZGZOtYnyYk7_Q"/>
+</div>
+<div class="aspect-square bg-surface-container-lowest border-2 border-border-pixel rounded flex items-center justify-center p-2 hover:bg-surface-variant transition-colors cursor-pointer group relative">
+<img class="object-contain w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform" data-alt="A tiny 32x32 pixel art icon of a glowing blue potion flask. The liquid inside looks magical and effervescent. Classic 8-bit RPG inventory item aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcg4Y2vKrXnKRUkLq4MgD7oBOkoWAXuOhL79Ayf3nfvw9A_hLfgfuUNPlB1RnDclmWMSIZDEfhvsskpx6DkoyFbTflEFY-AOepGaLIV2Akz6y6vCXNSTR9wePbcs0qMm0ujxuLgc7XActobznaRCKSRyiImAzMcwx5bTzb25meGiRUMBDEwi3jiexQg-e7rRieC2lBsvpMrZmi1xvWiZER-0LQhW1bVH2U7lrUuHIyo9oXxAuRyVrNlw"/>
+</div>
+<div class="aspect-square bg-surface-container-lowest border-2 border-border-pixel rounded flex items-center justify-center p-2 hover:bg-surface-variant transition-colors cursor-pointer group relative">
+<img class="object-contain w-full h-full opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform" data-alt="A tiny 32x32 pixel art icon of a golden shield with a green plus sign in the center. Symbolizing defensive coding or bug fixing. High contrast colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAGNu5b27TnIPHpvhwQ0Xxzpc5YjZK6B-Vi8Oaa-2p_OEAL992gaERVC34ZY4dDx62wjFmyzA8DL4wBgTxaZeQMI06KtNbGfNZf38ZnDoOBvEuaDCHriPs4H3p25ayZeexgaaZSpq38_PyVXB0waK1AEM-sPPMgpaVHsHgZofU90-c9Xkon8VJMOVb6ZVoQx0MUpUjgQiPBDkXRq0cG9qqnsKxh8Kx90HkXu8po42A38OYuluNcWKPSg"/>
+</div>
+<!-- Empty Slots -->
+<div class="aspect-square bg-surface border-2 border-dashed border-outline-variant rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-outline-variant" data-icon="lock">lock</span>
+</div>
+<div class="aspect-square bg-surface border-2 border-dashed border-outline-variant rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-outline-variant" data-icon="lock">lock</span>
+</div>
+<div class="aspect-square bg-surface border-2 border-dashed border-outline-variant rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-outline-variant" data-icon="lock">lock</span>
+</div>
+</div>
+</section>
+<!-- Spellbook (Libro de Hechizos) -->
+<section class="md:col-span-2 pixel-border bg-surface-container p-6 rounded flex flex-col gap-6 h-full">
+<div class="flex justify-between items-center border-b-2 border-border-pixel pb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-mana-blue" data-icon="menu_book" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<h3 class="font-headline-md text-headline-md text-primary">Spellbook</h3>
+</div>
+<button class="bg-level-up-gold text-on-primary-container font-label-pixel text-label-pixel px-4 py-2 rounded border-2 border-border-pixel pixel-btn-bevel transition-all">
+                        Train New Spell
+                    </button>
+</div>
+<div class="flex flex-col gap-4 overflow-y-auto pr-2 max-h-[400px]">
+<!-- Spell Card 1 -->
+<div class="bg-surface-container-lowest border-2 border-border-pixel p-4 rounded flex items-start gap-4 hover:bg-surface-container-high transition-colors">
+<div class="w-12 h-12 bg-mana-blue/20 rounded border border-mana-blue flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-mana-blue" data-icon="data_object">data_object</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<h4 class="font-label-pixel text-label-pixel text-primary text-lg">Variables (Storage)</h4>
+<span class="font-label-pixel text-label-pixel text-xp-green">MASTERED</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm">Create containers to hold data throughout your quest. Essential for maintaining state and tracking score.</p>
+<div class="mt-2 bg-dungeon-black border border-border-pixel p-2 rounded">
+<code class="font-label-pixel text-secondary text-xs">let heroHealth = 100;</code>
+</div>
+</div>
+</div>
+<!-- Spell Card 2 -->
+<div class="bg-surface-container-lowest border-2 border-border-pixel p-4 rounded flex items-start gap-4 hover:bg-surface-container-high transition-colors">
+<div class="w-12 h-12 bg-secondary/20 rounded border border-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary" data-icon="repeat">repeat</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-center mb-1">
+<h4 class="font-label-pixel text-label-pixel text-primary text-lg">For Loops (Repetition)</h4>
+<span class="font-label-pixel text-label-pixel text-level-up-gold">LVL 2</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm">Automate repetitive tasks. Cast this spell to iterate over arrays of enemies or inventory items without rewriting code.</p>
+<div class="mt-2 bg-dungeon-black border border-border-pixel p-2 rounded">
+<code class="font-label-pixel text-secondary text-xs">for(let i=0; i<enemies.length; code="" i++)="" {...}<="">
+</enemies.length;></code></div>
+</div>
+</div>
+<!-- Spell Card 3 (Locked) -->
+<div class="bg-surface-container-lowest border-2 border-dashed border-outline-variant p-4 rounded flex items-start gap-4 opacity-60">
+<div class="w-12 h-12 bg-surface rounded border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-outline-variant" data-icon="lock">lock</span>
+</div>
+<div class="flex-grow flex flex-col justify-center h-12">
+<h4 class="font-label-pixel text-label-pixel text-outline-variant text-lg">Functions (Rituals)</h4>
+<p class="font-body-md text-outline-variant text-sm">Unlock by completing 'The Ruins of Recursion'</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 h-20 border-t-4 border-border-pixel bg-surface-container flex justify-around items-center px-4 pb-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant rounded" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="map">map</span>
+<span class="font-label-pixel text-[10px] uppercase">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant rounded" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="menu_book">menu_book</span>
+<span class="font-label-pixel text-[10px] uppercase">Spells</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg p-2 border-b-4 border-on-primary-fixed-variant translate-y-1 transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-pixel text-[10px] uppercase font-bold">Hero</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant rounded" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<span class="font-label-pixel text-[10px] uppercase">Config</span>
+</a>
+</nav>
+</body></html>

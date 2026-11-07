@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevLevel - Configuración & Accesibilidad</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&family=Space+Grotesk:wght@100..900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed": "#221b00",
+            "surface-container-highest": "#393528",
+            "on-tertiary-fixed-variant": "#004f54",
+            "on-tertiary-container": "#006a70",
+            "on-secondary-fixed": "#00210c",
+            "surface-dim": "#161308",
+            "tertiary-fixed-dim": "#00dbe8",
+            "dungeon-black": "#0F172A",
+            "tertiary-fixed": "#79f5ff",
+            "error": "#ffb4ab",
+            "on-primary-fixed-variant": "#544600",
+            "primary-fixed": "#ffe16d",
+            "secondary-container": "#00b55d",
+            "error-container": "#93000a",
+            "surface-container": "#231f14",
+            "primary-container": "#ffd700",
+            "on-tertiary-fixed": "#002022",
+            "on-background": "#eae2cf",
+            "border-pixel": "#1E293B",
+            "on-error-container": "#ffdad6",
+            "tertiary-container": "#00f1ff",
+            "surface": "#161308",
+            "outline": "#999077",
+            "inverse-surface": "#eae2cf",
+            "on-tertiary": "#00363a",
+            "surface-variant": "#393528",
+            "health-red": "#EF4444",
+            "surface-bright": "#3d392c",
+            "surface-container-low": "#1f1b10",
+            "inverse-primary": "#705d00",
+            "village-light": "#F8FAFC",
+            "on-error": "#690005",
+            "secondary-fixed": "#6dfe9c",
+            "on-secondary": "#003919",
+            "primary-fixed-dim": "#e9c400",
+            "secondary-fixed-dim": "#4de082",
+            "surface-container-lowest": "#110e05",
+            "outline-variant": "#4d4732",
+            "on-secondary-container": "#003e1c",
+            "level-up-gold": "#FACC15",
+            "on-surface": "#eae2cf",
+            "secondary": "#4de082",
+            "primary": "#fff6df",
+            "xp-green": "#22C55E",
+            "tertiary": "#defcff",
+            "on-secondary-fixed-variant": "#005227",
+            "on-primary": "#3a3000",
+            "on-surface-variant": "#d0c6ab",
+            "on-primary-container": "#705e00",
+            "inverse-on-surface": "#343024",
+            "surface-tint": "#e9c400",
+            "background": "#161308",
+            "mana-blue": "#3B82F6",
+            "surface-container-high": "#2e2a1e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-mobile": "20px",
+            "pixel-unit": "4px",
+            "gutter": "16px",
+            "margin-desktop": "40px",
+            "container-padding": "12px"
+          },
+          "fontFamily": {
+            "headline-lg": ["Space Grotesk"],
+            "body-md": ["Inter"],
+            "headline-lg-mobile": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "body-lg": ["Inter"],
+            "label-pixel": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+            "label-pixel": ["14px", { "lineHeight": "1", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Pixel Bevel Buttons */
+    .bevel-btn-gold {
+      border: 2px solid #1E293B;
+      box-shadow: 0 4px 0 #b38600;
+      transition: all 0.08s ease-in-out;
+    }
+    .bevel-btn-gold:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #b38600;
+    }
+    .bevel-btn-dark {
+      border: 2px solid #1E293B;
+      box-shadow: 0 4px 0 #0F172A;
+      transition: all 0.08s ease-in-out;
+    }
+    .bevel-btn-dark:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0F172A;
+    }
+    .bevel-btn-danger {
+      border: 2px solid #1E293B;
+      box-shadow: 0 4px 0 #93000a;
+      transition: all 0.08s ease-in-out;
+    }
+    .bevel-btn-danger:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #93000a;
+    }
+    /* Custom Pixel Switch */
+    .pixel-switch {
+      position: relative;
+      width: 48px;
+      height: 28px;
+      background: #110e05;
+      border: 2px solid #1E293B;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      padding: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .pixel-switch.active {
+      background: #00b55d;
+    }
+    .pixel-switch .thumb {
+      width: 18px;
+      height: 18px;
+      background: #eae2cf;
+      border: 1px solid #1E293B;
+      transform: translateX(0);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .pixel-switch.active .thumb {
+      transform: translateX(20px);
+      background: #ffd700;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-28 select-none antialiased font-body-md text-body-md">
+<!-- TOP APP BAR -->
+<header class="w-full top-0 sticky z-40 bg-surface-container-low shadow-sm">
+<div class="flex items-center justify-between px-margin-mobile h-20 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<!-- Hero Pixel Avatar Leading -->
+<div class="w-10 h-10 bg-surface-container-highest border-2 border-border-pixel p-1 flex items-center justify-center relative overflow-hidden" title="Pixel-art Hero Avatar">
+<div class="w-7 h-7 bg-level-up-gold flex items-center justify-center text-on-primary-fixed">
+<span class="material-symbols-outlined" style="font-size: 20px;" style_weight="fill">shield_person</span>
+</div>
+<span class="absolute bottom-0 right-0 w-2 h-2 bg-xp-green"></span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-pixel text-label-pixel text-level-up-gold">DevLevel</span>
+<span class="text-[10px] font-label-pixel px-1.5 py-0.2 bg-surface-container-highest text-secondary border border-border-pixel">v1.0.0</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight leading-none mt-0.5">Configuración</h1>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Modo Seguro Activo" class="w-10 h-10 bg-surface-container border-2 border-border-pixel text-on-surface-variant flex items-center justify-center bevel-btn-dark focus:outline-none focus:ring-2 focus:ring-primary-container">
+<span class="material-symbols-outlined text-tertiary-container" data-icon="bolt">bolt</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN SCROLLABLE CONTENT (Mobile First Bento Canvas) -->
+<main class="w-full max-w-lg mx-auto px-margin-mobile pt-5 space-y-6">
+<!-- REINO NOTIFICATION / BANNER DE ACCESIBILIDAD UNIVERSAL -->
+<div class="bg-surface-container-low border-2 border-border-pixel p-container-padding relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-level-up-gold"></div>
+<div class="flex items-start gap-3 pl-2">
+<span class="material-symbols-outlined text-level-up-gold mt-0.5" data-icon="verified_user">verified_user</span>
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-label-pixel text-label-pixel text-primary uppercase tracking-wide">Ajustes del Reino Arcano</h2>
+<span class="text-[10px] font-label-pixel bg-primary-container text-on-primary-container px-1 font-bold">WCAG 2.2 AA</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-0.5">Personaliza tu grimorio táctico con controles de confort cognitivo, sonido 8-bit y accesibilidad.</p>
+</div>
+</div>
+</div>
+<!-- 1. ACCESIBILIDAD Y LECTURA (COMPROMISO CLAVE) -->
+<section class="bg-surface-container border-2 border-border-pixel p-container-padding space-y-4">
+<div class="flex items-center justify-between pb-2 border-b-2 border-surface-container-highest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="accessibility_new">accessibility_new</span>
+<h2 class="font-headline-md text-headline-md text-primary text-lg">Accesibilidad & Ergonomía</h2>
+</div>
+<span class="font-label-pixel text-[11px] text-secondary bg-surface-container-lowest px-2 py-0.5 border border-border-pixel">Nivel AAA Ready</span>
+</div>
+<!-- Text Scaling Stepper -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="font-label-pixel text-label-pixel text-on-surface">Escalado de Texto en Hechizos</label>
+<span class="font-label-pixel text-xs text-level-up-gold" id="scale-indicator">1.0x (Estándar)</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="scale-btn active py-2 px-1 text-center font-label-pixel text-xs bg-primary-container text-on-primary-container border-2 border-border-pixel bevel-btn-gold" id="btn-scale-1" onclick="setTextScale('1.0x', '14px', 1)">
+            1.0x Normal
+          </button>
+<button class="scale-btn py-2 px-1 text-center font-label-pixel text-xs bg-surface-container-low text-on-surface border-2 border-border-pixel bevel-btn-dark" id="btn-scale-2" onclick="setTextScale('1.25x', '16px', 2)">
+            1.25x Grande
+          </button>
+<button class="scale-btn py-2 px-1 text-center font-label-pixel text-xs bg-surface-container-low text-on-surface border-2 border-border-pixel bevel-btn-dark" id="btn-scale-3" onclick="setTextScale('1.5x', '18px', 3)">
+            1.5x Máximo
+          </button>
+</div>
+<!-- Live Code Box Preview -->
+<div class="bg-surface-container-lowest border-2 border-border-pixel p-3 font-label-pixel text-xs transition-all duration-150" id="preview-code-box">
+<div class="flex justify-between items-center text-[10px] text-outline pb-1 mb-1 border-b border-surface-container-highest">
+<span>// Previsualización en Tiempo Real</span>
+<span class="text-xp-green">DevLevel.js</span>
+</div>
+<code class="text-tertiary-container block leading-relaxed" id="preview-code">
+<span class="text-health-red">const</span> archMage = {<br/>
+              magia: <span class="text-level-up-gold">true</span>,<br/>
+              rango: <span class="text-secondary">"Nivel 13"</span><br/>
+            };
+          </code>
+</div>
+</div>
+<!-- Toggles List -->
+<div class="space-y-3 pt-1">
+<!-- Reduce Motion -->
+<div class="flex items-center justify-between p-2.5 bg-surface-container-low border border-border-pixel">
+<div class="pr-2">
+<p class="font-label-pixel text-label-pixel text-on-surface">Reducir Movimiento (Reduce Motion)</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Suprime sacudidas de pantalla y destellos mágicos intensos.</p>
+</div>
+<button aria-checked="true" aria-label="Reducir Movimiento" class="pixel-switch active shrink-0" onclick="toggleSwitch(this)" role="switch" type="button">
+<span class="thumb"></span>
+</button>
+</div>
+<!-- High Contrast Mode -->
+<div class="flex items-center justify-between p-2.5 bg-surface-container-low border border-border-pixel">
+<div class="pr-2">
+<p class="font-label-pixel text-label-pixel text-on-surface">Modo Lectura Arcana (Alto Contraste)</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Bordes reforzados en 2px e iconos con texto descriptivo reforzado.</p>
+</div>
+<button aria-checked="false" aria-label="Modo Lectura Arcana Alto Contraste" class="pixel-switch shrink-0" onclick="toggleSwitch(this)" role="switch" type="button">
+<span class="thumb"></span>
+</button>
+</div>
+<!-- Dialogue Subtitles -->
+<div class="flex items-center justify-between p-2.5 bg-surface-container-low border border-border-pixel">
+<div class="pr-2">
+<p class="font-label-pixel text-label-pixel text-on-surface">Subtítulos y Narración de Diálogos</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Transcripción detallada de cutscenes y consejos del Gran Hechicero.</p>
+</div>
+<button aria-checked="true" aria-label="Subtítulos y Narración de Diálogos" class="pixel-switch active shrink-0" onclick="toggleSwitch(this)" role="switch" type="button">
+<span class="thumb"></span>
+</button>
+</div>
+<!-- Screen Reader Bridge -->
+<div class="flex items-center justify-between p-2.5 bg-surface-container-low border border-border-pixel">
+<div class="pr-2">
+<p class="font-label-pixel text-label-pixel text-on-surface">Compatibilidad TalkBack / VoiceOver</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Etiquetas semánticas aria y pausas en rompecabezas tácticos.</p>
+</div>
+<button aria-checked="true" aria-label="Compatibilidad TalkBack y VoiceOver" class="pixel-switch active shrink-0" onclick="toggleSwitch(this)" role="switch" type="button">
+<span class="thumb"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- 2. AUDIO & EFECTOS CHIPTUNE -->
+<section class="bg-surface-container border-2 border-border-pixel p-container-padding space-y-4">
+<div class="flex items-center justify-between pb-2 border-b-2 border-surface-container-highest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-level-up-gold" data-icon="volume_up">volume_up</span>
+<h2 class="font-headline-md text-headline-md text-primary text-lg">Acústica & Chiptune 8-Bit</h2>
+</div>
+<span class="font-label-pixel text-[11px] text-level-up-gold bg-surface-container-lowest px-2 py-0.5 border border-border-pixel">DSP Estéreo</span>
+</div>
+<!-- Segmented Sliders -->
+<div class="space-y-4">
+<!-- BGM Volume -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-xs font-label-pixel">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base" data-icon="music_note">music_note</span>
+              Música Chiptune / Overworld BGM
+            </span>
+<span class="text-level-up-gold font-bold" id="bgm-value">70%</span>
+</div>
+<!-- Segmented Pixel Bar (10 steps) -->
+<div class="flex gap-1 h-5 p-0.5 bg-surface-container-lowest border-2 border-border-pixel items-center" id="bgm-steps">
+<div class="flex-1 h-full bg-level-up-gold cursor-pointer" onclick="setVolume('bgm', 10)"></div>
+<div class="flex-1 h-full bg-level-up-gold cursor-pointer" onclick="setVolume('bgm', 20)"></div>
+<div class="flex-1 h-full bg-level-up-gold cursor-pointer" onclick="setVolume('bgm', 30)"></div>
+<div class="flex-1 h-full bg-level-up-gold cursor-pointer" onclick="setVolume('bgm', 40)"></div>
+<div class="flex-1 h-full bg-level-up-gold cursor-pointer" onclick="setVolume('bgm', 50)"></div>
+<div class="flex-1 h-full bg-level-up-gold cursor-pointer" onclick="setVolume('bgm', 60)"></div>
+<div class="flex-1 h-full bg-level-up-gold cursor-pointer" onclick="setVolume('bgm', 70)"></div>
+<div class="flex-1 h-full bg-surface-container-highest cursor-pointer" onclick="setVolume('bgm', 80)"></div>
+<div class="flex-1 h-full bg-surface-container-highest cursor-pointer" onclick="setVolume('bgm', 90)"></div>
+<div class="flex-1 h-full bg-surface-container-highest cursor-pointer" onclick="setVolume('bgm', 100)"></div>
+</div>
+</div>
+<!-- SFX Volume -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-xs font-label-pixel">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base" data-icon="campaign">campaign</span>
+              Efectos de Hechizos & Clicks (SFX)
+            </span>
+<span class="text-secondary font-bold" id="sfx-value">90%</span>
+</div>
+<!-- Segmented Pixel Bar (10 steps) -->
+<div class="flex gap-1 h-5 p-0.5 bg-surface-container-lowest border-2 border-border-pixel items-center" id="sfx-steps">
+<div class="flex-1 h-full bg-secondary cursor-pointer" onclick="setVolume('sfx', 10)"></div>
+<div class="flex-1 h-full bg-secondary cursor-pointer" onclick="setVolume('sfx', 20)"></div>
+<div class="flex-1 h-full bg-secondary cursor-pointer" onclick="setVolume('sfx', 30)"></div>
+<div class="flex-1 h-full bg-secondary cursor-pointer" onclick="setVolume('sfx', 40)"></div>
+<div class="flex-1 h-full bg-secondary cursor-pointer" onclick="setVolume('sfx', 50)"></div>
+<div class="flex-1 h-full bg-secondary cursor-pointer" onclick="setVolume('sfx', 60)"></div>
+<div class="flex-1 h-full bg-secondary cursor-pointer" onclick="setVolume('sfx', 70)"></div>
+<div class="flex-1 h-full bg-secondary cursor-pointer" onclick="setVolume('sfx', 80)"></div>
+<div class="flex-1 h-full bg-secondary cursor-pointer" onclick="setVolume('sfx', 90)"></div>
+<div class="flex-1 h-full bg-surface-container-highest cursor-pointer" onclick="setVolume('sfx', 100)"></div>
+</div>
+</div>
+<!-- Quick Mute Toggle -->
+<div class="flex items-center justify-between p-2.5 bg-surface-container-low border border-border-pixel">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline" data-icon="volume_off">volume_off</span>
+<div>
+<p class="font-label-pixel text-label-pixel text-on-surface">Modo Silencio Mágico</p>
+<p class="text-xs text-on-surface-variant">Silencia instantáneamente todo el entorno sonoro.</p>
+</div>
+</div>
+<button aria-checked="false" aria-label="Modo Silencio Mágico" class="pixel-switch shrink-0" onclick="toggleSwitch(this)" role="switch" type="button">
+<span class="thumb"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- 3. LOCALIZACIÓN & IDIOMA -->
+<section class="bg-surface-container border-2 border-border-pixel p-container-padding space-y-3">
+<div class="flex items-center justify-between pb-2 border-b-2 border-surface-container-highest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container" data-icon="language">language</span>
+<h2 class="font-headline-md text-headline-md text-primary text-lg">Idioma del Grimorio</h2>
+</div>
+<span class="font-label-pixel text-[10px] text-tertiary-container bg-surface-container-lowest px-2 py-0.5 border border-border-pixel">Regional</span>
+</div>
+<div class="space-y-2">
+<!-- Spanish (Active with Crown) -->
+<div class="p-3 bg-surface-container-low border-2 border-primary-container flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs border border-border-pixel">
+              ES
+            </div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-pixel text-label-pixel text-primary font-bold">Español (Latinoamérica)</span>
+<span class="text-[10px] bg-level-up-gold text-on-primary-fixed px-1 font-label-pixel font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-xs" data-icon="crown">crown</span> Nativo
+                </span>
+</div>
+<p class="text-xs text-on-surface-variant">Traducción contextual adaptada para lógica y algoritmos.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-level-up-gold" data-icon="check_circle">check_circle</span>
+</div>
+<!-- English Option -->
+<div class="p-3 bg-surface-container-low border border-border-pixel flex items-center justify-between opacity-80 hover:opacity-100 transition-opacity">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 bg-surface-container-highest text-on-surface flex items-center justify-center font-bold text-xs border border-border-pixel">
+              EN
+            </div>
+<div>
+<span class="font-label-pixel text-label-pixel text-on-surface">English (Global)</span>
+<p class="text-xs text-on-surface-variant">Original coding syntax terms and dialogue.</p>
+</div>
+</div>
+<button class="px-2 py-1 text-xs font-label-pixel bg-surface-container text-outline hover:text-primary border border-border-pixel">
+            Seleccionar
+          </button>
+</div>
+</div>
+</section>
+<!-- 4. GESTIÓN DE CUENTA Y NUBE SUPABASE -->
+<section class="bg-surface-container border-2 border-border-pixel p-container-padding space-y-4">
+<div class="flex items-center justify-between pb-2 border-b-2 border-surface-container-highest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xp-green" data-icon="cloud_sync">cloud_sync</span>
+<h2 class="font-headline-md text-headline-md text-primary text-lg">Gremio & Nube Sagrada</h2>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 bg-surface-container-lowest border border-border-pixel">
+<span class="w-2 h-2 rounded-full bg-xp-green animate-pulse"></span>
+<span class="font-label-pixel text-[10px] text-xp-green">Sincronizado</span>
+</div>
+</div>
+<!-- Hero Card Profile Details -->
+<div class="bg-surface-container-low border-2 border-border-pixel p-3 flex items-center gap-3.5">
+<div class="w-14 h-14 bg-surface-container-highest border-2 border-level-up-gold flex items-center justify-center relative shrink-0">
+<span class="material-symbols-outlined text-3xl text-level-up-gold" data-icon="smart_toy">smart_toy</span>
+<span class="absolute -top-2 -right-2 bg-xp-green text-surface-container-lowest font-label-pixel text-[10px] px-1 font-bold border border-border-pixel">LV.13</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-primary text-base truncate">Kael El Mago de Código</h3>
+</div>
+<p class="text-xs font-label-pixel text-secondary truncate">kael.adventurer@devlevel.edu.co</p>
+<div class="flex items-center gap-1 mt-1 text-[11px] text-on-surface-variant font-label-pixel">
+<span class="material-symbols-outlined text-xs text-xp-green" data-icon="cloud_done">cloud_done</span>
+<span>Supabase Cloud Engine · Token Seguro</span>
+</div>
+</div>
+</div>
+<!-- Account Actions Buttons -->
+<div class="space-y-2 pt-1">
+<button class="w-full py-2.5 px-4 bg-surface-container-low text-primary font-label-pixel text-label-pixel flex items-center justify-between border-2 border-border-pixel bevel-btn-dark">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-level-up-gold" data-icon="key">key</span>
+            Renovar Contraseña / Clave Secreta
+          </span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="w-full py-2.5 px-4 bg-surface-container-low text-error font-label-pixel text-label-pixel flex items-center justify-between border-2 border-border-pixel bevel-btn-dark hover:bg-error-container hover:text-on-error-container transition-colors">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-error" data-icon="logout">logout</span>
+            Cerrar Sesión del Gremio
+          </span>
+<span class="material-symbols-outlined text-sm" data-icon="exit_to_app">exit_to_app</span>
+</button>
+<div class="pt-2 text-center">
+<button class="text-xs font-label-pixel text-outline hover:text-health-red underline flex items-center justify-center gap-1 mx-auto transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="delete_forever">delete_forever</span>
+            Eliminar Cuenta y Datos de Aventurero
+          </button>
+</div>
+</div>
+</section>
+<!-- 5. SOPORTE, SANTUARIO & CRÉDITOS ACADÉMICOS -->
+<section class="space-y-3">
+<!-- Santuario de Sabiduría Link Card -->
+<div class="bg-surface-container-low border-2 border-border-pixel p-3.5 flex items-center justify-between bevel-btn-dark cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-highest border border-border-pixel flex items-center justify-center text-tertiary-container group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+</div>
+<div>
+<h4 class="font-label-pixel text-label-pixel text-primary font-bold">Santuario de Sabiduría</h4>
+<p class="text-xs text-on-surface-variant">Guías interactivas, FAQ arcano y soporte en vivo.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform" data-icon="open_in_new">open_in_new</span>
+</div>
+<!-- Academic Credits & Verification Slab -->
+<div class="p-3 bg-surface-container-lowest border-2 border-border-pixel text-center space-y-1.5">
+<div class="flex items-center justify-center gap-1 text-xs font-label-pixel text-level-up-gold">
+<span class="material-symbols-outlined text-xs" data-icon="school">school</span>
+<span>Desarrollo Móvil · Universidad de La Sabana</span>
+</div>
+<p class="text-xs text-on-surface-variant font-label-pixel">
+          Creado por <span class="text-primary font-bold">Ethian White & Tatiana Mayorga</span>
+</p>
+<div class="pt-1 flex items-center justify-center gap-2 text-[10px] text-outline font-label-pixel border-t border-surface-container-highest">
+<span class="flex items-center gap-0.5 text-xp-green">
+<span class="material-symbols-outlined text-xs" data-icon="check">check</span>
+            WCAG 2.2 AA Verificado
+          </span>
+<span>•</span>
+<span>Licencia Académica 2025</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BOTTOM NAVIGATION BAR (FIXED RETRO PIXEL RPG STYLE) -->
+<!-- Shared Component: BottomNavBar (Labels: Map, Spells, Hero, Config. 'Config' is ACTIVE) -->
+<nav class="fixed bottom-0 w-full z-50 h-20 bg-surface-container dark:bg-surface-container-highest shadow-2xl">
+<div class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-2 h-20 bg-surface-container">
+<!-- 1. MAP (Inactive) -->
+<a aria-label="Navegar al Mapa de Aventuras" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant active:translate-y-1 transition-all" href="#map">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-pixel text-label-pixel mt-0.5">Map</span>
+</a>
+<!-- 2. SPELLS (Inactive) -->
+<a aria-label="Grimorio de Hechizos y Código" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant active:translate-y-1 transition-all" href="#spells">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-pixel text-label-pixel mt-0.5">Spells</span>
+</a>
+<!-- 3. HERO (Inactive) -->
+<a aria-label="Perfil del Héroe y Atributos" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant active:translate-y-1 transition-all" href="#hero">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-pixel text-label-pixel mt-0.5">Hero</span>
+</a>
+<!-- 4. CONFIG (Active State strictly applied according to JSON specification) -->
+<a aria-current="page" aria-label="Ajustes y Configuración Activa" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg p-2 border-b-4 border-on-primary-fixed-variant active:translate-y-1 transition-all" href="#config">
+<span class="material-symbols-outlined font-bold" data-icon="settings">settings</span>
+<span class="font-label-pixel text-label-pixel mt-0.5 font-bold">Config</span>
+</a>
+</div>
+</nav>
+<!-- MICRO-INTERACTIONS JAVASCRIPT -->
+<script>
+    // Text scale stepper interactive logic
+    function setTextScale(scaleLabel, fontSize, index) {
+      document.getElementById('scale-indicator').textContent = scaleLabel + (index === 1 ? ' (Estándar)' : '');
+      const codePreview = document.getElementById('preview-code');
+      codePreview.style.fontSize = fontSize;
+      
+      const buttons = [document.getElementById('btn-scale-1'), document.getElementById('btn-scale-2'), document.getElementById('btn-scale-3')];
+      buttons.forEach((btn, i) => {
+        if (i + 1 === index) {
+          btn.className = 'scale-btn active py-2 px-1 text-center font-label-pixel text-xs bg-primary-container text-on-primary-container border-2 border-border-pixel bevel-btn-gold';
+        } else {
+          btn.className = 'scale-btn py-2 px-1 text-center font-label-pixel text-xs bg-surface-container-low text-on-surface border-2 border-border-pixel bevel-btn-dark';
+        }
+      });
+    }
+
+    // Toggle switch interaction
+    function toggleSwitch(element) {
+      const isChecked = element.classList.contains('active');
+      if (isChecked) {
+        element.classList.remove('active');
+        element.setAttribute('aria-checked', 'false');
+      } else {
+        element.classList.add('active');
+        element.setAttribute('aria-checked', 'true');
+      }
+    }
+
+    // Segmented slider logic
+    function setVolume(type, percentage) {
+      const valueEl = document.getElementById(type + '-value');
+      valueEl.textContent = percentage + '%';
+      
+      const container = document.getElementById(type + '-steps');
+      const steps = container.children;
+      const count = percentage / 10;
+      const fillColor = (type === 'bgm') ? 'bg-level-up-gold' : 'bg-secondary';
+      const emptyColor = 'bg-surface-container-highest';
+
+      for (let i = 0; i < steps.length; i++) {
+        if (i < count) {
+          steps[i].className = 'flex-1 h-full cursor-pointer ' + fillColor;
+        } else {
+          steps[i].className = 'flex-1 h-full cursor-pointer ' + emptyColor;
+        }
+      }
+    }
+  </script>
+</body></html>

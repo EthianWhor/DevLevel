@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevLevel - Racha Diaria &amp; Centro de Misiones</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Space Grotesk, JetBrains Mono, Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;600;700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error-container": "#ffdad6",
+            "tertiary-container": "#00f1ff",
+            "village-light": "#F8FAFC",
+            "surface-container-highest": "#393528",
+            "on-error": "#690005",
+            "on-tertiary-container": "#006a70",
+            "dungeon-black": "#0F172A",
+            "border-pixel": "#1E293B",
+            "surface-bright": "#3d392c",
+            "primary": "#fff6df",
+            "on-primary-container": "#705e00",
+            "inverse-surface": "#eae2cf",
+            "secondary-fixed-dim": "#4de082",
+            "on-primary-fixed": "#221b00",
+            "on-tertiary": "#00363a",
+            "error-container": "#93000a",
+            "secondary-container": "#00b55d",
+            "surface": "#161308",
+            "secondary": "#4de082",
+            "health-red": "#EF4444",
+            "on-secondary-container": "#003e1c",
+            "error": "#ffb4ab",
+            "on-primary": "#3a3000",
+            "on-tertiary-fixed": "#002022",
+            "inverse-on-surface": "#343024",
+            "primary-container": "#ffd700",
+            "on-secondary-fixed": "#00210c",
+            "xp-green": "#22C55E",
+            "background": "#161308",
+            "primary-fixed": "#ffe16d",
+            "on-secondary": "#003919",
+            "outline-variant": "#4d4732",
+            "on-background": "#eae2cf",
+            "on-surface": "#eae2cf",
+            "surface-container": "#231f14",
+            "inverse-primary": "#705d00",
+            "mana-blue": "#3B82F6",
+            "secondary-fixed": "#6dfe9c",
+            "outline": "#999077",
+            "on-secondary-fixed-variant": "#005227",
+            "surface-dim": "#161308",
+            "on-surface-variant": "#d0c6ab",
+            "surface-container-lowest": "#110e05",
+            "tertiary-fixed": "#79f5ff",
+            "on-tertiary-fixed-variant": "#004f54",
+            "tertiary-fixed-dim": "#00dbe8",
+            "level-up-gold": "#FACC15",
+            "surface-tint": "#e9c400",
+            "surface-variant": "#393528",
+            "tertiary": "#defcff",
+            "surface-container-low": "#1f1b10",
+            "on-primary-fixed-variant": "#544600",
+            "surface-container-high": "#2e2a1e",
+            "primary-fixed-dim": "#e9c400"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-desktop": "40px",
+            "gutter": "16px",
+            "margin-mobile": "20px",
+            "container-padding": "12px",
+            "pixel-unit": "4px"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-md": ["Space Grotesk"],
+            "body-lg": ["Inter"],
+            "headline-lg-mobile": ["Space Grotesk"],
+            "label-pixel": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }],
+            "label-pixel": ["14px", { "lineHeight": "1", "fontWeight": "600" }],
+            "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .pixel-art {
+      image-rendering: pixelated;
+    }
+    .bevel-box {
+      box-shadow: inset -2px -2px 0px 0px #1E293B, inset 2px 2px 0px 0px #393528;
+    }
+    .quest-bevel {
+      box-shadow: 0 4px 0 0 #b28900;
+    }
+    .quest-bevel:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 0 #b28900;
+    }
+    .danger-bevel {
+      box-shadow: 0 4px 0 0 #7f1d1d;
+    }
+    .danger-bevel:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 0 #7f1d1d;
+    }
+    @keyframes flame-pulse {
+      0%, 100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.6)); }
+      50% { transform: scale(1.06) translateY(-2px); filter: drop-shadow(0 0 18px rgba(239, 68, 68, 0.8)); }
+    }
+    .animate-flame {
+      animation: flame-pulse 1.8s infinite ease-in-out;
+    }
+    @keyframes rune-blink {
+      0%, 100% { border-color: #ffd700; opacity: 1; }
+      50% { border-color: #ef4444; opacity: 0.7; }
+    }
+    .animate-rune-blink {
+      animation: rune-blink 1.2s infinite ease-in-out;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-on-primary-container">
+<!-- TOP APP BAR (Shared Component Anchor) -->
+<header class="w-full top-0 sticky z-40 bg-surface-container-low border-b-4 border-border-pixel">
+<div class="flex items-center justify-between px-margin-mobile h-20 w-full max-w-screen-xl mx-auto">
+<!-- Leading: Pixel-art Hero Avatar -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-high border-2 border-border-pixel rounded-none flex items-center justify-center relative overflow-hidden shadow-inner">
+<div class="w-7 h-7 bg-primary-container rounded-none flex items-center justify-center border border-surface-container-highest">
+<span class="font-label-pixel text-label-pixel text-on-primary-container">LV.8</span>
+</div>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-xp-green border border-border-pixel"></div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-pixel text-label-pixel text-level-up-gold">DevLevel</span>
+<span class="font-label-pixel text-xs text-on-surface-variant">Arquimago de Bucles</span>
+</div>
+</div>
+<!-- Trailing: Icon bolt & Daily Streak Badge -->
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-high border-2 border-border-pixel rounded-none">
+<span class="material-symbols-outlined text-level-up-gold text-base" data-icon="bolt" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-label-pixel text-label-pixel text-primary font-bold">7d</span>
+</div>
+<button aria-label="Notificaciones" class="w-10 h-10 flex items-center justify-center bg-surface-container-high hover:bg-surface-variant border-2 border-border-pixel text-primary active:translate-y-0.5 transition-transform">
+<span class="material-symbols-outlined text-xl" data-icon="notifications" data-weight="fill" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN SCROLLABLE CONTENT -->
+<main class="w-full max-w-md mx-auto px-margin-mobile pt-4 pb-28 flex flex-col gap-6">
+<!-- URGENT HERO MODAL / BANNER DE RACHA EN RIESGO -->
+<section class="w-full bg-surface-container-low border-4 border-health-red rounded-none p-4 relative overflow-hidden shadow-lg">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 min-w-10 bg-error-container border-2 border-health-red flex items-center justify-center text-health-red mt-0.5">
+<span class="material-symbols-outlined text-2xl" data-icon="warning" data-weight="fill" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-pixel text-xs text-health-red uppercase tracking-wider font-bold">¡Racha en Riesgo!</span>
+<span class="font-label-pixel text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+              04h 32m
+            </span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary leading-tight">
+            ¡Tu fuego arcano se apaga!
+          </h2>
+<p class="font-body-md text-sm text-on-surface-variant mt-1 leading-snug">
+            Tu héroe te espera en la mazmorra. Si no completas el reto de lógica antes de medianoche, perderás tu multiplicador de sabiduría.
+          </p>
+</div>
+</div>
+<!-- Barra de tiempo de combustión segmentada -->
+<div class="mt-4 pt-3 border-t-2 border-border-pixel flex flex-col gap-1.5">
+<div class="flex justify-between items-center text-xs font-label-pixel">
+<span class="text-on-surface-variant">Combustión de Racha Restante</span>
+<span class="text-level-up-gold font-bold">18% (4h 32m)</span>
+</div>
+<!-- Progress Bar Segmentada 8px Style -->
+<div class="w-full h-3 bg-dungeon-black border-2 border-border-pixel p-0.5 flex gap-1">
+<div class="h-full w-1/6 bg-health-red"></div>
+<div class="h-full w-1/6 bg-health-red"></div>
+<div class="h-full w-1/6 bg-surface-container-highest"></div>
+<div class="h-full w-1/6 bg-surface-container-highest"></div>
+<div class="h-full w-1/6 bg-surface-container-highest"></div>
+<div class="h-full w-1/6 bg-surface-container-highest"></div>
+</div>
+</div>
+</section>
+<!-- IMPACTFUL RETRO PIXEL STREAK DISPLAY CARD -->
+<section class="w-full bg-surface-container border-4 border-border-pixel rounded-none p-5 flex flex-col items-center relative bevel-box">
+<!-- Glow Decorator -->
+<div class="absolute -top-3 px-3 py-1 bg-primary-container text-on-primary-container border-2 border-border-pixel font-label-pixel text-xs uppercase font-extrabold tracking-wider">
+        Racha de Fuego Diario
+      </div>
+<!-- Pixel Flame Hero Section -->
+<div class="my-3 flex flex-col items-center justify-center relative">
+<div class="w-24 h-24 flex items-center justify-center animate-flame relative">
+<!-- Pixel flame icon container -->
+<div class="w-20 h-20 bg-surface-container-high border-2 border-level-up-gold flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-6xl text-level-up-gold" data-icon="local_fire_department" data-weight="fill" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+</div>
+<!-- Big Number -->
+<div class="mt-2 text-center">
+<div class="font-headline-lg-mobile text-5xl font-black text-primary tracking-tight flex items-center justify-center gap-1">
+<span>7</span>
+<span class="text-level-up-gold text-2xl font-label-pixel">DÍAS</span>
+</div>
+<p class="font-label-pixel text-label-pixel text-secondary font-bold mt-1 uppercase tracking-wide">
+            Consecutivos de Lógica
+          </p>
+</div>
+</div>
+<!-- Buff & Multiplier Badge -->
+<div class="w-full bg-surface-container-high border-2 border-border-pixel p-3 flex items-center justify-between mt-3">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-xp-green/20 border border-xp-green flex items-center justify-center text-xp-green">
+<span class="material-symbols-outlined text-lg" data-icon="auto_awesome" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-label-pixel text-xs text-primary font-bold">+25% XP Buff de Sabiduría</span>
+<span class="font-body-md text-xs text-on-surface-variant">Bonificación activa en mazmorras</span>
+</div>
+</div>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-label-pixel text-xs font-bold border border-border-pixel">ACTIVO</span>
+</div>
+<!-- SEMANAL RETRO CALENDAR (Lunes a Domingo) -->
+<div class="w-full mt-5 pt-4 border-t-2 border-border-pixel flex flex-col gap-2">
+<div class="flex justify-between items-center text-xs font-label-pixel">
+<span class="text-on-surface uppercase tracking-wider font-semibold">Progreso Semanal (Semana 42)</span>
+<span class="text-level-up-gold font-bold">Día 7 / 7</span>
+</div>
+<div class="grid grid-cols-7 gap-1.5 pt-1">
+<!-- Lun: Hecho -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-pixel text-xs text-on-surface-variant font-medium">L</span>
+<div class="w-full aspect-square bg-surface-container-high border-2 border-xp-green flex items-center justify-center text-xp-green">
+<span class="material-symbols-outlined text-base font-bold" data-icon="check">check</span>
+</div>
+<span class="font-label-pixel text-[10px] text-on-surface-variant">+50</span>
+</div>
+<!-- Mar: Hecho -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-pixel text-xs text-on-surface-variant font-medium">M</span>
+<div class="w-full aspect-square bg-surface-container-high border-2 border-xp-green flex items-center justify-center text-xp-green">
+<span class="material-symbols-outlined text-base font-bold" data-icon="check">check</span>
+</div>
+<span class="font-label-pixel text-[10px] text-on-surface-variant">+50</span>
+</div>
+<!-- Mie: Hecho -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-pixel text-xs text-on-surface-variant font-medium">X</span>
+<div class="w-full aspect-square bg-surface-container-high border-2 border-xp-green flex items-center justify-center text-xp-green">
+<span class="material-symbols-outlined text-base font-bold" data-icon="check">check</span>
+</div>
+<span class="font-label-pixel text-[10px] text-on-surface-variant">+60</span>
+</div>
+<!-- Jue: Hecho -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-pixel text-xs text-on-surface-variant font-medium">J</span>
+<div class="w-full aspect-square bg-surface-container-high border-2 border-xp-green flex items-center justify-center text-xp-green">
+<span class="material-symbols-outlined text-base font-bold" data-icon="check">check</span>
+</div>
+<span class="font-label-pixel text-[10px] text-on-surface-variant">+60</span>
+</div>
+<!-- Vie: Hecho -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-pixel text-xs text-on-surface-variant font-medium">V</span>
+<div class="w-full aspect-square bg-surface-container-high border-2 border-xp-green flex items-center justify-center text-xp-green">
+<span class="material-symbols-outlined text-base font-bold" data-icon="check">check</span>
+</div>
+<span class="font-label-pixel text-[10px] text-on-surface-variant">+75</span>
+</div>
+<!-- Sab: Hecho -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-pixel text-xs text-on-surface-variant font-medium">S</span>
+<div class="w-full aspect-square bg-surface-container-high border-2 border-xp-green flex items-center justify-center text-xp-green">
+<span class="material-symbols-outlined text-base font-bold" data-icon="check">check</span>
+</div>
+<span class="font-label-pixel text-[10px] text-on-surface-variant">+80</span>
+</div>
+<!-- Dom: HOY / Cofre de recompensa especial (Blinking) -->
+<div class="flex flex-col items-center gap-1">
+<span class="font-label-pixel text-xs text-level-up-gold font-bold">D</span>
+<div class="w-full aspect-square bg-surface-container-highest border-2 border-level-up-gold animate-rune-blink flex items-center justify-center text-level-up-gold relative shadow-md">
+<span class="material-symbols-outlined text-lg" data-icon="inventory_2" data-weight="fill" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<div class="absolute -top-1 -right-1 w-2 h-2 bg-health-red rounded-none"></div>
+</div>
+<span class="font-label-pixel text-[10px] text-level-up-gold font-bold">HOY</span>
+</div>
+</div>
+<!-- Banner de Recompensa del Día 7 -->
+<div class="mt-2 p-2 bg-surface-container-lowest border border-level-up-gold/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-level-up-gold text-lg" data-icon="diamond" data-weight="fill" style="font-variation-settings: 'FILL' 1;">diamond</span>
+<span class="font-label-pixel text-xs text-primary">Recompensa: <strong class="text-level-up-gold">Gema de Memoria &amp; Poción de Maná</strong></span>
+</div>
+<span class="font-label-pixel text-[11px] text-xp-green font-bold">+200 XP</span>
+</div>
+</div>
+</section>
+<!-- HERO ACTION BUTTON (Dorada Retro-Logic Beveled) -->
+<div class="w-full flex flex-col gap-2">
+<a class="w-full py-4 px-6 bg-primary-container text-on-primary-container font-label-pixel text-label-pixel font-bold uppercase tracking-wider flex items-center justify-center gap-3 border-2 border-border-pixel quest-bevel transition-all" href="#mapa-reto">
+<span class="material-symbols-outlined text-xl" data-icon="swords" data-weight="fill" style="font-variation-settings: 'FILL' 1;">swords</span>
+<span>Proteger Racha: Jugar Reto de Hoy</span>
+</a>
+<p class="text-center font-label-pixel text-xs text-on-surface-variant flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-xs text-level-up-gold" data-icon="shield">shield</span>
+        1 Escudo de Congelación disponible en tu inventario
+      </p>
+</div>
+<!-- SECCIÓN: PERGAMINO DE AVISOS / REGISTRO DE MENSAJES (Notificaciones del Reino) -->
+<section class="w-full flex flex-col gap-3">
+<div class="flex items-center justify-between border-b-2 border-border-pixel pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-level-up-gold" data-icon="history_edu">history_edu</span>
+<h3 class="font-headline-md text-lg text-primary uppercase tracking-wide">
+            Pergamino de Avisos
+          </h3>
+</div>
+<span class="px-2 py-0.5 bg-surface-container-high border border-border-pixel font-label-pixel text-xs text-on-surface-variant">3 Nuevos</span>
+</div>
+<!-- Lista de Notificaciones estilo Bento/Card Notched -->
+<div class="flex flex-col gap-3">
+<!-- 1. Notificación Urgente: Alerta del Arch-Mage -->
+<article class="bg-surface-container-low border-2 border-border-pixel hover:border-level-up-gold p-3.5 transition-colors relative flex flex-col gap-2">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 bg-level-up-gold/10 border border-level-up-gold flex items-center justify-center text-level-up-gold">
+<span class="material-symbols-outlined text-base" data-icon="campaign" data-weight="fill" style="font-variation-settings: 'FILL' 1;">campaign</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-pixel text-xs text-level-up-gold font-bold uppercase tracking-wider">Alerta del Arch-Mage</span>
+<span class="font-label-pixel text-[10px] text-on-surface-variant">Hace 15 minutos • Evento Limitado</span>
+</div>
+</div>
+<span class="w-2 h-2 bg-health-red rounded-none"></span>
+</div>
+<p class="font-body-md text-sm text-primary leading-snug">
+            ¡El <strong class="text-level-up-gold">Gólem de Listas</strong> está debilitado hoy! Aprovecha el bonus de +150 XP y doble probabilidad de botín raro resolviendo su array.
+          </p>
+<div class="pt-2 flex items-center justify-between border-t border-border-pixel/60">
+<a class="font-label-pixel text-xs text-level-up-gold flex items-center gap-1 hover:underline" href="#batalla-golem">
+<span>Ir al Combate</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+</a>
+<span class="font-label-pixel text-[11px] text-secondary font-semibold">+150 XP Bonus</span>
+</div>
+</article>
+<!-- 2. Notificación Social/Gremio: Kael -->
+<article class="bg-surface-container-low border-2 border-border-pixel hover:border-secondary transition-colors p-3.5 flex flex-col gap-2">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 bg-secondary/10 border border-secondary flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-base" data-icon="group" data-weight="fill" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-pixel text-xs text-secondary font-bold uppercase tracking-wider">Gremio de Algoritmos</span>
+<span class="font-label-pixel text-[10px] text-on-surface-variant">Hace 1 hora • Cooperativo</span>
+</div>
+</div>
+</div>
+<p class="font-body-md text-sm text-on-surface leading-snug">
+            El compañero <strong class="text-primary">Kael</strong> completó el <span class="text-secondary font-medium">Laberinto de Bucles While</span> (+10 Puntos de Gremio para la cripta común).
+          </p>
+<div class="pt-2 flex items-center justify-between border-t border-border-pixel/60">
+<button class="font-label-pixel text-xs text-on-surface-variant hover:text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="celebration">celebration</span>
+<span>Enviar Felicitación</span>
+</button>
+<span class="font-label-pixel text-[11px] text-secondary">+10 GP</span>
+</div>
+</article>
+<!-- 3. Notificación de Sistema: Grimorio / Nuevo Hechizo -->
+<article class="bg-surface-container-low border-2 border-border-pixel hover:border-mana-blue transition-colors p-3.5 flex flex-col gap-2">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 bg-mana-blue/10 border border-mana-blue flex items-center justify-center text-mana-blue">
+<span class="material-symbols-outlined text-base" data-icon="menu_book" data-weight="fill" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-pixel text-xs text-mana-blue font-bold uppercase tracking-wider">Sistema del Reino</span>
+<span class="font-label-pixel text-[10px] text-on-surface-variant">Hace 3 horas • Grimorio</span>
+</div>
+</div>
+</div>
+<p class="font-body-md text-sm text-on-surface leading-snug">
+            Nuevo hechizo de nivel 2 disponible para desbloquear: <strong class="text-primary">«Invocación Recursiva»</strong>. Requiere 3 runas de maná.
+          </p>
+<div class="pt-2 flex items-center justify-between border-t border-border-pixel/60">
+<a class="font-label-pixel text-xs text-mana-blue flex items-center gap-1 hover:underline" href="#grimorio">
+<span>Examinar en Grimorio</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+</a>
+<span class="font-label-pixel text-[11px] text-on-surface-variant">Tomo 2</span>
+</div>
+</article>
+</div>
+</section>
+<!-- SECCIÓN: CONFIGURACIÓN RÁPIDA DE RECORDATORIOS (Toggles Pixel Art) -->
+<section class="w-full bg-surface-container border-2 border-border-pixel p-4 flex flex-col gap-4">
+<div class="flex items-center gap-2 border-b border-border-pixel pb-2">
+<span class="material-symbols-outlined text-primary text-base" data-icon="tune">tune</span>
+<h4 class="font-label-pixel text-xs text-primary font-bold uppercase tracking-wider">
+          Configuración Rápida de Avisos
+        </h4>
+</div>
+<!-- Toggle 1: Recordatorio Diario a las 20:00 -->
+<div class="flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<span class="font-label-pixel text-xs text-primary font-bold">Recordatorio Diario a las 20:00</span>
+<span class="font-body-md text-xs text-on-surface-variant">Campana mágica antes de la quema</span>
+</div>
+<!-- Pixel Toggle Switch (ON) -->
+<button aria-checked="true" class="w-12 h-6 bg-secondary-container border-2 border-border-pixel flex items-center justify-end px-0.5 cursor-pointer relative shadow-inner" role="switch" type="button">
+<div class="w-4 h-4 bg-primary border border-border-pixel"></div>
+</button>
+</div>
+<!-- Toggle 2: Alertas de racha en peligro -->
+<div class="flex items-center justify-between gap-4 pt-2 border-t border-border-pixel/60">
+<div class="flex flex-col">
+<span class="font-label-pixel text-xs text-primary font-bold">Alertas de Racha en Peligro</span>
+<span class="font-body-md text-xs text-on-surface-variant">Aviso crítico con 6h y 2h de margen</span>
+</div>
+<!-- Pixel Toggle Switch (ON) -->
+<button aria-checked="true" class="w-12 h-6 bg-secondary-container border-2 border-border-pixel flex items-center justify-end px-0.5 cursor-pointer relative shadow-inner" role="switch" type="button">
+<div class="w-4 h-4 bg-primary border border-border-pixel"></div>
+</button>
+</div>
+<!-- Toggle 3: Notificaciones del Gremio -->
+<div class="flex items-center justify-between gap-4 pt-2 border-t border-border-pixel/60">
+<div class="flex flex-col">
+<span class="font-label-pixel text-xs text-on-surface-variant font-medium">Avisos del Gremio &amp; Cooperativo</span>
+<span class="font-body-md text-xs text-on-surface-variant/70">Solo logros mayores y eventos</span>
+</div>
+<!-- Pixel Toggle Switch (OFF) -->
+<button aria-checked="false" class="w-12 h-6 bg-surface-container-high border-2 border-border-pixel flex items-center justify-start px-0.5 cursor-pointer relative shadow-inner" role="switch" type="button">
+<div class="w-4 h-4 bg-on-surface-variant border border-border-pixel"></div>
+</button>
+</div>
+</section>
+</main>
+<!-- BOTTOM NAVBAR (Shared Component Anchor) -->
+<!-- Contextual Active: Map (El usuario se prepara para saltar al mapa/reto diario para salvar la racha) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 h-20 bg-surface-container dark:bg-surface-container-highest border-t-4 border-border-pixel flex justify-around items-center px-4 pb-2">
+<!-- Item 1: Map (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg p-2 border-b-4 border-on-primary-fixed-variant active:translate-y-1 transition-all" href="#map">
+<span class="material-symbols-outlined text-2xl" data-icon="map" data-weight="fill" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label-pixel text-label-pixel text-xs mt-0.5">Map</span>
+</a>
+<!-- Item 2: Spells -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant active:translate-y-1 transition-all" href="#spells">
+<span class="material-symbols-outlined text-2xl" data-icon="menu_book">menu_book</span>
+<span class="font-label-pixel text-label-pixel text-xs mt-0.5">Spells</span>
+</a>
+<!-- Item 3: Hero -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant active:translate-y-1 transition-all" href="#hero">
+<span class="material-symbols-outlined text-2xl" data-icon="person">person</span>
+<span class="font-label-pixel text-label-pixel text-xs mt-0.5">Hero</span>
+</a>
+<!-- Item 4: Config -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant active:translate-y-1 transition-all" href="#config">
+<span class="material-symbols-outlined text-2xl" data-icon="settings">settings</span>
+<span class="font-label-pixel text-label-pixel text-xs mt-0.5">Config</span>
+</a>
+</nav>
+<script>
+    // Microinteracción para los switches tipo pixel art
+    document.querySelectorAll('[role="switch"]').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const isChecked = toggle.getAttribute('aria-checked') === 'true';
+        toggle.setAttribute('aria-checked', !isChecked);
+        
+        if (!isChecked) {
+          toggle.classList.remove('bg-surface-container-high', 'justify-start');
+          toggle.classList.add('bg-secondary-container', 'justify-end');
+          toggle.querySelector('div').classList.remove('bg-on-surface-variant');
+          toggle.querySelector('div').classList.add('bg-primary');
+        } else {
+          toggle.classList.remove('bg-secondary-container', 'justify-end');
+          toggle.classList.add('bg-surface-container-high', 'justify-start');
+          toggle.querySelector('div').classList.remove('bg-primary');
+          toggle.querySelector('div').classList.add('bg-on-surface-variant');
+        }
+      });
+    });
+  </script>
+</body></html>

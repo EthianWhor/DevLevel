@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevLevel - Overworld Map</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#006a70",
+                      "on-tertiary-fixed": "#002022",
+                      "on-secondary-container": "#003e1c",
+                      "surface-container-high": "#2e2a1e",
+                      "inverse-on-surface": "#343024",
+                      "surface-container": "#231f14",
+                      "primary-fixed": "#ffe16d",
+                      "on-secondary-fixed-variant": "#005227",
+                      "tertiary-fixed": "#79f5ff",
+                      "surface-bright": "#3d392c",
+                      "secondary-fixed": "#6dfe9c",
+                      "on-primary-fixed": "#221b00",
+                      "on-surface": "#eae2cf",
+                      "on-error": "#690005",
+                      "secondary-container": "#00b55d",
+                      "tertiary-fixed-dim": "#00dbe8",
+                      "surface-container-lowest": "#110e05",
+                      "level-up-gold": "#FACC15",
+                      "surface-container-low": "#1f1b10",
+                      "outline-variant": "#4d4732",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-container": "#705e00",
+                      "on-tertiary": "#00363a",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "border-pixel": "#1E293B",
+                      "surface-variant": "#393528",
+                      "primary": "#fff6df",
+                      "surface": "#161308",
+                      "error-container": "#93000a",
+                      "health-red": "#EF4444",
+                      "on-primary-fixed-variant": "#544600",
+                      "mana-blue": "#3B82F6",
+                      "tertiary": "#defcff",
+                      "error": "#ffb4ab",
+                      "on-secondary": "#003919",
+                      "surface-tint": "#e9c400",
+                      "on-secondary-fixed": "#00210c",
+                      "tertiary-container": "#00f1ff",
+                      "surface-dim": "#161308",
+                      "primary-container": "#ffd700",
+                      "inverse-primary": "#705d00",
+                      "inverse-surface": "#eae2cf",
+                      "surface-container-highest": "#393528",
+                      "on-background": "#eae2cf",
+                      "outline": "#999077",
+                      "on-surface-variant": "#d0c6ab",
+                      "background": "#161308",
+                      "village-light": "#F8FAFC",
+                      "secondary": "#4de082",
+                      "xp-green": "#22C55E",
+                      "secondary-fixed-dim": "#4de082",
+                      "on-primary": "#3a3000",
+                      "dungeon-black": "#0F172A",
+                      "primary-fixed-dim": "#e9c400"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "40px",
+                      "margin-mobile": "20px",
+                      "pixel-unit": "4px",
+                      "gutter": "16px",
+                      "container-padding": "12px"
+              },
+              "fontFamily": {
+                      "label-pixel": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-lg-mobile": [
+                              "Space Grotesk"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Space Grotesk"
+                      ],
+                      "headline-md": [
+                              "Space Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "label-pixel": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Custom Utilities for Pixel Theme */
+        .pixel-border {
+            border: 4px solid var(--tw-colors-border-pixel);
+        }
+        .pixel-border-sm {
+            border: 2px solid var(--tw-colors-border-pixel);
+        }
+        .pixel-shadow {
+            box-shadow: 4px 4px 0px 0px var(--tw-colors-border-pixel);
+        }
+        .pixel-shadow-sm {
+            box-shadow: 2px 2px 0px 0px var(--tw-colors-border-pixel);
+        }
+        .bevel-bottom {
+            border-bottom: 4px solid rgba(0,0,0,0.3);
+        }
+        .bevel-bottom-sm {
+            border-bottom: 2px solid rgba(0,0,0,0.3);
+        }
+        
+        /* Path dashed line animation */
+        .path-line {
+            stroke-dasharray: 8;
+            animation: dash 2s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -16;
+            }
+        }
+
+        /* Scanline effect */
+        .scanlines {
+            position: relative;
+        }
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col scanlines overflow-x-hidden">
+<!-- TopAppBar from JSON -->
+<header class="w-full top-0 sticky z-40 bg-surface dark:bg-surface border-b-4 border-border-pixel bg-surface-container-low flex items-center justify-between px-margin-mobile h-20 max-w-screen-xl mx-auto shadow-none">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-variant pixel-border-sm rounded-sm overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A retro 8-bit style pixel art avatar of a young programmer hero, facing forward, vibrant colors, set against a dark stylized digital background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZeoCo_S_QVSmZB6c1IQpB4PmMsaP79AGj-7ChRO5Vo0YMKusMySGEgjUuAwqGKW-8PVIi2c5oFYz0qxeTB0YcSCyZ1C0EOFBm8xomLQOYp2hF99qJLbJ7Hzjxl6_y5GhGpkbWZRjuj5uI9CgkCMyxrdocHYLaGyevENndr-Qfq7Piohro8CuX1t1HOvGfBccpjNt1AKPLv5qLvERU-HI9Sj51XGfxxPiQwEQk5g-BxHgVRH98l9w8YA"/>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed tracking-tight">DevLevel</span>
+<span class="font-label-pixel text-label-pixel text-level-up-gold text-[10px]">LVL 4: ROOKIE</span>
+</div>
+</div>
+<!-- Hero HUD (Health/XP) -->
+<div class="hidden md:flex flex-col gap-1 w-48 mr-4">
+<div class="flex items-center justify-between text-[10px] font-label-pixel text-label-pixel mb-1">
+<span class="text-health-red">HP</span>
+<span class="text-on-surface-variant">100/100</span>
+</div>
+<div class="w-full h-2 bg-surface-variant pixel-border-sm flex">
+<div class="h-full bg-health-red w-full"></div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-label-pixel text-label-pixel mt-1 mb-1">
+<span class="text-xp-green">XP</span>
+<span class="text-on-surface-variant">450/1000</span>
+</div>
+<div class="w-full h-2 bg-surface-variant pixel-border-sm flex">
+<div class="h-full bg-xp-green w-[45%] border-r-2 border-[rgba(0,0,0,0.2)]"></div>
+<div class="h-full bg-xp-green w-[0%] opacity-0"></div> <!-- segmented look placeholder -->
+</div>
+</div>
+<button class="p-2 text-primary dark:text-primary-fixed hover:bg-surface-variant transition-transform translate-y-0.5 rounded-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+</header>
+<!-- Top Navigation (Desktop) - Suppressed on mobile, visible on md -->
+<nav class="hidden md:flex justify-center items-center w-full bg-surface-container py-2 border-b-2 border-border-pixel">
+<div class="flex gap-8">
+<a class="flex flex-col items-center justify-center text-primary font-label-pixel text-label-pixel px-4 py-2 border-b-4 border-level-up-gold transition-all translate-y-0.5" href="#">
+<span class="material-symbols-outlined mb-1">map</span>
+                Map
+            </a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant font-label-pixel text-label-pixel px-4 py-2 hover:bg-surface-variant rounded-sm transition-all" href="#">
+<span class="material-symbols-outlined mb-1">menu_book</span>
+                Spells
+            </a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant font-label-pixel text-label-pixel px-4 py-2 hover:bg-surface-variant rounded-sm transition-all" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+                Hero
+            </a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant font-label-pixel text-label-pixel px-4 py-2 hover:bg-surface-variant rounded-sm transition-all" href="#">
+<span class="material-symbols-outlined mb-1">settings</span>
+                Config
+            </a>
+</div>
+</nav>
+<!-- Main Content Area: The Overworld -->
+<main class="flex-grow relative pb-24 md:pb-12 overflow-y-auto overflow-x-hidden flex flex-col items-center w-full">
+<!-- Background Map Texture -->
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(var(--tw-colors-surface-variant) 2px, transparent 2px); background-size: 32px 32px;"></div>
+<!-- Scrollable Map Container -->
+<div class="relative w-full max-w-2xl mx-auto flex flex-col items-center pt-12 pb-32 z-10 min-h-[1200px]">
+<!-- SVG Path linking nodes -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="xMidYMin slice" style="z-index: -1;">
+<!-- Completed Path (Green) -->
+<path class="pixel-border-sm" d="M 50% 90% Q 30% 80% 50% 70% T 50% 50% T 30% 30% T 50% 10%" fill="none" stroke="var(--tw-colors-surface-variant)" stroke-linecap="square" stroke-width="12"></path>
+<path d="M 50% 90% Q 30% 80% 50% 70% T 50% 50%" fill="none" stroke="var(--tw-colors-xp-green)" stroke-linecap="square" stroke-width="6"></path>
+<!-- Incomplete Path (Dashed) -->
+<path class="path-line opacity-50" d="M 50% 50% T 30% 30% T 50% 10%" fill="none" stroke="var(--tw-colors-on-surface-variant)" stroke-linecap="square" stroke-width="4"></path>
+</svg>
+<!-- Node 1: Start (Completed) -->
+<div class="absolute top-[85%] left-1/2 transform -translate-x-1/2 flex flex-col items-center group cursor-pointer">
+<div class="w-16 h-16 bg-surface-container-high pixel-border rounded-full flex items-center justify-center mb-2 shadow-[0_0_15px_rgba(34,197,94,0.3)] border-xp-green transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-xp-green text-3xl" style="font-variation-settings: 'FILL' 1;">flag</span>
+</div>
+<div class="bg-surface-container pixel-border-sm px-3 py-1 rounded-sm text-center bevel-bottom-sm">
+<h3 class="font-label-pixel text-label-pixel text-xp-green">Tutorial Town</h3>
+<p class="font-label-pixel text-[10px] text-on-surface-variant mt-1">Variables 101</p>
+</div>
+<div class="mt-2 flex gap-1">
+<span class="material-symbols-outlined text-level-up-gold text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-level-up-gold text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-level-up-gold text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<!-- Node 2: Forest of Loops (Completed) -->
+<div class="absolute top-[65%] left-[65%] transform -translate-x-1/2 flex flex-col items-center group cursor-pointer">
+<div class="w-20 h-20 bg-surface-container-high pixel-border rounded-lg flex items-center justify-center mb-2 shadow-[0_0_15px_rgba(34,197,94,0.3)] border-xp-green transition-transform group-hover:scale-110 relative overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover opacity-50" data-alt="A pixel art rendering of a dark, stylized digital forest with glowing green binary code falling like leaves, ominous but inviting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBROso-F8ZNIGjbZyFY1dso7j3yGiVswhuUWK3i3-vy0Lb3u-oeqg0z1vEHiU71gtXEb-8bwh1yE7ToiarhPRUJ2PANH4YfbbMzkcHXkqz5W1i8nn_JXhBwIwcuKO1HDkUjEFWUgnkiBc0Uz2f1HoKO-L--FCyuMFGzhUjGEwZxna928vCImFTeZEGlwJkxWjW4iY32rwrQjC_HKfb_g_WgGI_W9qQbS8Armu3vcJ4Md_JxvZFwHnJ9RA"/>
+<span class="material-symbols-outlined text-xp-green text-4xl relative z-10" style="font-variation-settings: 'FILL' 1;">forest</span>
+</div>
+<div class="bg-surface-container pixel-border-sm px-3 py-1 rounded-sm text-center bevel-bottom-sm">
+<h3 class="font-label-pixel text-label-pixel text-xp-green">Forest of Loops</h3>
+<p class="font-label-pixel text-[10px] text-on-surface-variant mt-1">For &amp; While</p>
+</div>
+<div class="mt-2 flex gap-1">
+<span class="material-symbols-outlined text-level-up-gold text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-level-up-gold text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-surface-variant text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<!-- Node 3: CURRENT LEVEL (Active) -->
+<div class="absolute top-[45%] left-1/2 transform -translate-x-1/2 flex flex-col items-center group cursor-pointer z-20">
+<!-- Current Player Indicator -->
+<div class="absolute -top-10 animate-bounce">
+<span class="material-symbols-outlined text-level-up-gold text-3xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="w-24 h-24 bg-primary-container pixel-border border-level-up-gold rounded-sm flex items-center justify-center mb-2 shadow-[0_0_25px_rgba(250,204,21,0.5)] transition-transform group-hover:scale-105 relative overflow-hidden bevel-bottom">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay" data-alt="A pixel art rendering of a treacherous mountain peak made of glowing data blocks and geometric conditional statements, challenging and bright." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBacLfYloUFH9KakATtAICPOrfwWNjOWwWMNT7vQ9eI4tZdlk3J6ecMrBpTC4AMFtYfK84v_r7CdUdrptxDj_zPHjELP_n0t1WRvvMcP0MhJntZ0o5UNfuj0V9CnSqqmKLWVWlSEdMVDZ6yoKy1FvM_HCm5wkB42Su8CvgaPC4Z-IVVFDlhRipcZdOf4ho8GyGIms7i_nJZx7OtkEDC3JGRnaJ05CaaTyQ2r84SI8sWbwc7xxn92nfmCQ"/>
+<span class="material-symbols-outlined text-on-primary-container text-5xl relative z-10" style="font-variation-settings: 'FILL' 1;">terrain</span>
+</div>
+<div class="bg-surface-container pixel-border px-4 py-2 rounded-sm text-center border-level-up-gold bevel-bottom">
+<h3 class="font-label-pixel text-[16px] font-bold text-level-up-gold">Mountain of Conditions</h3>
+<p class="font-label-pixel text-[12px] text-on-surface mt-1">If/Else Logic</p>
+<button class="mt-2 bg-level-up-gold text-on-primary-container font-label-pixel text-[12px] px-3 py-1 rounded-sm bevel-bottom-sm w-full hover:bg-primary-fixed active:translate-y-1 active:bevel-bottom-none transition-all">
+                        ENTER
+                    </button>
+</div>
+</div>
+<!-- Node 4: Locked Level -->
+<div class="absolute top-[25%] left-[30%] transform -translate-x-1/2 flex flex-col items-center group cursor-not-allowed opacity-60 grayscale">
+<div class="w-16 h-16 bg-surface-variant pixel-border border-outline-variant rounded-full flex items-center justify-center mb-2 relative">
+<span class="material-symbols-outlined text-outline-variant text-3xl absolute z-10">lock</span>
+</div>
+<div class="bg-surface-container pixel-border-sm border-outline-variant px-3 py-1 rounded-sm text-center">
+<h3 class="font-label-pixel text-label-pixel text-outline-variant">Array Abyss</h3>
+<p class="font-label-pixel text-[10px] text-outline-variant mt-1">Data Structures</p>
+</div>
+</div>
+<!-- Node 5: Boss Level (Locked) -->
+<div class="absolute top-[5%] left-1/2 transform -translate-x-1/2 flex flex-col items-center group cursor-not-allowed opacity-50 grayscale">
+<div class="w-28 h-28 bg-surface-variant pixel-border border-outline-variant rounded-sm flex items-center justify-center mb-2 relative">
+<img class="absolute inset-0 w-full h-full object-cover opacity-30" data-alt="A dark, menacing pixel art castle surrounded by digital glitches and corrupted data streams, representing a boss battle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYlhD3CvdNxmeZcdkyPUjb0mb4mxO0sdNnxBuqcLXj-7IE1S4-OxcnUwao7EjuGBAOmyldUzUL9O6vfjonL2-9v7TAfuQ1XSclYhkOD0YeTKCvL0FLMwCU6xeCR5t9HUB4NbBCTe4yHUJH2L6OnRLTTnoJodIdr-YY2LcM3jpwLXwVv4gDwiv7xQYxTUQzBrQDGLeUsJs8n1w-BOXiXimexrEE26e-oUdEv3Omq4onn6Zw-Tia9FmfKw"/>
+<span class="material-symbols-outlined text-outline-variant text-5xl absolute z-10">skull</span>
+</div>
+<div class="bg-surface-container pixel-border-sm border-outline-variant px-4 py-2 rounded-sm text-center">
+<h3 class="font-label-pixel text-[16px] text-outline-variant">The Function Fort</h3>
+<p class="font-label-pixel text-[10px] text-outline-variant mt-1">BOSS BATTLE</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar from JSON (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 h-20 bg-surface-container dark:bg-surface-container-highest border-t-4 border-border-pixel flex justify-around items-center px-4 pb-2 shadow-none">
+<!-- Active: Map -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg p-2 border-b-4 border-on-primary-fixed-variant translate-y-1 transition-all w-16" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label-pixel text-[10px] mt-1 text-primary-container dark:text-primary-fixed font-label-pixel text-primary">Map</span>
+</a>
+<!-- Inactive: Spells -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant rounded-lg transition-all w-16" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-pixel text-[10px] mt-1">Spells</span>
+</a>
+<!-- Inactive: Hero -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant rounded-lg transition-all w-16" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-pixel text-[10px] mt-1">Hero</span>
+</a>
+<!-- Inactive: Config -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant rounded-lg transition-all w-16" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-pixel text-[10px] mt-1">Config</span>
+</a>
+</nav>
+<script>
+        // Simple script to handle visual 'press' state on buttons that use bevel-bottom
+        document.querySelectorAll('button.bevel-bottom-sm').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.borderBottomWidth = '0px';
+                btn.style.transform = 'translateY(2px)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.borderBottomWidth = '2px';
+                btn.style.transform = 'translateY(0)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.borderBottomWidth = '2px';
+                btn.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

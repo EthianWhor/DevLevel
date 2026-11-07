@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevLevel - Libro de Hechizos</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#e9c400",
+            "surface-container-highest": "#393528",
+            "inverse-primary": "#705d00",
+            "primary-fixed": "#ffe16d",
+            "surface-bright": "#3d392c",
+            "outline-variant": "#4d4732",
+            "surface-container": "#231f14",
+            "mana-blue": "#3B82F6",
+            "on-secondary": "#003919",
+            "background": "#161308",
+            "tertiary-fixed": "#79f5ff",
+            "secondary": "#4de082",
+            "on-secondary-fixed-variant": "#005227",
+            "on-tertiary-fixed-variant": "#004f54",
+            "dungeon-black": "#0F172A",
+            "inverse-on-surface": "#343024",
+            "surface-dim": "#161308",
+            "secondary-fixed": "#6dfe9c",
+            "on-primary-container": "#705e00",
+            "on-tertiary-container": "#006a70",
+            "village-light": "#F8FAFC",
+            "on-surface": "#eae2cf",
+            "on-error": "#690005",
+            "on-primary-fixed-variant": "#544600",
+            "health-red": "#EF4444",
+            "border-pixel": "#1E293B",
+            "surface-tint": "#e9c400",
+            "on-primary": "#3a3000",
+            "tertiary-container": "#00f1ff",
+            "surface-container-high": "#2e2a1e",
+            "primary-container": "#ffd700",
+            "on-background": "#eae2cf",
+            "on-error-container": "#ffdad6",
+            "on-tertiary": "#00363a",
+            "surface-container-lowest": "#110e05",
+            "error-container": "#93000a",
+            "tertiary-fixed-dim": "#00dbe8",
+            "tertiary": "#defcff",
+            "secondary-fixed-dim": "#4de082",
+            "level-up-gold": "#FACC15",
+            "on-tertiary-fixed": "#002022",
+            "inverse-surface": "#eae2cf",
+            "surface-container-low": "#1f1b10",
+            "error": "#ffb4ab",
+            "surface": "#161308",
+            "xp-green": "#22C55E",
+            "on-secondary-fixed": "#00210c",
+            "on-secondary-container": "#003e1c",
+            "on-primary-fixed": "#221b00",
+            "outline": "#999077",
+            "on-surface-variant": "#d0c6ab",
+            "surface-variant": "#393528",
+            "primary": "#fff6df",
+            "secondary-container": "#00b55d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "pixel-unit": "4px",
+            "container-padding": "12px",
+            "margin-desktop": "40px",
+            "margin-mobile": "20px",
+            "gutter": "16px"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "headline-md": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "body-md": ["Inter"],
+            "label-pixel": ["JetBrains Mono"],
+            "headline-lg-mobile": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+            "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "label-pixel": ["14px", {"lineHeight": "1", "fontWeight": "600"}],
+            "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .pixel-corners {
+      box-shadow: 0 -4px 0 0 #1E293B, 0 4px 0 0 #1E293B, -4px 0 0 0 #1E293B, 4px 0 0 0 #1E293B;
+    }
+    .pixel-btn-bevel {
+      box-shadow: 0 4px 0 0 #705e00;
+    }
+    .pixel-btn-bevel:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 0 #705e00;
+    }
+    .pixel-btn-blue {
+      box-shadow: 0 4px 0 0 #1D4ED8;
+    }
+    .pixel-btn-blue:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 0 #1D4ED8;
+    }
+    .pixel-card-bevel {
+      box-shadow: 0 4px 0 0 #1E293B;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen pb-28 selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface dark:bg-surface border-b-4 border-border-pixel bg-surface-container-low">
+<div class="flex items-center justify-between px-margin-mobile h-20 w-full max-w-screen-xl mx-auto">
+<!-- Leading: Pixel-art Hero Avatar -->
+<div class="flex items-center gap-3">
+<div class="relative w-11 h-11 bg-surface-container-high border-2 border-border-pixel p-1 flex items-center justify-center pixel-card-bevel">
+<div class="w-8 h-8 bg-level-up-gold border border-dungeon-black flex items-center justify-center">
+<span class="material-symbols-outlined text-dungeon-black text-xl select-none" data-icon="face">face</span>
+</div>
+<span class="absolute -bottom-1 -right-1 bg-xp-green text-dungeon-black font-label-pixel text-xs px-1 border border-border-pixel font-bold">L4</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-pixel text-label-pixel text-level-up-gold leading-none tracking-tight">DEVLEVEL</span>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed leading-tight">Grimorio Lógica</h1>
+</div>
+</div>
+<!-- Trailing: Mana / Energy Pool -->
+<div class="flex items-center gap-2 bg-surface-container border-2 border-border-pixel px-3 py-1.5 pixel-card-bevel">
+<span class="material-symbols-outlined text-mana-blue select-none" data-icon="bolt" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<div class="flex flex-col">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-pixel text-xs text-mana-blue font-bold">MANÁ</span>
+<span class="font-label-pixel text-xs text-on-surface">85/100</span>
+</div>
+<!-- Segmented Mini Bar -->
+<div class="w-16 h-2 bg-surface-container-lowest border border-border-pixel flex gap-0.5 p-0.5">
+<div class="h-full w-3 bg-mana-blue"></div>
+<div class="h-full w-3 bg-mana-blue"></div>
+<div class="h-full w-3 bg-mana-blue"></div>
+<div class="h-full w-2 bg-mana-blue"></div>
+<div class="h-full w-2 bg-transparent"></div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-screen-xl mx-auto px-margin-mobile pt-4 space-y-5">
+<!-- Grimorio Progress Slab -->
+<section class="bg-surface-container-low border-2 border-border-pixel p-container-padding pixel-card-bevel">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-level-up-gold select-none" data-icon="auto_stories" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label-pixel text-label-pixel text-on-surface uppercase tracking-wide">Progreso del Grimorio</span>
+</div>
+<span class="font-label-pixel text-label-pixel text-level-up-gold bg-surface-container-highest px-2 py-0.5 border border-border-pixel">
+          7 / 24 HECHIZOS
+        </span>
+</div>
+<!-- Segmented Pixel XP / Mastery Bar -->
+<div class="w-full h-5 bg-surface-container-lowest border-2 border-border-pixel p-1 flex gap-1">
+<div class="h-full flex-1 bg-level-up-gold"></div>
+<div class="h-full flex-1 bg-level-up-gold"></div>
+<div class="h-full flex-1 bg-level-up-gold"></div>
+<div class="h-full flex-1 bg-mana-blue"></div>
+<div class="h-full flex-1 bg-mana-blue"></div>
+<div class="h-full flex-1 bg-mana-blue"></div>
+<div class="h-full flex-1 bg-mana-blue"></div>
+<div class="h-full flex-1 bg-surface-container-high opacity-40"></div>
+<div class="h-full flex-1 bg-surface-container-high opacity-40"></div>
+<div class="h-full flex-1 bg-surface-container-high opacity-40"></div>
+<div class="h-full flex-1 bg-surface-container-high opacity-40"></div>
+<div class="h-full flex-1 bg-surface-container-high opacity-40"></div>
+</div>
+<div class="flex justify-between text-xs font-label-pixel text-on-surface-variant mt-1.5">
+<span>Rango: Aprendiz de Sintaxis</span>
+<span class="text-level-up-gold">29% Completado</span>
+</div>
+</section>
+<!-- Retro RPG Tab Filter -->
+<nav aria-label="Filtros de Hechizos" class="overflow-x-auto pb-1 -mx-2 px-2 flex gap-2 scrollbar-none">
+<button class="bg-primary-container text-on-primary-container border-2 border-border-pixel px-3 py-1.5 font-label-pixel text-label-pixel whitespace-nowrap pixel-btn-bevel flex items-center gap-1.5 font-bold">
+<span class="material-symbols-outlined text-sm select-none" data-icon="stars">stars</span>
+        Todos
+      </button>
+<button class="bg-surface-container-high text-on-surface border-2 border-border-pixel px-3 py-1.5 font-label-pixel text-label-pixel whitespace-nowrap hover:bg-surface-variant flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-sm text-level-up-gold select-none" data-icon="inventory_2">inventory_2</span>
+        Variables
+      </button>
+<button class="bg-surface-container-high text-on-surface border-2 border-border-pixel px-3 py-1.5 font-label-pixel text-label-pixel whitespace-nowrap hover:bg-surface-variant flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-sm text-secondary select-none" data-icon="alt_route">alt_route</span>
+        Condicionales
+      </button>
+<button class="bg-surface-container-high text-on-surface border-2 border-border-pixel px-3 py-1.5 font-label-pixel text-label-pixel whitespace-nowrap hover:bg-surface-variant flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-sm text-mana-blue select-none" data-icon="sync">sync</span>
+        Bucles
+      </button>
+<button class="bg-surface-container-high text-on-surface-variant border-2 border-border-pixel px-3 py-1.5 font-label-pixel text-label-pixel whitespace-nowrap hover:bg-surface-variant flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-sm text-outline select-none" data-icon="terminal">terminal</span>
+        Funciones
+      </button>
+</nav>
+<!-- Spellbook Grid of Collectible Runes -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-level-up-gold select-none" data-icon="menu_book">menu_book</span>
+          Tomo de Conjuros
+        </h2>
+<span class="font-label-pixel text-xs text-on-surface-variant">Toca para inspeccionar</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+<!-- Hechizo 1: Variables: Caja Arcana (Activo / Seleccionado por defecto) -->
+<article class="relative bg-surface-container-high border-2 border-level-up-gold p-container-padding pixel-card-bevel cursor-pointer ring-2 ring-primary-container ring-offset-2 ring-offset-background transition-transform active:translate-y-1">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-surface-container-lowest border-2 border-level-up-gold flex items-center justify-center text-level-up-gold">
+<span class="material-symbols-outlined text-2xl select-none" data-icon="inventory_2" data-weight="fill" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="bg-level-up-gold text-on-primary-container font-label-pixel text-xs px-1.5 py-0.2 font-bold">NIVEL 3</span>
+<span class="text-xs font-label-pixel text-xp-green">★ Dominado</span>
+</div>
+<h3 class="font-headline-md text-lg text-primary mt-0.5">Variables: Caja Arcana</h3>
+</div>
+</div>
+<span class="bg-mana-blue/20 text-tertiary-fixed border border-mana-blue text-xs font-label-pixel px-1.5 py-0.5">5 MP</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 text-sm">
+            Guarda y etiqueta esencias de información para reutilizarlas en conjuros posteriores.
+          </p>
+<!-- Code Snippet Box -->
+<div class="mt-3 bg-dungeon-black border-2 border-border-pixel p-2 font-label-pixel text-xs text-secondary flex items-center justify-between">
+<code>let x = 10;</code>
+<span class="text-on-surface-variant text-[10px]">Asignación</span>
+</div>
+</article>
+<!-- Hechizo 2: Bifurcación: Si/Entonces (if/else) -->
+<article class="bg-surface-container border-2 border-border-pixel p-container-padding pixel-card-bevel hover:border-secondary transition-colors cursor-pointer active:translate-y-1">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-surface-container-lowest border-2 border-secondary flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl select-none" data-icon="alt_route" data-weight="fill" style="font-variation-settings: 'FILL' 1;">alt_route</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="bg-secondary-container text-on-secondary font-label-pixel text-xs px-1.5 py-0.2 font-bold">NIVEL 2</span>
+<span class="text-xs font-label-pixel text-on-surface-variant">En progreso</span>
+</div>
+<h3 class="font-headline-md text-lg text-primary mt-0.5">Bifurcación: Si/Entonces</h3>
+</div>
+</div>
+<span class="bg-mana-blue/20 text-tertiary-fixed border border-mana-blue text-xs font-label-pixel px-1.5 py-0.5">12 MP</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 text-sm">
+            Evalúa condiciones booleanas para tomar caminos alternativos en el flujo de ejecución.
+          </p>
+<div class="mt-3 bg-dungeon-black border-2 border-border-pixel p-2 font-label-pixel text-xs text-secondary flex items-center justify-between">
+<code>if (llave) { abrir(); }</code>
+<span class="text-on-surface-variant text-[10px]">Decisión</span>
+</div>
+</article>
+<!-- Hechizo 3: Bucle Infinito: Ciclo For -->
+<article class="bg-surface-container border-2 border-border-pixel p-container-padding pixel-card-bevel hover:border-mana-blue transition-colors cursor-pointer active:translate-y-1">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-surface-container-lowest border-2 border-mana-blue flex items-center justify-center text-mana-blue">
+<span class="material-symbols-outlined text-2xl select-none" data-icon="hourglass_top" data-weight="fill" style="font-variation-settings: 'FILL' 1;">hourglass_top</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="bg-mana-blue text-dungeon-black font-label-pixel text-xs px-1.5 py-0.2 font-bold">NIVEL 2</span>
+<span class="text-xs font-label-pixel text-on-surface-variant">En progreso</span>
+</div>
+<h3 class="font-headline-md text-lg text-primary mt-0.5">Bucle Infinito: Ciclo For</h3>
+</div>
+</div>
+<span class="bg-mana-blue/20 text-tertiary-fixed border border-mana-blue text-xs font-label-pixel px-1.5 py-0.5">20 MP</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 text-sm">
+            Itera tareas idénticas tantas veces como indique el contador arcano sin fatigarte.
+          </p>
+<div class="mt-3 bg-dungeon-black border-2 border-border-pixel p-2 font-label-pixel text-xs text-secondary flex items-center justify-between">
+<code>for(i=0; i&lt;n; i++)</code>
+<span class="text-on-surface-variant text-[10px]">Iteración</span>
+</div>
+</article>
+<!-- Hechizo 4: Bloqueado (Funciones y Retornos) -->
+<article class="bg-surface-container-lowest border-2 border-dashed border-border-pixel p-container-padding pixel-card-bevel opacity-85 relative">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-surface-container-high border-2 border-outline-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-2xl select-none" data-icon="lock" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="bg-outline-variant text-on-surface-variant font-label-pixel text-xs px-1.5 py-0.2 font-bold">BLOQUEADO</span>
+</div>
+<h3 class="font-headline-md text-lg text-outline mt-0.5">Funciones y Retornos</h3>
+</div>
+</div>
+<span class="text-outline text-xs font-label-pixel">?? MP</span>
+</div>
+<div class="mt-3 bg-surface-container-high border border-border-pixel p-2.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-base select-none" data-icon="flag">flag</span>
+<p class="font-label-pixel text-xs text-on-surface-variant">
+              Requisito: Desbloquea en Sector 4: The Function Fort.
+            </p>
+</div>
+</article>
+<!-- Hechizo 5: Bloqueado (Matrices / Arrays) -->
+<article class="bg-surface-container-lowest border-2 border-dashed border-border-pixel p-container-padding pixel-card-bevel opacity-85 relative">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 bg-surface-container-high border-2 border-outline-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-2xl select-none" data-icon="lock" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="bg-outline-variant text-on-surface-variant font-label-pixel text-xs px-1.5 py-0.2 font-bold">BLOQUEADO</span>
+</div>
+<h3 class="font-headline-md text-lg text-outline mt-0.5">Matrices / Arrays</h3>
+</div>
+</div>
+<span class="text-outline text-xs font-label-pixel">?? MP</span>
+</div>
+<div class="mt-3 bg-surface-container-high border border-border-pixel p-2.5 flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-base select-none" data-icon="flag">flag</span>
+<p class="font-label-pixel text-xs text-on-surface-variant">
+              Requisito: Derrota al Gólem de Listas en Mazmorra 5.
+            </p>
+</div>
+</article>
+</div>
+</section>
+<!-- Modal / Tarjeta Expandida Destacada: Inspección en Detalle de Hechizo -->
+<section aria-labelledby="modal-spell-title" class="bg-surface-container border-4 border-level-up-gold p-5 pixel-corners relative mt-6">
+<!-- Badge Superior -->
+<div class="flex items-center justify-between border-b-2 border-border-pixel pb-3">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-level-up-gold inline-block"></span>
+<span class="font-label-pixel text-xs text-level-up-gold uppercase tracking-wider font-bold">Grimorio :: Análisis Arcano</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="bg-mana-blue text-dungeon-black text-xs font-label-pixel px-2 py-0.5 font-bold">COSTE: 5 MANÁ MENTAL</span>
+<button aria-label="Cerrar detalle" class="text-on-surface-variant hover:text-primary p-1">
+<span class="material-symbols-outlined text-xl select-none" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<div class="pt-4 space-y-4">
+<!-- Título e Icono Principal -->
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 bg-surface-container-lowest border-4 border-level-up-gold flex items-center justify-center text-level-up-gold shrink-0">
+<span class="material-symbols-outlined text-4xl select-none" data-icon="inventory_2" data-weight="fill" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+</div>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold" id="modal-spell-title">
+                Variables: Caja Arcana
+              </h2>
+<span class="bg-xp-green text-dungeon-black font-label-pixel text-xs px-2 py-0.5 font-bold">MAESTRÍA: NIVEL 3 (MAX)</span>
+</div>
+<p class="font-label-pixel text-xs text-on-surface-variant mt-1">Categoría: Almacenamiento &amp; Memoria de Datos</p>
+</div>
+</div>
+<!-- Explicación en lenguaje simple y Analogía Real -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+<!-- Explicación Simple -->
+<div class="bg-surface-container-high border-2 border-border-pixel p-3">
+<h4 class="font-label-pixel text-xs text-level-up-gold flex items-center gap-1.5 font-bold uppercase mb-1">
+<span class="material-symbols-outlined text-base select-none" data-icon="psychology">psychology</span>
+              Concepto sin Enredos
+            </h4>
+<p class="font-body-md text-sm text-on-surface leading-relaxed">
+              Una variable es simplemente una caja con una etiqueta adhesiva pegada al frente. Adentro puedes guardar un número, una palabra o un objeto místico para usarlo más adelante sin tener que volver a escribirlo.
+            </p>
+</div>
+<!-- Analogía en el Mundo Real -->
+<div class="bg-surface-container-high border-2 border-border-pixel p-3">
+<h4 class="font-label-pixel text-xs text-mana-blue flex items-center gap-1.5 font-bold uppercase mb-1">
+<span class="material-symbols-outlined text-base select-none" data-icon="cottage">cottage</span>
+              Analogía en el Mundo Real
+            </h4>
+<p class="font-body-md text-sm text-on-surface leading-relaxed">
+              Es igual que la cajonera de tu inventario: pegas la etiqueta <em>"Pociones"</em> en un cajón y guardas 3 frascos. Cada vez que tu héroe necesita curarse, sabe exactamente a qué cajón acudir.
+            </p>
+</div>
+</div>
+<!-- Consola de Sintaxis Arcana -->
+<div class="bg-dungeon-black border-2 border-border-pixel p-3">
+<div class="flex items-center justify-between border-b border-border-pixel pb-1 mb-2">
+<span class="font-label-pixel text-xs text-on-surface-variant">// Grimorio_Consola.js</span>
+<span class="text-xp-green text-xs font-label-pixel">✓ Sintaxis Verificada</span>
+</div>
+<pre class="font-label-pixel text-xs text-on-surface overflow-x-auto"><code><span class="text-level-up-gold">let</span> nombreHeroe = <span class="text-secondary">"Kael"</span>;
+<span class="text-level-up-gold">let</span> puntosVida = <span class="text-tertiary-fixed">100</span>;
+<span class="text-on-surface-variant">// La variable guarda el valor en el cofre de memoria</span></code></pre>
+</div>
+<!-- Botones de Acción -->
+<div class="flex flex-col sm:flex-row gap-3 pt-2">
+<button class="flex-1 bg-primary-container text-on-primary-container border-2 border-on-primary-fixed-variant p-3 font-label-pixel text-label-pixel font-bold flex items-center justify-center gap-2 pixel-btn-bevel transition-transform">
+<span class="material-symbols-outlined select-none" data-icon="swords">swords</span>
+            Practicar en Arena
+          </button>
+<button class="flex-1 bg-surface-container-highest text-on-surface border-2 border-border-pixel p-3 font-label-pixel text-label-pixel font-bold flex items-center justify-center gap-2 hover:bg-surface-variant pixel-card-bevel transition-colors">
+<span class="material-symbols-outlined select-none" data-icon="quiz">quiz</span>
+            Ver Desafíos (4/4 Superados)
+          </button>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Shared Component Execution) -->
+<nav aria-label="Navegación principal" class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-2 fixed bottom-0 w-full z-50 h-20 border-t-4 border-border-pixel bg-surface-container dark:bg-surface-container-highest">
+<!-- Map (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant active:translate-y-1 transition-all" href="#map">
+<span class="material-symbols-outlined text-2xl select-none" data-icon="map">map</span>
+<span class="font-label-pixel text-label-pixel mt-1">Map</span>
+</a>
+<!-- Spells (Active Navigation Item) -->
+<a aria-current="page" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg p-2 border-b-4 border-on-primary-fixed-variant active:translate-y-1 transition-all" href="#spells">
+<span class="material-symbols-outlined text-2xl select-none" data-icon="menu_book" data-weight="fill" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-label-pixel text-label-pixel mt-1 font-bold">Spells</span>
+</a>
+<!-- Hero (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant active:translate-y-1 transition-all" href="#hero">
+<span class="material-symbols-outlined text-2xl select-none" data-icon="person">person</span>
+<span class="font-label-pixel text-label-pixel mt-1">Hero</span>
+</a>
+<!-- Config (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant active:translate-y-1 transition-all" href="#config">
+<span class="material-symbols-outlined text-2xl select-none" data-icon="settings">settings</span>
+<span class="font-label-pixel text-label-pixel mt-1">Config</span>
+</a>
+</nav>
+</body></html>

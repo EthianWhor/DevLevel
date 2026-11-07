@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DevLevel - Splash Screen</title>
+<!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600;700;800&amp;family=Space+Grotesk:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined (Mandatory Link) -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim as mandated -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "health-red": "#EF4444",
+            "primary-container": "#ffd700",
+            "on-error": "#690005",
+            "on-primary-fixed": "#221b00",
+            "xp-green": "#22C55E",
+            "on-secondary-fixed": "#00210c",
+            "outline": "#999077",
+            "secondary-fixed-dim": "#4de082",
+            "tertiary": "#defcff",
+            "surface-container-low": "#1f1b10",
+            "secondary": "#4de082",
+            "error": "#ffb4ab",
+            "primary-fixed": "#ffe16d",
+            "surface-tint": "#e9c400",
+            "error-container": "#93000a",
+            "surface-container-highest": "#393528",
+            "surface-bright": "#3d392c",
+            "surface-container-high": "#2e2a1e",
+            "tertiary-fixed": "#79f5ff",
+            "on-tertiary": "#00363a",
+            "inverse-primary": "#705d00",
+            "on-primary": "#3a3000",
+            "primary-fixed-dim": "#e9c400",
+            "background": "#161308",
+            "on-background": "#eae2cf",
+            "surface-container-lowest": "#110e05",
+            "inverse-on-surface": "#343024",
+            "on-tertiary-container": "#006a70",
+            "on-surface-variant": "#d0c6ab",
+            "on-primary-fixed-variant": "#544600",
+            "on-tertiary-fixed": "#002022",
+            "on-secondary-fixed-variant": "#005227",
+            "on-secondary-container": "#003e1c",
+            "surface-container": "#231f14",
+            "surface-variant": "#393528",
+            "level-up-gold": "#FACC15",
+            "border-pixel": "#1E293B",
+            "secondary-container": "#00b55d",
+            "inverse-surface": "#eae2cf",
+            "dungeon-black": "#0F172A",
+            "surface": "#161308",
+            "on-primary-container": "#705e00",
+            "on-secondary": "#003919",
+            "surface-dim": "#161308",
+            "outline-variant": "#4d4732",
+            "tertiary-fixed-dim": "#00dbe8",
+            "on-error-container": "#ffdad6",
+            "primary": "#fff6df",
+            "on-surface": "#eae2cf",
+            "on-tertiary-fixed-variant": "#004f54",
+            "secondary-fixed": "#6dfe9c",
+            "village-light": "#F8FAFC",
+            "mana-blue": "#3B82F6",
+            "tertiary-container": "#00f1ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "container-padding": "12px",
+            "pixel-unit": "4px",
+            "gutter": "16px",
+            "margin-desktop": "40px",
+            "margin-mobile": "20px"
+          },
+          "fontFamily": {
+            "headline-md": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-pixel": ["JetBrains Mono"],
+            "headline-lg-mobile": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+            "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+            "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "label-pixel": ["14px", { "lineHeight": "1", "fontWeight": "600" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Pixel art grid background pattern */
+    .arcane-grid {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(250, 204, 21, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(250, 204, 21, 0.04) 1px, transparent 1px);
+    }
+
+    /* Pixel star twinkling effect */
+    @keyframes pixel-twinkle {
+      0%, 100% { opacity: 0.15; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.2); }
+    }
+    .star-twinkle-fast {
+      animation: pixel-twinkle 2.2s infinite ease-in-out;
+    }
+    .star-twinkle-slow {
+      animation: pixel-twinkle 4s infinite ease-in-out;
+    }
+
+    /* Retro CRT Scanline Overlay */
+    .scanlines {
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0) 50%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.3)
+      );
+      background-size: 100% 4px;
+    }
+
+    /* Blinking underscore */
+    @keyframes cursor-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .blink-cursor {
+      animation: cursor-blink 0.9s infinite step-end;
+    }
+
+    /* Floating mana particles */
+    @keyframes particle-drift {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.8; }
+      80% { opacity: 0.8; }
+      100% { transform: translateY(-80px) rotate(45deg); opacity: 0; }
+    }
+    .floating-spark {
+      animation: particle-drift 5s infinite linear;
+    }
+
+    /* Support prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .star-twinkle-fast,
+      .star-twinkle-slow,
+      .floating-spark,
+      .blink-cursor {
+        animation: none !important;
+        opacity: 0.6;
+      }
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface antialiased overflow-x-hidden min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-dungeon-black relative">
+<!-- Ambient RPG Atmosphere Layer -->
+<div aria-hidden="true" class="fixed inset-0 arcane-grid pointer-events-none z-0"></div>
+<div aria-hidden="true" class="fixed inset-0 scanlines opacity-40 pointer-events-none z-10"></div>
+<!-- Decorative 8-Bit Pixel Constellations & Stars -->
+<div aria-hidden="true" class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<!-- Star 1 -->
+<div class="absolute top-12 left-8 w-2 h-2 bg-level-up-gold star-twinkle-fast shadow-[0_0_8px_#ffd700]"></div>
+<!-- Star 2 -->
+<div class="absolute top-28 right-12 w-1.5 h-1.5 bg-tertiary-fixed star-twinkle-slow shadow-[0_0_6px_#79f5ff]"></div>
+<!-- Star 3 -->
+<div class="absolute top-64 left-16 w-1 h-1 bg-village-light star-twinkle-fast opacity-75"></div>
+<!-- Star 4 -->
+<div class="absolute top-96 right-20 w-2 h-2 bg-mana-blue star-twinkle-slow"></div>
+<!-- Star 5 -->
+<div class="absolute bottom-40 left-12 w-2 h-2 bg-primary-fixed-dim star-twinkle-fast shadow-[0_0_8px_#ffd700]"></div>
+<!-- Star 6 -->
+<div class="absolute bottom-72 right-10 w-1.5 h-1.5 bg-secondary-fixed star-twinkle-slow"></div>
+<!-- Floating Arcane Bits -->
+<div class="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-level-up-gold floating-spark" style="animation-delay: 0.5s;"></div>
+<div class="absolute bottom-24 right-1/3 w-2 h-2 bg-tertiary-fixed-dim floating-spark" style="animation-delay: 2.3s;"></div>
+<div class="absolute bottom-44 right-1/4 w-1 h-1 bg-xp-green floating-spark" style="animation-delay: 1.2s;"></div>
+</div>
+<!-- Screen Framing Border (Retro RPG Canvas Border) -->
+<header class="relative z-20 w-full pt-6 px-margin-mobile flex justify-between items-center max-w-md mx-auto">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container border-2 border-border-pixel">
+<span class="w-2 h-2 bg-xp-green"></span>
+<span class="font-label-pixel text-label-pixel text-secondary tracking-widest text-xs uppercase">REALM: ONLINE</span>
+</div>
+<!-- Realm Sigil & Sound Accessibility Toggle -->
+<div class="flex items-center gap-3">
+<button aria-label="Alternar ritmo de animación" class="w-8 h-8 flex items-center justify-center bg-surface-container-low border-2 border-border-pixel text-level-up-gold hover:bg-surface-variant transition-colors" id="motionToggle" title="Accesibilidad de Animación" type="button">
+<span class="material-symbols-outlined text-base">magic_button</span>
+</button>
+<div class="px-2 py-1 bg-surface-container-low border-2 border-border-pixel font-label-pixel text-xs text-on-surface-variant">
+        60 FPS
+      </div>
+</div>
+</header>
+<!-- Central Hero Stage -->
+<main class="relative z-20 flex-1 flex flex-col items-center justify-center px-margin-mobile py-8 w-full max-w-md mx-auto text-center" role="main">
+<!-- Central Animated Pixel-art Logo (Mandatory Custom Element) -->
+<div class="relative group my-2">
+<!-- Glow Aura -->
+<div aria-hidden="true" class="absolute inset-0 bg-primary-container blur-2xl opacity-15 rounded-full pointer-events-none transform scale-90"></div>
+<!-- Embedded Animated SVG Component -->
+<!-- STITCH_SVG_START:ANIMATION_16 class="w-56 h-56 mx-auto mb-4 relative z-10 filter drop-shadow-[0_8px_0_rgba(15,23,42,0.8)]" --><div class="w-56 h-56 mx-auto mb-4 relative z-10 filter drop-shadow-[0_8px_0_rgba(15,23,42,0.8)]" id="animated-svg-ANIMATION_16" style="display:block;"><svg height="100%" shape-rendering="crispEdges" viewbox="0 0 320 320" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>
+      @keyframes floatPulse {
+        0%, 100% { transform: translateY(0px) scale(1); }
+        50% { transform: translateY(-8px) scale(1.02); }
+      }
+      @keyframes runeGlow {
+        0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 2px #ffd700); }
+        50% { opacity: 1; filter: drop-shadow(0 0 10px #ffd700); }
+      }
+      @keyframes gemShine {
+        0%, 100% { fill: #00ffff; filter: drop-shadow(0 0 4px #00e5ff); }
+        50% { fill: #ffffff; filter: drop-shadow(0 0 14px #00ffff); }
+      }
+      @keyframes particleDrift {
+        0% { transform: translateY(0) scale(1); opacity: 0; }
+        30% { opacity: 1; }
+        80% { opacity: 0.8; }
+        100% { transform: translateY(-30px) scale(0.5); opacity: 0; }
+      }
+      .shield-group {
+        animation: floatPulse 3.5s ease-in-out infinite;
+        transform-origin: center;
+      }
+      .glow-rune {
+        animation: runeGlow 2.5s ease-in-out infinite;
+      }
+      .gem-core {
+        animation: gemShine 2s ease-in-out infinite;
+      }
+      .p1 { animation: particleDrift 2.8s linear infinite; }
+      .p2 { animation: particleDrift 3.4s linear infinite 0.7s; }
+      .p3 { animation: particleDrift 2.2s linear infinite 1.3s; }
+      .p4 { animation: particleDrift 3.0s linear infinite 1.9s; }
+    </style>
+</defs>
+<!-- Ambient Pixel Sparkles / Mana Embers -->
+<g class="p1" fill="#ffd700">
+<rect height="8" width="8" x="60" y="120"></rect>
+</g>
+<g class="p2" fill="#00e5ff">
+<rect height="6" width="6" x="250" y="100"></rect>
+</g>
+<g class="p3" fill="#00ff66">
+<rect height="6" width="6" x="80" y="220"></rect>
+</g>
+<g class="p4" fill="#ffd700">
+<rect height="8" width="8" x="230" y="210"></rect>
+</g>
+<!-- Main Pixel Emblem Group -->
+<g class="shield-group">
+<!-- Outer Shield Shadow / Border (Dark Bronze/Gold) -->
+<!-- Pixel Shield Outer Outline (16x16 modular pixel grid, 1 unit = 10px) -->
+<!-- Rows of the shield frame -->
+<g fill="#2a2208">
+<rect height="20" width="160" x="80" y="50"></rect>
+<rect height="20" width="200" x="60" y="70"></rect>
+<rect height="70" width="220" x="50" y="90"></rect>
+<rect height="30" width="200" x="60" y="160"></rect>
+<rect height="30" width="160" x="80" y="190"></rect>
+<rect height="30" width="100" x="110" y="220"></rect>
+<rect height="20" width="40" x="140" y="250"></rect>
+</g>
+<!-- Outer Gold Pixel Border -->
+<g fill="#d4af37">
+<rect height="10" width="140" x="90" y="60"></rect>
+<rect height="10" width="180" x="70" y="70"></rect>
+<rect height="10" width="200" x="60" y="80"></rect>
+<rect height="70" width="10" x="60" y="90"></rect>
+<rect height="70" width="10" x="250" y="90"></rect>
+<rect height="20" width="10" x="70" y="160"></rect>
+<rect height="20" width="10" x="240" y="160"></rect>
+<rect height="20" width="10" x="90" y="180"></rect>
+<rect height="20" width="10" x="220" y="180"></rect>
+<rect height="20" width="20" x="110" y="200"></rect>
+<rect height="20" width="20" x="190" y="200"></rect>
+<rect height="20" width="20" x="130" y="220"></rect>
+<rect height="20" width="20" x="170" y="220"></rect>
+<rect height="20" width="40" x="140" y="240"></rect>
+</g>
+<!-- Shield Inner Body (Deep Obsidian Slate) -->
+<g fill="#161308">
+<rect height="70" width="180" x="70" y="90"></rect>
+<rect height="20" width="160" x="80" y="160"></rect>
+<rect height="20" width="120" x="100" y="180"></rect>
+<rect height="20" width="60" x="130" y="200"></rect>
+<rect height="10" width="40" x="140" y="220"></rect>
+</g>
+<!-- Radiant Inner Pixel Highlights (Bright Gold / Amber) -->
+<g class="glow-rune" fill="#ffd700">
+<rect height="10" width="160" x="80" y="70"></rect>
+<rect height="80" width="10" x="70" y="80"></rect>
+<rect height="80" width="10" x="240" y="80"></rect>
+<rect height="10" width="10" x="80" y="160"></rect>
+<rect height="10" width="10" x="230" y="160"></rect>
+<rect height="10" width="10" x="100" y="170"></rect>
+<rect height="10" width="10" x="210" y="170"></rect>
+</g>
+<!-- Pixel Code Bracket (Left < ) in Emerald Mana Green -->
+<g fill="#00ff66">
+<rect height="15" width="15" x="95" y="120"></rect>
+<rect height="15" width="15" x="110" y="105"></rect>
+<rect height="15" width="15" x="125" y="90"></rect>
+<rect height="15" width="15" x="110" y="135"></rect>
+<rect height="15" width="15" x="125" y="150"></rect>
+</g>
+<!-- Pixel Code Bracket (Right > ) in Emerald Mana Green -->
+<g fill="#00ff66">
+<rect height="15" width="15" x="210" y="120"></rect>
+<rect height="15" width="15" x="195" y="105"></rect>
+<rect height="15" width="15" x="180" y="90"></rect>
+<rect height="15" width="15" x="195" y="135"></rect>
+<rect height="15" width="15" x="180" y="150"></rect>
+</g>
+<!-- Central Mana Crystal / Logic Soul Gem (Cyan / Diamond) -->
+<g class="gem-core">
+<rect height="10" width="20" x="150" y="100"></rect>
+<rect height="25" width="40" x="140" y="110"></rect>
+<rect height="15" width="20" x="150" y="135"></rect>
+<rect height="10" width="10" x="155" y="150"></rect>
+</g>
+<!-- Crystal Core White Specular Highlight -->
+<g fill="#ffffff">
+<rect height="10" width="10" x="145" y="115"></rect>
+<rect height="5" width="5" x="155" y="115"></rect>
+</g>
+<!-- Lower Logic Rune: Golden Level-Up Spark / Star -->
+<g fill="#ffd700">
+<rect height="20" width="10" x="155" y="180"></rect>
+<rect height="10" width="20" x="150" y="185"></rect>
+</g>
+</g>
+</svg></div><!-- STITCH_SVG_END:ANIMATION_16 -->
+<!-- Pixel Decorative Corner Glyphs -->
+<div aria-hidden="true" class="absolute -top-2 -left-2 w-3 h-3 border-t-2 border-l-2 border-level-up-gold"></div>
+<div aria-hidden="true" class="absolute -top-2 -right-2 w-3 h-3 border-t-2 border-r-2 border-level-up-gold"></div>
+<div aria-hidden="true" class="absolute -bottom-2 -left-2 w-3 h-3 border-b-2 border-l-2 border-level-up-gold"></div>
+<div aria-hidden="true" class="absolute -bottom-2 -right-2 w-3 h-3 border-b-2 border-r-2 border-level-up-gold"></div>
+</div>
+<!-- Game Title Header Cluster -->
+<div class="mt-3 flex flex-col items-center">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-level-up-gold tracking-tight drop-shadow-[0_3px_0_#544600] uppercase font-extrabold flex items-center justify-center gap-1.5">
+        DevLevel
+      </h1>
+<!-- Gold Beveled Subtitle Banner -->
+<div class="mt-2 inline-flex items-center gap-2 px-3 py-1.5 bg-surface-container border-2 border-border-pixel shadow-[0_3px_0_#0F172A]">
+<span class="w-1.5 h-1.5 bg-mana-blue inline-block"></span>
+<h2 class="font-label-pixel text-label-pixel text-on-surface font-semibold tracking-wider uppercase text-xs sm:text-sm">
+          Aprende Lógica de Programación
+        </h2>
+<span class="w-1.5 h-1.5 bg-mana-blue inline-block"></span>
+</div>
+</div>
+<!-- RPG Quest Loading Progress Terminal -->
+<section aria-label="Progreso de Inicialización de DevLevel" class="w-full mt-8 max-w-xs">
+<!-- Dialogue Status Text -->
+<div class="flex items-center justify-between mb-2 font-label-pixel text-xs text-on-surface-variant">
+<div class="flex items-center gap-1.5 overflow-hidden">
+<span class="text-level-up-gold">&gt;</span>
+<span class="truncate text-on-surface text-left font-medium" id="loadingPhaseText">
+            Cargando Grimorio de Lógica...
+          </span>
+<span class="text-level-up-gold blink-cursor font-bold">_</span>
+</div>
+<span class="text-level-up-gold font-bold ml-2" id="loadingPercent">42%</span>
+</div>
+<!-- Segmented 8-bit Progress Bar Outer Slab -->
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="42" class="w-full h-7 bg-surface-container-lowest p-1 border-2 border-border-pixel shadow-[0_4px_0_#0F172A] relative" id="splashProgressBar" role="progressbar">
+<!-- Segmented Fill Container -->
+<div class="h-full w-full bg-surface-container flex items-center gap-1 overflow-hidden p-0.5">
+<!-- 12 Pixel Blocks simulating 8-bit increments -->
+<div class="flex-1 h-full bg-level-up-gold border-r border-on-primary-fixed-variant transition-all duration-300"></div>
+<div class="flex-1 h-full bg-level-up-gold border-r border-on-primary-fixed-variant transition-all duration-300"></div>
+<div class="flex-1 h-full bg-level-up-gold border-r border-on-primary-fixed-variant transition-all duration-300"></div>
+<div class="flex-1 h-full bg-level-up-gold border-r border-on-primary-fixed-variant transition-all duration-300"></div>
+<div class="flex-1 h-full bg-level-up-gold border-r border-on-primary-fixed-variant transition-all duration-300"></div>
+<div class="flex-1 h-full bg-surface-container-high transition-all duration-300"></div>
+<div class="flex-1 h-full bg-surface-container-high transition-all duration-300"></div>
+<div class="flex-1 h-full bg-surface-container-high transition-all duration-300"></div>
+<div class="flex-1 h-full bg-surface-container-high transition-all duration-300"></div>
+<div class="flex-1 h-full bg-surface-container-high transition-all duration-300"></div>
+<div class="flex-1 h-full bg-surface-container-high transition-all duration-300"></div>
+<div class="flex-1 h-full bg-surface-container-high transition-all duration-300"></div>
+</div>
+</div>
+<!-- Tactical Micro-stats Bar (Mana / Logic HP status) -->
+<div class="mt-3 flex justify-between items-center text-[11px] font-label-pixel text-outline">
+<span class="flex items-center gap-1 text-mana-blue font-semibold">
+<span class="w-1.5 h-1.5 bg-mana-blue inline-block"></span> MP 128/128
+        </span>
+<span class="flex items-center gap-1 text-xp-green font-semibold">
+<span class="w-1.5 h-1.5 bg-xp-green inline-block"></span> REINO: ESTABLE
+        </span>
+</div>
+<!-- Action Prompt / Transition Prompt (WCAG compliant contrast) -->
+<div class="mt-6">
+<button class="w-full py-2.5 px-4 bg-surface-container border-2 border-border-pixel hover:border-level-up-gold text-on-surface font-label-pixel text-xs tracking-wider transition-all duration-150 active:translate-y-0.5 shadow-[0_3px_0_#1E293B] focus:outline-none focus:ring-2 focus:ring-level-up-gold" id="skipButton" type="button">
+          [ ESPERANDO INVOCACIÓN AUTOMÁTICA ]
+        </button>
+</div>
+</section>
+</main>
+<!-- Footer Meta Details (RPG Style & Academic Anchor) -->
+<footer class="relative z-20 w-full pb-6 px-margin-mobile max-w-md mx-auto text-center" role="contentinfo">
+<div class="border-t-2 border-border-pixel pt-3 flex flex-col items-center gap-1">
+<p class="font-label-pixel text-[11px] text-on-surface-variant font-medium tracking-wide">
+        v1.0.0 · Universidad de La Sabana
+      </p>
+<p class="font-body-md text-[11px] text-outline">
+        Diseñado para dominar la algoritmia pixel a pixel
+      </p>
+</div>
+</footer>
+<!-- Splash Screen Simulation & Transition Engine -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const phrases = [
+        "Cargando Grimorio de Lógica...",
+        "Sincronizando runas binarias...",
+        "Invocando Arch-Mage...",
+        "Calibrando bucles del Overworld...",
+        "¡Reino desbloqueado!"
+      ];
+
+      const percentages = [20, 48, 74, 91, 100];
+      const textElement = document.getElementById('loadingPhaseText');
+      const percentElement = document.getElementById('loadingPercent');
+      const progressContainer = document.getElementById('splashProgressBar');
+      const skipButton = document.getElementById('skipButton');
+      const motionToggle = document.getElementById('motionToggle');
+
+      let currentStep = 0;
+      let motionReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Update segment styles dynamically
+      function updateBlocks(percentage) {
+        if (!progressContainer) return;
+        const blocks = progressContainer.querySelectorAll('.flex-1');
+        const activeCount = Math.round((percentage / 100) * blocks.length);
+
+        blocks.forEach((block, idx) => {
+          if (idx < activeCount) {
+            block.className = 'flex-1 h-full bg-level-up-gold border-r border-on-primary-fixed-variant transition-all duration-200';
+          } else {
+            block.className = 'flex-1 h-full bg-surface-container-high transition-all duration-200';
+          }
+        });
+      }
+
+      function advanceLoading() {
+        if (currentStep < phrases.length) {
+          textElement.textContent = phrases[currentStep];
+          percentElement.textContent = percentages[currentStep] + '%';
+          updateBlocks(percentages[currentStep]);
+
+          if (currentStep === phrases.length - 1) {
+            skipButton.textContent = "[ ENTRAR AL REINO AHORA ]";
+            skipButton.classList.remove('bg-surface-container');
+            skipButton.classList.add('bg-primary-container', 'text-on-primary-fixed', 'border-on-primary-fixed-variant', 'font-bold');
+            skipButton.onclick = () => {
+              // Simulated route navigation
+              window.location.hash = "#onboarding";
+            };
+          }
+
+          currentStep++;
+          if (currentStep < phrases.length) {
+            setTimeout(advanceLoading, motionReduced ? 400 : 850);
+          }
+        }
+      }
+
+      // Initial kickoff
+      setTimeout(advanceLoading, 500);
+
+      // Manual continue option
+      skipButton.addEventListener('click', () => {
+        currentStep = phrases.length - 1;
+        advanceLoading();
+      });
+
+      // Accessible motion toggle
+      motionToggle.addEventListener('click', () => {
+        motionReduced = !motionReduced;
+        document.body.classList.toggle('reduce-motion-active', motionReduced);
+        motionToggle.classList.toggle('border-level-up-gold', motionReduced);
+      });
+    });
+  </script>
+</body></html>
