@@ -46,6 +46,8 @@ Las pruebas levantan la API real en un puerto libre y le hacen peticiones HTTP, 
 
 En Supabase: **SQL Editor → New query**, pegar todo `supabase/schema.sql` y ejecutar. Crea las 6 tablas con RLS activado y sin políticas, así que solo este backend puede leer y escribir.
 
+Después, en otra consulta, pegar y ejecutar `supabase/seed.sql`: carga el contenido del módulo (5 unidades, 15 niveles y 45 retos). Se puede ejecutar varias veces sin duplicar datos.
+
 ## Estructura
 
 ```

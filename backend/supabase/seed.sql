@@ -1,5 +1,6 @@
 -- =============================================================
--- DevLevel: contenido de las unidades 1 a 3 (9 niveles, 27 retos)
+-- DevLevel: contenido del módulo de lógica (5 unidades, 15 niveles, 45 retos)
+-- Unidades 1 a 3: niveles 1 a 9. Unidades 4 y 5: niveles 10 a 15.
 -- Ejecutar en Supabase > SQL Editor, después de schema.sql
 -- Formato de "respuesta":
 --   opcion_multiple -> índice de la opción correcta
@@ -211,4 +212,155 @@ values
  'Correcto. Las dos condiciones son verdaderas, así que pasa.',
  'Revisa cada condición: 20 >= 18 es verdadero y tieneEntrada también.',
  'Comprueba las dos condiciones por separado.')
+on conflict (nivel_id, orden) do nothing;
+
+-- =============================================================
+-- Unidades 4 y 5 (6 niveles, 18 retos)
+-- =============================================================
+
+insert into public.unidades (id, orden, titulo, descripcion) values
+  (4, 4, 'Repetir sin cansarse', 'Haz que el programa repita pasos sin escribirlos una y otra vez.'),
+  (5, 5, 'Bloques reutilizables', 'Crea tus propios bloques de pasos y úsalos cuantas veces quieras.')
+on conflict (id) do nothing;
+
+insert into public.niveles
+  (id, unidad_id, orden, titulo, concepto_titulo, concepto_texto, concepto_ejemplo, hechizo_nombre, hechizo_descripcion, xp_recompensa)
+values
+  (10, 4, 10, 'Repetir N veces', 'Ciclo',
+   'Un ciclo repite un grupo de pasos. Con «Repetir N veces» los pasos se hacen exactamente esa cantidad de veces, sin tener que escribirlos muchas veces.',
+   E'Repetir 3 veces\n  Aplaudir\nFin repetir',
+   'Hechizo del Eco', 'Repite un grupo de pasos las veces que quieras sin escribirlos de nuevo.', 50),
+  (11, 4, 11, 'Repetir mientras', 'Ciclo «Mientras»',
+   'Con «Mientras» los pasos se repiten mientras una condición sea verdadera. Cuando la condición se vuelve falsa, el ciclo termina. Dentro del ciclo algo debe cambiar; si no, nunca terminaría.',
+   E'vasos = 0\nMientras vasos < 3 hacer\n  Llenar un vaso\n  vasos = vasos + 1\nFin mientras',
+   'Hechizo de la Vigilia', 'Repite pasos mientras una condición siga siendo verdadera.', 50),
+  (12, 4, 12, 'Recorrer una lista', 'Lista y recorrido',
+   'Una lista guarda varios datos en orden dentro de una sola variable. Con «Para cada» recorres la lista y haces los mismos pasos con cada elemento, del primero al último.',
+   E'frutas = [«manzana», «pera», «uva»]\nPara cada fruta en frutas hacer\n  Mostrar fruta\nFin para',
+   'Hechizo del Inventario', 'Recorre cada elemento de una lista sin olvidar ninguno.', 50),
+  (13, 5, 13, 'Crear una función', 'Función',
+   'Una función es un bloque de pasos con nombre. La creas una vez y la puedes usar (llamar) todas las veces que quieras escribiendo su nombre.',
+   E'Función saludar()\n  Mostrar «¡Hola, héroe!»\nFin función\n\nsaludar()\nsaludar()',
+   'Hechizo del Pergamino', 'Guarda unos pasos con nombre para usarlos cuando quieras.', 50),
+  (14, 5, 14, 'Datos de entrada', 'Parámetros',
+   'Una función puede recibir datos de entrada, llamados parámetros. Se escriben entre paréntesis y permiten que la misma función trabaje con datos distintos cada vez que la llamas.',
+   E'Función saludar(nombre)\n  Mostrar «Hola » + nombre\nFin función\n\nsaludar(«Ana»)    (muestra Hola Ana)\nsaludar(«Luis»)   (muestra Hola Luis)',
+   'Hechizo del Ingrediente', 'Entrega datos a una función para que trabaje con ellos.', 50),
+  (15, 5, 15, 'Datos de salida', 'Valor de salida',
+   'Una función también puede entregar un resultado con «Devolver». Ese resultado se puede guardar en una variable o usar en otra operación.',
+   E'Función doble(numero)\n  Devolver numero * 2\nFin función\n\nresultado = doble(4)\nMostrar resultado   (muestra 8)',
+   'Hechizo del Tesoro', 'Haz que una función te entregue un resultado para usarlo después.', 50)
+on conflict (id) do nothing;
+
+insert into public.retos
+  (nivel_id, orden, tipo, enunciado, codigo, opciones, respuesta, explicacion_correcta, explicacion_error, pista)
+values
+-- Nivel 10
+(10, 1, 'opcion_multiple', '¿Cuántas veces aplaude este algoritmo?',
+ E'Repetir 4 veces\n  Aplaudir\nFin repetir',
+ '["1","4","5"]', '1',
+ 'Correcto. Los pasos dentro de «Repetir 4 veces» se hacen 4 veces.',
+ 'El número que acompaña a «Repetir» dice cuántas veces se hacen los pasos de adentro.',
+ 'Mira el número después de «Repetir».'),
+(10, 2, 'completar', 'Completa el algoritmo para dar 10 pasos.',
+ E'Repetir ___ veces\n  Dar un paso\nFin repetir',
+ '["1","10","100"]', '1',
+ 'Correcto. Si el ciclo se repite 10 veces, se dan 10 pasos.',
+ 'Cada vuelta del ciclo da un paso. ¿Cuántas vueltas necesitas para dar 10 pasos?',
+ 'Una vuelta = un paso.'),
+(10, 3, 'opcion_multiple', '¿Qué muestra este algoritmo?',
+ E'puntos = 0\nRepetir 3 veces\n  puntos = puntos + 2\nFin repetir\nMostrar puntos',
+ '["2","3","6"]', '2',
+ 'Correcto. Se suma 2 tres veces: 0 + 2 + 2 + 2 = 6.',
+ 'Sigue cada vuelta: en cada una puntos aumenta 2, y hay 3 vueltas.',
+ 'Escribe cuánto vale puntos después de cada vuelta.'),
+-- Nivel 11
+(11, 1, 'opcion_multiple', '¿Cuándo se detiene un ciclo «Mientras»?', null,
+ '["Cuando la condición se vuelve falsa","Después de una sola vuelta","Nunca se detiene"]', '0',
+ 'Correcto. El ciclo se repite mientras la condición es verdadera y termina cuando se vuelve falsa.',
+ 'El ciclo no tiene un número fijo de vueltas: depende de la condición.',
+ 'Lee la palabra «mientras» como «siempre que».'),
+(11, 2, 'opcion_multiple', '¿Cuántas veces se muestra «Hola»?',
+ E'contador = 1\nMientras contador <= 3 hacer\n  Mostrar «Hola»\n  contador = contador + 1\nFin mientras',
+ '["2","3","4"]', '1',
+ 'Correcto. contador vale 1, 2 y 3; cuando llega a 4 la condición es falsa y el ciclo termina.',
+ 'Revisa los valores de contador: 1, 2 y 3 cumplen la condición; 4 ya no.',
+ 'Anota el valor de contador en cada vuelta.'),
+(11, 3, 'ordenar', 'Ordena el algoritmo para comer hasta no tener hambre y después lavar el plato.', null,
+ '["Fin mientras","Mientras tengaHambre hacer","Comer un bocado","Lavar el plato"]', '[1,2,0,3]',
+ 'Correcto. Primero va la condición del ciclo, luego el paso que se repite, se cierra el ciclo y al final se lava el plato.',
+ 'Un ciclo empieza con «Mientras…», luego van los pasos que se repiten y termina con «Fin mientras». Lo que va después solo se hace una vez.',
+ '¿Qué línea abre el ciclo?'),
+-- Nivel 12
+(12, 1, 'opcion_multiple', '¿Cuántas vueltas da este ciclo?',
+ E'colores = [«rojo», «azul», «verde», «amarillo»]\nPara cada color en colores hacer\n  Mostrar color\nFin para',
+ '["3","4","1"]', '1',
+ 'Correcto. La lista tiene 4 elementos, así que el ciclo da 4 vueltas.',
+ '«Para cada» da una vuelta por cada elemento de la lista: cuenta cuántos hay.',
+ 'Cuenta los elementos entre los corchetes.'),
+(12, 2, 'completar', 'Completa el algoritmo para saludar a cada amigo.',
+ E'amigos = [«Ana», «Luis», «Sara»]\nPara cada amigo en ___ hacer\n  Mostrar «Hola » + amigo\nFin para',
+ '["amigo","amigos","Hola"]', '1',
+ 'Correcto. Se recorre la lista «amigos»; en cada vuelta «amigo» toma uno de los nombres.',
+ 'Después de «en» va el nombre de la lista que se quiere recorrer.',
+ '¿Cómo se llama la variable que guarda la lista?'),
+(12, 3, 'opcion_multiple', '¿Qué muestra este algoritmo?',
+ E'precios = [2, 3, 5]\ntotal = 0\nPara cada precio en precios hacer\n  total = total + precio\nFin para\nMostrar total',
+ '["5","10","3"]', '1',
+ 'Correcto. Se suman todos los precios: 0 + 2 + 3 + 5 = 10.',
+ 'En cada vuelta se suma un precio al total. Al final el total tiene la suma de todos.',
+ 'Suma los números de la lista.'),
+-- Nivel 13
+(13, 1, 'opcion_multiple', '¿Para qué sirve una función?', null,
+ '["Para guardar un grupo de pasos con nombre y reutilizarlo","Para borrar variables","Para que el programa sea más lento"]', '0',
+ 'Correcto. Una función agrupa pasos con un nombre para usarlos cuantas veces quieras.',
+ 'Una función no borra ni hace más lento el programa: guarda pasos con nombre para reutilizarlos.',
+ 'Piensa en una receta que guardas para usarla otro día.'),
+(13, 2, 'opcion_multiple', '¿Cuántas veces se muestra «¡Hola!»?',
+ E'Función saludar()\n  Mostrar «¡Hola!»\nFin función\n\nsaludar()\nsaludar()\nsaludar()',
+ '["1","3","0"]', '1',
+ 'Correcto. Crear la función no muestra nada; cada llamada a saludar() la ejecuta, y hay 3 llamadas.',
+ 'Los pasos de una función solo se ejecutan cuando se llama. Cuenta las llamadas a saludar().',
+ 'Cuenta cuántas veces aparece saludar() fuera de la función.'),
+(13, 3, 'ordenar', 'Ordena las líneas para crear la función «lavarseLasManos» y después usarla.', null,
+ '["Fin función","lavarseLasManos()","Función lavarseLasManos()","Enjabonar y enjuagar"]', '[2,3,0,1]',
+ 'Correcto. Se abre la función, se escriben sus pasos, se cierra y después se llama.',
+ 'Primero se crea la función (abrir, pasos y cerrar) y solo después se puede llamar.',
+ 'La llamada va al final, fuera de la función.'),
+-- Nivel 14
+(14, 1, 'opcion_multiple', 'En «Función saludar(nombre)», ¿qué es «nombre»?', null,
+ '["El resultado de la función","Un dato de entrada (parámetro)","Un error"]', '1',
+ 'Correcto. Lo que va entre paréntesis al crear la función es un parámetro: un dato de entrada.',
+ 'Lo que va entre paréntesis al crear la función es el dato que la función recibe.',
+ 'Está entre paréntesis, justo después del nombre de la función.'),
+(14, 2, 'opcion_multiple', '¿Qué muestra este algoritmo?',
+ E'Función presentar(heroe)\n  Mostrar «Soy » + heroe\nFin función\n\npresentar(«Mago»)',
+ '["Soy heroe","Soy Mago","Mago"]', '1',
+ 'Correcto. Al llamar presentar(«Mago»), el parámetro heroe vale «Mago».',
+ 'El parámetro toma el valor que va entre paréntesis en la llamada.',
+ '¿Qué valor se pasa entre paréntesis al llamar la función?'),
+(14, 3, 'completar', 'Completa la llamada para que muestre «Hola Sara».',
+ E'Función saludar(nombre)\n  Mostrar «Hola » + nombre\nFin función\n\nsaludar(___)',
+ '["«Sara»","nombre","«Hola»"]', '0',
+ 'Correcto. Al pasar «Sara», el parámetro nombre vale «Sara».',
+ 'Lo que va entre paréntesis en la llamada es el valor que recibe nombre.',
+ 'Pasa el nombre de la persona que quieres saludar.'),
+-- Nivel 15
+(15, 1, 'opcion_multiple', '¿Para qué sirve «Devolver» dentro de una función?', null,
+ '["Para repetir la función","Para entregar un resultado a quien la llamó","Para borrar la función"]', '1',
+ 'Correcto. «Devolver» entrega el resultado de la función para usarlo afuera.',
+ '«Devolver» no repite ni borra: entrega un resultado.',
+ 'Piensa en una máquina que te entrega algo al final.'),
+(15, 2, 'opcion_multiple', '¿Qué muestra este algoritmo?',
+ E'Función sumar(a, b)\n  Devolver a + b\nFin función\n\ntotal = sumar(3, 4)\nMostrar total',
+ '["7","34","12"]', '0',
+ 'Correcto. sumar(3, 4) devuelve 3 + 4 = 7, que se guarda en total.',
+ 'La función devuelve a + b con a = 3 y b = 4. Ese resultado se guarda en total.',
+ 'Reemplaza a por 3 y b por 4.'),
+(15, 3, 'completar', 'Completa la función para que entregue el triple del número.',
+ E'Función triple(numero)\n  ___ numero * 3\nFin función\n\nMostrar triple(5)   (muestra 15)',
+ '["Mostrar","Devolver","Repetir"]', '1',
+ 'Correcto. «Devolver» entrega el resultado para que se pueda mostrar afuera de la función.',
+ 'Para que la función entregue un resultado a quien la llamó se usa «Devolver».',
+ '¿Qué palabra entrega el resultado de una función?')
 on conflict (nivel_id, orden) do nothing;
