@@ -62,3 +62,27 @@ export type RespuestaMapa = {
     nivelActualId: number | null;
   };
 };
+export type TipoReto = 'opcion_multiple' | 'ordenar' | 'completar';
+
+export type RetoPublico = {
+  id: number;
+  orden: number;
+  tipo: TipoReto;
+  enunciado: string;
+  codigo: string | null;
+  opciones: string[];
+  pista: string;
+};
+
+export type RespuestaNivel = {
+  nivel: {
+    id: number;
+    orden: number;
+    titulo: string;
+    conceptoTitulo: string;
+    conceptoTexto: string;
+    conceptoEjemplo: string | null;
+    xpRecompensa: number;
+  };
+  retos: RetoPublico[];
+};
