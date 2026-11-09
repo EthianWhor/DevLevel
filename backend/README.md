@@ -44,6 +44,7 @@ backend/
     │   ├── supabase.ts   Cliente de Supabase con la llave secreta
     │   ├── perfil.ts     Lectura del perfil y conversión a camelCase
     │   ├── avatares.ts   Avatares permitidos
+    │   ├── progreso.ts   Reglas de XP, estrellas, racha y nivel
     │   └── validacion.ts Validación de correo y contraseña
     ├── middleware/
     │   └── requiere-sesion.ts  Valida el token de las rutas protegidas
@@ -52,7 +53,8 @@ backend/
         ├── auth.ts       POST /auth/register, /auth/login, /auth/refresh
         ├── me.ts         GET /me, PATCH /me
         ├── mapa.ts       GET /mapa
-        └── retos.ts      POST /retos/:id/responder
+        ├── retos.ts      POST /retos/:id/responder
+        └── completar.ts  POST /niveles/:id/completar
 ```
 
 ## Despliegue en Render
@@ -82,6 +84,7 @@ En el plan gratis el servicio se duerme tras 15 minutos sin uso y la primera pet
 | `PATCH /me` | Listo | Actualiza nombre de héroe y avatar (requiere sesión) |
 | `GET /mapa` | Listo | Unidades y niveles con su estado para el usuario (requiere sesión) |
 | `POST /retos/:id/responder` | Listo | Revisa una respuesta, guarda el intento y devuelve la explicación (requiere sesión) |
+| `POST /niveles/:id/completar` | Listo | Calcula XP, estrellas, racha y subida de nivel (requiere sesión) |
 
 ### Formato general
 
@@ -349,6 +352,75 @@ Responder mal no es un error HTTP: siempre es `200` y el resultado va en `correc
 | `401` | Sin sesión o token vencido | `{ "error": "Debes iniciar sesión" }` |
 | `403` | El reto es de un nivel bloqueado | `{ "error": "Este nivel todavía está bloqueado" }` |
 | `404` | El reto no existe | `{ "error": "El reto no existe" }` |
+
+### `POST /niveles/:id/completar` (requiere sesión)
+
+Se llama cuando el usuario ya acertó todos los retos del nivel. No lleva cuerpo.
+
+**Reglas**
+
+| Qué | Regla |
+|---|---|
+| Requisito | Cada reto del nivel debe tener al menos una respuesta correcta en esta partida |
+| Estrellas | Según los errores antes de acertar cada reto: 0 errores = 3 ★, 1 o 2 = 2 ★, 3 o más = 1 ★ |
+| XP | `xpRecompensa` del nivel **solo la primera vez**. Repetir un nivel sirve para mejorar las estrellas (se guarda la mejor) pero no da XP |
+| Nivel del jugador | Cada 100 XP se sube un nivel: 0–99 = nivel 1, 100–199 = nivel 2… |
+| Racha | Días seguidos completando al menos un nivel, contados en hora de Colombia. Si ya jugó hoy no cambia; si jugó ayer sube 1; si faltó un día o más vuelve a 1 |
+| Repetir un nivel | Solo cuentan los intentos hechos después de la última vez que se completó |
+
+**Petición**
+
+```http
+POST /niveles/1/completar
+Authorization: Bearer <token>
+```
+
+**Respuesta `200 OK`**
+
+```json
+{
+  "nivelId": 1,
+  "primeraVez": true,
+  "errores": 1,
+  "estrellas": 2,
+  "mejoresEstrellas": 2,
+  "xpGanada": 50,
+  "subioDeNivel": true,
+  "nivelAnterior": 1,
+  "nivelNuevo": 2,
+  "progresoNivel": { "xpEnNivel": 0, "xpPorNivel": 100 },
+  "racha": { "actual": 3, "maxima": 5, "cambio": "aumento" },
+  "hechizoDesbloqueado": {
+    "nombre": "Hechizo del Camino",
+    "descripcion": "Convierte un problema en una lista de pasos que se pueden seguir."
+  },
+  "siguienteNivelId": 2,
+  "perfil": {
+    "id": "6f1c2a3e-8b1d-4f6a-9c2e-1a2b3c4d5e6f",
+    "nombreHeroe": "Ada",
+    "avatar": "mago",
+    "xp": 100,
+    "nivel": 2,
+    "rachaActual": 3,
+    "rachaMaxima": 5,
+    "ultimaActividad": "2026-11-09"
+  }
+}
+```
+
+- `subioDeNivel` indica si hay que mostrar la pantalla Subida de nivel.
+- `racha.cambio` es `aumento`, `igual` o `reinicio`.
+- `hechizoDesbloqueado` es `null` si el nivel ya se había completado antes.
+- `siguienteNivelId` es `null` en el último nivel.
+
+**Errores**
+
+| Código | Cuándo | Ejemplo |
+|---|---|---|
+| `401` | Sin sesión o token vencido | `{ "error": "Debes iniciar sesión" }` |
+| `403` | El nivel está bloqueado | `{ "error": "Este nivel todavía está bloqueado" }` |
+| `404` | El nivel no existe | `{ "error": "El nivel no existe" }` |
+| `409` | Faltan retos por acertar | `{ "error": "Responde correctamente todos los retos del nivel antes de completarlo", "retosPendientes": [3] }` |
 
 ### Probar con curl
 

@@ -6,6 +6,7 @@ import { meRouter } from './routes/me';
 import { mapaRouter } from './routes/mapa';
 import { nivelesRouter } from './routes/niveles';
 import { retosRouter } from './routes/retos';
+import { completarRouter } from './routes/completar';
 
 // Responde los errores no controlados siempre en JSON.
 // Express 5 pasa aquí automáticamente los errores de las rutas async.
@@ -32,6 +33,7 @@ export function crearApp() {
   app.use('/me', meRouter);
   app.use('/mapa', mapaRouter);
   app.use('/niveles', nivelesRouter);
+  app.use('/niveles', completarRouter);
   app.use('/retos', retosRouter);
 
   // Cualquier ruta que no exista responde 404 en JSON.
