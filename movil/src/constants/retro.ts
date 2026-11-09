@@ -7,14 +7,14 @@ export const Retro = {
   superficie: '#231f14', // surface-container
   superficieAlta: '#2e2a1e', // surface-container-high
   borde: '#4d4732', // outline-variant
-  texto: '#eae2cf', // on-surface (14.6:1 sobre fondo)
-  textoSecundario: '#d0c6ab', // on-surface-variant (11:1 sobre fondo)
-  textoApagado: '#b3aa90', // para niveles bloqueados (7.9:1 sobre fondo)
+  texto: '#eae2cf', // on-surface (14.4:1 sobre fondo)
+  textoSecundario: '#d0c6ab', // on-surface-variant (10.9:1 sobre fondo)
+  textoApagado: '#b3aa90', // para niveles bloqueados (8:1 sobre fondo, 7.1:1 sobre superficie)
   oro: '#ffd700', // primary-container: acción principal
   oroOscuro: '#544600', // bevel inferior del botón dorado
-  textoSobreOro: '#221b00', // on-primary-fixed (13:1 sobre oro)
+  textoSobreOro: '#221b00', // on-primary-fixed (12.2:1 sobre oro)
   verde: '#4de082', // secondary: completado / XP
-  error: '#ffb4ab', // texto de error (10:1 sobre fondo)
+  error: '#ffb4ab', // texto de error (10.9:1 sobre fondo)
   azulMana: '#3B82F6',
 } as const;
 

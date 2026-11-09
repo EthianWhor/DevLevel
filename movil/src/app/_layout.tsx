@@ -44,6 +44,7 @@ function Navegacion() {
       <Stack.Protected guard={estado === 'con-sesion'}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="personaje" />
+        <Stack.Screen name="nivel/[id]" />
       </Stack.Protected>
     </Stack>
   );
