@@ -187,9 +187,8 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 
 **Tatiana (backend)**
 - [x] `GET /mapa` con el estado de cada nivel para el usuario — Hecho por: Ethian White · Commit: c65ea1a
-- [ ] `GET /niveles/:id` sin enviar las respuestas correctas — Hecho por: ______ · Commit: ______
-- [ ] Contenido de las unidades 1 a 3 en `backend/supabase/seed.sql` (9 niveles, 27 retos) — Hecho por: ______ · Commit: ______
-
+- [x] `GET /niveles/:id` sin enviar las respuestas correctas — Hecho por: Tatiana Mayorga · Commit: d3670da
+- [x] Contenido de las unidades 1 a 3 en `backend/supabase/seed.sql` (9 niveles, 27 retos) — Hecho por: Tatiana Mayorga · Commit: d3670da
 ### Lunes 9 de noviembre — Retos
 
 **Ethian (backend)**
