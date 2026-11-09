@@ -1,31 +1,39 @@
 import { NativeTabs } from 'expo-router/native-tabs';
-import { useColorScheme } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { Retro } from '@/constants/retro';
 
+// Barra de pestañas inferior nativa (Material en Android).
+// Cada pestaña tiene ícono + texto, así no depende solo del ícono para
+// entenderse, y TalkBack lee el nombre de la pestaña y si está seleccionada.
 export default function AppTabs() {
-  const scheme = useColorScheme();
-  const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
-
   return (
     <NativeTabs
-      backgroundColor={colors.background}
-      indicatorColor={colors.backgroundElement}
-      labelStyle={{ selected: { color: colors.text } }}>
+      backgroundColor={Retro.superficie}
+      indicatorColor={Retro.superficieAlta}
+      iconColor={{ default: Retro.textoSecundario, selected: Retro.oro }}
+      labelStyle={{
+        default: { color: Retro.textoSecundario },
+        selected: { color: Retro.oro },
+      }}
+      labelVisibilityMode="labeled">
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/home.png')}
-          renderingMode="template"
-        />
+        <NativeTabs.Trigger.Label>Mapa</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="map.fill" md="map" />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="explore">
-        <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
-          renderingMode="template"
-        />
+      <NativeTabs.Trigger name="hechizos">
+        <NativeTabs.Trigger.Label>Hechizos</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="book.fill" md="menu_book" />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="perfil">
+        <NativeTabs.Trigger.Label>Perfil</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="person.fill" md="person" />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="configuracion">
+        <NativeTabs.Trigger.Label>Configuración</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="gearshape.fill" md="settings" />
       </NativeTabs.Trigger>
     </NativeTabs>
   );
