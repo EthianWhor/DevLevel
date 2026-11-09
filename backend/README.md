@@ -51,7 +51,8 @@ backend/
         ├── health.ts     GET /health
         ├── auth.ts       POST /auth/register, /auth/login, /auth/refresh
         ├── me.ts         GET /me, PATCH /me
-        └── mapa.ts       GET /mapa
+        ├── mapa.ts       GET /mapa
+        └── retos.ts      POST /retos/:id/responder
 ```
 
 ## Despliegue en Render
@@ -80,6 +81,7 @@ En el plan gratis el servicio se duerme tras 15 minutos sin uso y la primera pet
 | `GET /me` | Listo | Devuelve el perfil del usuario (requiere sesión) |
 | `PATCH /me` | Listo | Actualiza nombre de héroe y avatar (requiere sesión) |
 | `GET /mapa` | Listo | Unidades y niveles con su estado para el usuario (requiere sesión) |
+| `POST /retos/:id/responder` | Listo | Revisa una respuesta, guarda el intento y devuelve la explicación (requiere sesión) |
 
 ### Formato general
 
@@ -300,6 +302,53 @@ Devuelve las unidades en orden, cada una con sus niveles y el estado de cada niv
 ```
 
 Cuando el usuario completa todos los niveles, `nivelActualId` es `null` y ningún nivel queda en `actual`.
+
+### `POST /retos/:id/responder` (requiere sesión)
+
+Revisa la respuesta, guarda el intento en `intentos_retos` (con eso se calculan las estrellas al completar el nivel) y devuelve si fue correcta. La respuesta correcta nunca se envía a la app.
+
+Forma de `respuesta` según el tipo de reto:
+
+| Tipo | `respuesta` | Ejemplo |
+|---|---|---|
+| `opcion_multiple` | Índice de la opción elegida | `1` |
+| `completar` | Índice de la palabra elegida | `0` |
+| `ordenar` | Índices de las opciones en el orden elegido, usando cada una una vez | `[2, 0, 1, 3]` |
+
+**Petición**
+
+```http
+POST /retos/2/responder
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{ "respuesta": [1, 2, 0, 3] }
+```
+
+**Respuesta `200 OK` (correcta)**
+
+```json
+{
+  "retoId": 2,
+  "nivelId": 1,
+  "correcta": true,
+  "explicacion": "Correcto. Primero se hierve el agua, luego se prepara la taza, se sirve y se espera.",
+  "pista": null
+}
+```
+
+**Respuesta `200 OK` (incorrecta)**: igual, con `"correcta": false`, la explicación del error y la `pista` del reto.
+
+Responder mal no es un error HTTP: siempre es `200` y el resultado va en `correcta`.
+
+**Errores**
+
+| Código | Cuándo | Ejemplo |
+|---|---|---|
+| `400` | La respuesta no tiene la forma del tipo de reto | `{ "error": "La respuesta debe usar cada opción una sola vez", "campos": { "respuesta": "..." } }` |
+| `401` | Sin sesión o token vencido | `{ "error": "Debes iniciar sesión" }` |
+| `403` | El reto es de un nivel bloqueado | `{ "error": "Este nivel todavía está bloqueado" }` |
+| `404` | El reto no existe | `{ "error": "El reto no existe" }` |
 
 ### Probar con curl
 
