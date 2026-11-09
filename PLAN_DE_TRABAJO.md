@@ -152,9 +152,9 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 ### Viernes 6 de noviembre — Base del proyecto
 
 **Ethian**
-- [ ] Agregar a Tatiana como colaboradora del repositorio en GitHub, crear el proyecto en Supabase y agregarla como miembro — Hecho por: ______ · Commit: ______
-- [ ] Escribir el esquema de la base de datos en `backend/supabase/schema.sql` (las 6 tablas, RLS activado) y ejecutarlo en Supabase — Hecho por: ______ · Commit: ______
-- [ ] Crear el esqueleto del backend en `backend/` (Express + TypeScript, `GET /health`, `.env.example`, `.gitignore` con `.env`) — Hecho por: ______ · Commit: ______
+- [x] Agregar a Tatiana como colaboradora del repositorio en GitHub, crear el proyecto en Supabase y agregarla como miembro — Hecho por: Ethian White · Commit: no aplica (se hace en GitHub y Supabase)
+- [x] Escribir el esquema de la base de datos en `backend/supabase/schema.sql` (las 6 tablas, RLS activado) y ejecutarlo en Supabase — Hecho por: Ethian White · Commit: fe44488
+- [x] Crear el esqueleto del backend en `backend/` (Express + TypeScript, `GET /health`, `.env.example`, `.gitignore` con `.env`) — Hecho por: Ethian White · Commit: 7b3664b
 - [ ] Desplegar el backend en Render y anotar la URL pública en el README — Hecho por: ______ · Commit: ______
 
 **Tatiana**
