@@ -2,6 +2,10 @@ import { DarkTheme, ThemeProvider, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
+import { SpaceGrotesk_500Medium, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
+import { Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
+import { JetBrainsMono_400Regular } from '@expo-google-fonts/jetbrains-mono';
 
 import { Retro } from '@/constants/retro';
 import { AuthProvider, useAuth } from '@/context/auth-context';
@@ -27,13 +31,23 @@ const temaNavegacion = {
 function Navegacion() {
   const { estado } = useAuth();
 
+  const [fuentesCargadas, errorFuentes] = useFonts({
+    SpaceGrotesk_500Medium,
+    SpaceGrotesk_700Bold,
+    Inter_400Regular,
+    Inter_600SemiBold,
+    JetBrainsMono_400Regular,
+  });
+  // Si una fuente falla, la app sigue con la fuente del sistema.
+  const fuentesListas = fuentesCargadas || errorFuentes !== null;
+
   useEffect(() => {
-    if (estado !== 'cargando') {
+    if (estado !== 'cargando' && fuentesListas) {
       SplashScreen.hideAsync();
     }
-  }, [estado]);
+  }, [estado, fuentesListas]);
 
-  if (estado === 'cargando') return null;
+  if (estado === 'cargando' || !fuentesListas) return null;
 
   return (
     <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: Retro.fondo } }}>
