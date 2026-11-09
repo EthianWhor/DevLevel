@@ -167,26 +167,26 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 ### Sábado 7 de noviembre — Autenticación de punta a punta
 
 **Ethian**
-- [ ] `POST /auth/register` y `POST /auth/login` en el backend (validación de datos y errores claros) — Hecho por: ______ · Commit: ______
-- [ ] Middleware que valida el token en las rutas protegidas — Hecho por: ______ · Commit: ______
-- [ ] `GET /me` y `PATCH /me` — Hecho por: ______ · Commit: ______
-- [ ] Documentar los endpoints de auth en `backend/README.md` (petición y respuesta de ejemplo) — Hecho por: ______ · Commit: ______
+- [x] `POST /auth/register` y `POST /auth/login` en el backend (validación de datos y errores claros) — Hecho por: Ethian White · Commit: 36d1764
+- [x] Middleware que valida el token en las rutas protegidas — Hecho por: Ethian White · Commit: a9fe325
+- [x] `GET /me` y `PATCH /me` — Hecho por: Ethian White · Commit: 8086adc
+- [x] Documentar los endpoints de auth en `backend/README.md` (petición y respuesta de ejemplo) — Hecho por: Ethian White · Commit: 0d1e33d
 
 **Tatiana**
-- [ ] Cliente de la API en `movil/src/api/` (URL desde `EXPO_PUBLIC_API_URL`, manejo de errores de red) — Hecho por: ______ · Commit: ______
-- [ ] `AuthContext` con el token guardado en `expo-secure-store` y redirección según haya sesión o no — Hecho por: ______ · Commit: ______
+- [x] Cliente de la API en `movil/src/api/` (URL desde `EXPO_PUBLIC_API_URL`, manejo de errores de red) — Hecho por: Ethian White · Commit: 0b2d2f9
+- [x] `AuthContext` con el token guardado en `expo-secure-store` y redirección según haya sesión o no — Hecho por: Ethian White · Commit: 2da7e87
 - [ ] Pantallas Splash y Onboarding — Hecho por: ______ · Commit: ______
 - [ ] Pantalla Login / Registro conectada al backend, con errores debajo de cada campo (ícono + texto) — Hecho por: ______ · Commit: ______
 
 ### Domingo 8 de noviembre — Mapa y contenido
 
 **Ethian (app)**
-- [ ] Pantalla Selección de personaje (avatar y nombre de héroe, guarda con `PATCH /me`) — Hecho por: ______ · Commit: ______
-- [ ] Pantalla Mapa de niveles consumiendo `GET /mapa` (estados completado, actual y bloqueado con ícono + texto) — Hecho por: ______ · Commit: ______
-- [ ] Barra de pestañas inferior (Mapa, Hechizos, Perfil, Configuración) — Hecho por: ______ · Commit: ______
+- [x] Pantalla Selección de personaje (avatar y nombre de héroe, guarda con `PATCH /me`) — Hecho por: Ethian White · Commit: 7af71c7
+- [x] Pantalla Mapa de niveles consumiendo `GET /mapa` (estados completado, actual y bloqueado con ícono + texto) — Hecho por: Ethian White · Commit: c1a3c8e
+- [x] Barra de pestañas inferior (Mapa, Hechizos, Perfil, Configuración) — Hecho por: Ethian White · Commit: 37b5efc
 
 **Tatiana (backend)**
-- [ ] `GET /mapa` con el estado de cada nivel para el usuario — Hecho por: ______ · Commit: ______
+- [x] `GET /mapa` con el estado de cada nivel para el usuario — Hecho por: Ethian White · Commit: c65ea1a
 - [ ] `GET /niveles/:id` sin enviar las respuestas correctas — Hecho por: ______ · Commit: ______
 - [ ] Contenido de las unidades 1 a 3 en `backend/supabase/seed.sql` (9 niveles, 27 retos) — Hecho por: ______ · Commit: ______
 
