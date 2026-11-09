@@ -2,6 +2,7 @@ import express, { type ErrorRequestHandler } from 'express';
 import cors from 'cors';
 import { healthRouter } from './routes/health';
 import { authRouter } from './routes/auth';
+import { meRouter } from './routes/me';
 
 // Responde los errores no controlados siempre en JSON.
 // Express 5 pasa aquí automáticamente los errores de las rutas async.
@@ -25,6 +26,7 @@ export function crearApp() {
 
   app.use('/health', healthRouter);
   app.use('/auth', authRouter);
+  app.use('/me', meRouter);
 
   // Cualquier ruta que no exista responde 404 en JSON.
   app.use((_req, res) => {
