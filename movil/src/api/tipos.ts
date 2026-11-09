@@ -86,3 +86,9 @@ export type RespuestaNivel = {
   };
   retos: RetoPublico[];
 };
+export type RespuestaReto = number | number[];
+
+export type ResultadoReto = {
+  correcta: boolean;
+  explicacion: string;
+};

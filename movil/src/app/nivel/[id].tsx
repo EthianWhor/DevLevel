@@ -2,14 +2,22 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { esErrorApi, obtenerNivel, type RespuestaNivel } from '@/api';
 
+import {
+  esErrorApi,
+  obtenerNivel,
+  responderReto,
+  type RespuestaNivel,
+  type RespuestaReto,
+  type ResultadoReto,
+} from '@/api';
 import { Concepto } from '@/components/nivel/concepto';
+import { Reto } from '@/components/nivel/reto';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { useAuth } from '@/context/auth-context';
 import { AlturaLinea, Colores, Espacio, Fuentes, Tamanos } from '@/theme';
 
-type Fase = 'concepto' | 'retos';
+type Fase = 'concepto' | 'retos' | 'resultado';
 
 export default function NivelScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -19,8 +27,11 @@ export default function NivelScreen() {
   const [error, setError] = useState<string | null>(null);
   const [cargando, setCargando] = useState(true);
   const [fase, setFase] = useState<Fase>('concepto');
+  const [indice, setIndice] = useState(0);
+  const [enviando, setEnviando] = useState(false);
+  const [resultado, setResultado] = useState<ResultadoReto | null>(null);
 
-    const cargar = useCallback(async () => {
+  const cargar = useCallback(async () => {
     setCargando(true);
     setError(null);
     try {
@@ -35,6 +46,20 @@ export default function NivelScreen() {
   useEffect(() => {
     cargar();
   }, [cargar]);
+
+  async function responder(respuesta: RespuestaReto) {
+    if (!datos) return;
+    setEnviando(true);
+    try {
+      const reto = datos.retos[indice];
+      setResultado(await conSesion((token) => responderReto(reto.id, respuesta, token)));
+      setFase('resultado');
+    } catch (e) {
+      setError(esErrorApi(e) ? e.message : 'No se pudo enviar la respuesta.');
+    } finally {
+      setEnviando(false);
+    }
+  }
 
   return (
     <SafeAreaView style={estilos.pantalla}>
@@ -55,10 +80,21 @@ export default function NivelScreen() {
           totalRetos={datos.retos.length}
           onEmpezar={() => setFase('retos')}
         />
+      ) : fase === 'retos' ? (
+        <Reto
+          key={datos.retos[indice].id}
+          reto={datos.retos[indice]}
+          numero={indice + 1}
+          total={datos.retos.length}
+          enviando={enviando}
+          onResponder={responder}
+        />
       ) : (
-        // Provisional: aquí entra la pantalla Reto (siguiente tarea).
+        // Provisional: aquí entra la pantalla Resultado (siguiente tarea).
         <View style={estilos.centro}>
-          <Text style={estilos.texto}>{`Aquí van los ${datos.retos.length} retos.`}</Text>
+          <Text style={estilos.texto}>
+            {resultado?.correcta ? '✔ Correcto' : '✖ Incorrecto'}
+          </Text>
           <BotonPrincipal titulo="Volver al mapa" onPress={() => router.back()} />
         </View>
       )}
