@@ -50,7 +50,8 @@ backend/
     └── routes/
         ├── health.ts     GET /health
         ├── auth.ts       POST /auth/register, /auth/login, /auth/refresh
-        └── me.ts         GET /me, PATCH /me
+        ├── me.ts         GET /me, PATCH /me
+        └── mapa.ts       GET /mapa
 ```
 
 ## Despliegue en Render
@@ -78,6 +79,7 @@ En el plan gratis el servicio se duerme tras 15 minutos sin uso y la primera pet
 | `POST /auth/refresh` | Listo | Renueva el token con el `refreshToken` |
 | `GET /me` | Listo | Devuelve el perfil del usuario (requiere sesión) |
 | `PATCH /me` | Listo | Actualiza nombre de héroe y avatar (requiere sesión) |
+| `GET /mapa` | Listo | Unidades y niveles con su estado para el usuario (requiere sesión) |
 
 ### Formato general
 
@@ -265,6 +267,39 @@ Content-Type: application/json
 | `400` | Nombre o avatar inválidos | `{ "error": "Revisa los datos del formulario", "campos": { "nombreHeroe": "El nombre de héroe debe tener entre 2 y 20 caracteres" } }` |
 | `400` | No se envió ningún campo | `{ "error": "Envía nombreHeroe y/o avatar para actualizar" }` |
 | `401` | Sin sesión o token vencido | `{ "error": "Debes iniciar sesión" }` |
+
+### `GET /mapa` (requiere sesión)
+
+Devuelve las unidades en orden, cada una con sus niveles y el estado de cada nivel para el usuario:
+
+| Estado | Significado |
+|---|---|
+| `completado` | Ya lo terminó; `estrellas` dice con cuántas (1 a 3) |
+| `actual` | El primer nivel sin completar: el único que se puede jugar |
+| `bloqueado` | Viene después del actual; se desbloquea al completar el anterior |
+
+**Respuesta `200 OK`** (recortada)
+
+```json
+{
+  "unidades": [
+    {
+      "id": 1,
+      "orden": 1,
+      "titulo": "Pensar en pasos",
+      "descripcion": "Qué es un algoritmo y por qué el orden importa",
+      "niveles": [
+        { "id": 1, "orden": 1, "titulo": "¿Qué es un algoritmo?", "xpRecompensa": 50, "estado": "completado", "estrellas": 3 },
+        { "id": 2, "orden": 2, "titulo": "El orden importa", "xpRecompensa": 50, "estado": "actual", "estrellas": null },
+        { "id": 3, "orden": 3, "titulo": "Dividir un problema", "xpRecompensa": 50, "estado": "bloqueado", "estrellas": null }
+      ]
+    }
+  ],
+  "resumen": { "completados": 1, "total": 15, "nivelActualId": 2 }
+}
+```
+
+Cuando el usuario completa todos los niveles, `nivelActualId` es `null` y ningún nivel queda en `actual`.
 
 ### Probar con curl
 
