@@ -198,7 +198,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 - [ ] Contenido de las unidades 4 y 5 en `seed.sql` (6 niveles, 18 retos) — Hecho por: ______ · Commit: ______
 
 **Tatiana (app)**
-- [ ] Pantalla Concepto (explicación del nivel antes de los retos) — Hecho por: ______ · Commit: ______
+- [x] Pantalla Concepto (explicación del nivel antes de los retos) — Hecho por: Tatiana Mayorga · Commit: 6951482
 - [ ] Pantalla Reto con los 3 tipos: opción múltiple, ordenar pasos tocando y completar el espacio (sin arrastre) — Hecho por: ______ · Commit: ______
 - [ ] Pantalla Resultado: correcto o incorrecto con ícono + texto + vibración, explicación y botones Continuar / Intentar de nuevo — Hecho por: ______ · Commit: ______
 
