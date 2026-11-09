@@ -192,10 +192,10 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 ### Lunes 9 de noviembre — Retos
 
 **Ethian (backend)**
-- [ ] `POST /retos/:id/responder` (revisa la respuesta y guarda el intento) — Hecho por: ______ · Commit: ______
-- [ ] `POST /niveles/:id/completar` (XP, estrellas, racha y subida de nivel) — Hecho por: ______ · Commit: ______
-- [ ] Pruebas automáticas de la API para auth, responder y completar — Hecho por: ______ · Commit: ______
-- [ ] Contenido de las unidades 4 y 5 en `seed.sql` (6 niveles, 18 retos) — Hecho por: ______ · Commit: ______
+- [x] `POST /retos/:id/responder` (revisa la respuesta y guarda el intento) — Hecho por: Ethian White · Commit: c1d6fec
+- [x] `POST /niveles/:id/completar` (XP, estrellas, racha y subida de nivel) — Hecho por: Ethian White · Commit: 4cccdc1
+- [x] Pruebas automáticas de la API para auth, responder y completar — Hecho por: Ethian White · Commit: cb55c66
+- [x] Contenido de las unidades 4 y 5 en `seed.sql` (6 niveles, 18 retos) — Hecho por: Ethian White · Commit: 097f502
 
 **Tatiana (app)**
 - [x] Pantalla Concepto (explicación del nivel antes de los retos) — Hecho por: Tatiana Mayorga · Commit: 6951482
