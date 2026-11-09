@@ -159,9 +159,9 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 
 **Tatiana**
 - [x] Leer este plan y marcar esta casilla como aceptado, con un commit propio — Hecho por: Tatiana Mayorga· Commit: 40163a1
-- [ ] Crear la app en `movil/` (Expo SDK 57 + TypeScript + expo-router) y configurar EAS (`eas.json` con perfiles `development` y `preview`) — Hecho por: ______ · Commit: ______
-- [ ] Crear el tema Retro-Logic en `movil/src/theme/` (colores, tipografías Space Grotesk, Inter y JetBrains Mono, espaciados) — Hecho por: ______ · Commit: ______
-- [ ] Crear los componentes base accesibles: botón principal, tarjeta y barra de progreso segmentada (con `accessibilityRole`, `accessibilityLabel` y área táctil ≥ 48 dp) — Hecho por: ______ · Commit: ______
+- [x] Crear la app en `movil/` (Expo SDK 57 + TypeScript + expo-router) y configurar EAS (`eas.json` con perfiles `development` y `preview`) — Hecho por: Tatiana Mayorga· Commit: 6034efd, 6101e7a
+- [x] Crear el tema Retro-Logic en `movil/src/theme/` (colores, tipografías Space Grotesk, Inter y JetBrains Mono, espaciados) — Hecho por: Tatiana Mayorga · Commit: e7e7e27, 5bbb0c6
+- [x] Crear los componentes base accesibles: botón principal, tarjeta y barra de progreso segmentada (con `accessibilityRole`, `accessibilityLabel` y área táctil ≥ 48 dp) — Hecho por: Tatiana Mayorga · Commit: d276f9b
 - [ ] Generar un primer APK de prueba con EAS e instalarlo en un celular — Hecho por: ______ · Commit: ______
 
 ### Sábado 7 de noviembre — Autenticación de punta a punta
