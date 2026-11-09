@@ -26,6 +26,21 @@ El servidor queda en `http://localhost:3000`. Para probarlo: `http://localhost:3
 | `npm run build` | Compila TypeScript a `dist/` |
 | `npm start` | Ejecuta la versión compilada (lo que usa Render) |
 | `npm run typecheck` | Revisa los tipos sin compilar |
+| `npm test` | Corre las pruebas automáticas de la API |
+
+## Pruebas automáticas
+
+```bash
+npm test
+```
+
+Las pruebas levantan la API real en un puerto libre y le hacen peticiones HTTP, pero en lugar de Supabase usan una base de datos falsa en memoria (`test/supabase-falso.ts`). Por eso no necesitan `.env`, no tocan los datos reales y se pueden correr sin internet.
+
+| Archivo | Qué prueba |
+|---|---|
+| `test/auth.test.ts` | Registro, login, refresh, rutas protegidas sin token, `GET /me` y `PATCH /me` |
+| `test/retos.test.ts` | `POST /retos/:id/responder` y `POST /niveles/:id/completar` (estrellas, XP, subida de nivel, racha, repetir niveles, niveles bloqueados) |
+| `test/progreso.test.ts` | Reglas puras de `lib/progreso.ts` (nivel por XP, estrellas, racha con fechas de Colombia) |
 
 ## Base de datos
 
