@@ -74,21 +74,27 @@ export type RetoPublico = {
   pista: string;
 };
 
-export type RespuestaNivel = {
-  nivel: {
-    id: number;
-    orden: number;
-    titulo: string;
-    conceptoTitulo: string;
-    conceptoTexto: string;
-    conceptoEjemplo: string | null;
-    xpRecompensa: number;
-  };
-  retos: RetoPublico[];
-};
-export type RespuestaReto = number | number[];
-
 export type ResultadoReto = {
+  retoId: number;
+  nivelId: number;
   correcta: boolean;
   explicacion: string;
+  pista: string | null; 
+};
+
+export type ResultadoNivel = {
+  nivelId: number;
+  primeraVez: boolean;
+  errores: number;
+  estrellas: number;
+  mejoresEstrellas: number;
+  xpGanada: number;
+  subioDeNivel: boolean;
+  nivelAnterior: number;
+  nivelNuevo: number;
+  progresoNivel: { xpEnNivel: number; xpPorNivel: number };
+  racha: { actual: number; maxima: number; cambio: string };
+  hechizoDesbloqueado: { nombre: string; descripcion: string } | null;
+  siguienteNivelId: number | null;
+  perfil: Perfil;
 };

@@ -4,6 +4,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
+  completarNivel,
   esErrorApi,
   obtenerNivel,
   responderReto,
@@ -13,6 +14,7 @@ import {
 } from '@/api';
 import { Concepto } from '@/components/nivel/concepto';
 import { Reto } from '@/components/nivel/reto';
+import { Resultado } from '@/components/nivel/resultado';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { useAuth } from '@/context/auth-context';
 import { AlturaLinea, Colores, Espacio, Fuentes, Tamanos } from '@/theme';
@@ -21,7 +23,7 @@ type Fase = 'concepto' | 'retos' | 'resultado';
 
 export default function NivelScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { conSesion } = useAuth();
+  const { conSesion, recargarPerfil } = useAuth();
 
   const [datos, setDatos] = useState<RespuestaNivel | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -61,6 +63,28 @@ export default function NivelScreen() {
     }
   }
 
+  async function continuar() {
+    if (!datos) return;
+    if (indice + 1 >= datos.retos.length) {
+      try {
+        await conSesion((token) => completarNivel(datos.nivel.id, token));
+        await recargarPerfil();
+        router.back();
+      } catch (e) {
+        setError(esErrorApi(e) ? e.message : 'No se pudo completar el nivel.');
+      }
+      return;
+    }
+    setIndice(indice + 1);
+    setResultado(null);
+    setFase('retos');
+  }
+
+  function reintentar() {
+    setResultado(null);
+    setFase('retos');
+  }
+
   return (
     <SafeAreaView style={estilos.pantalla}>
       {cargando ? (
@@ -90,13 +114,13 @@ export default function NivelScreen() {
           onResponder={responder}
         />
       ) : (
-        // Provisional: aquí entra la pantalla Resultado (siguiente tarea).
-        <View style={estilos.centro}>
-          <Text style={estilos.texto}>
-            {resultado?.correcta ? '✔ Correcto' : '✖ Incorrecto'}
-          </Text>
-          <BotonPrincipal titulo="Volver al mapa" onPress={() => router.back()} />
-        </View>
+        <Resultado
+          correcta={resultado?.correcta ?? false}
+          explicacion={resultado?.explicacion ?? ''}
+          esUltimo={indice + 1 >= datos.retos.length}
+          onContinuar={continuar}
+          onReintentar={reintentar}
+        />
       )}
     </SafeAreaView>
   );
