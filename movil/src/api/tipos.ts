@@ -98,3 +98,17 @@ export type ResultadoNivel = {
   siguienteNivelId: number | null;
   perfil: Perfil;
 };
+export type RespuestaNivel = {
+  nivel: {
+    id: number;
+    orden: number;
+    titulo: string;
+    conceptoTitulo: string;
+    conceptoTexto: string;
+    conceptoEjemplo: string | null;
+    xpRecompensa: number;
+  };
+  retos: RetoPublico[];
+};
+
+export type RespuestaReto = number | number[];
