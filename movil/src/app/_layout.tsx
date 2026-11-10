@@ -9,6 +9,7 @@ import { JetBrainsMono_400Regular } from '@expo-google-fonts/jetbrains-mono';
 
 import { Retro } from '@/constants/retro';
 import { AuthProvider, useAuth } from '@/context/auth-context';
+import { PreferenciasProvider } from '@/context/preferencias-context';
 
 // El splash nativo se queda visible hasta saber si hay sesión guardada.
 SplashScreen.preventAutoHideAsync();
@@ -68,9 +69,11 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={temaNavegacion}>
       <StatusBar style="light" />
-      <AuthProvider>
-        <Navegacion />
-      </AuthProvider>
+         <AuthProvider>
+          <PreferenciasProvider>
+            <Navegacion />
+          </PreferenciasProvider>
+        </AuthProvider>
     </ThemeProvider>
   );
 }
