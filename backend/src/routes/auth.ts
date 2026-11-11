@@ -132,3 +132,98 @@ authRouter.post('/refresh', async (req, res) => {
 
   await responderSesion(res, data.session);
 });
+
+// Código que llega al correo para recuperar la contraseña (6 a 10 números,
+// según cómo esté configurado Supabase).
+const PATRON_CODIGO = /^\d{6,10}$/;
+
+// POST /auth/recuperar
+// Pide a Supabase que envíe al correo un código para cambiar la contraseña.
+// Siempre responde lo mismo, exista o no la cuenta, para no revelar qué
+// correos están registrados.
+authRouter.post('/recuperar', async (req, res) => {
+  const datos = (req.body ?? {}) as { email?: unknown };
+  const errorCorreo = validarCorreo(datos.email);
+  if (errorCorreo) {
+    res.status(400).json({ error: 'Revisa los datos del formulario', campos: { email: errorCorreo } });
+    return;
+  }
+
+  const email = (datos.email as string).trim().toLowerCase();
+  const { error } = await crearClienteSesion().auth.resetPasswordForEmail(email);
+
+  if (error) {
+    if (error.status === 429 || error.code === 'over_email_send_rate_limit') {
+      res.status(429).json({
+        error: 'Ya pediste un código hace poco. Espera un minuto y vuelve a intentarlo.',
+      });
+      return;
+    }
+    // Cualquier otro error se registra, pero al usuario se le responde igual.
+    console.error('No se pudo enviar el correo de recuperación', error);
+  }
+
+  res.json({
+    mensaje: 'Si el correo tiene una cuenta, te enviamos un código para cambiar la contraseña.',
+  });
+});
+
+// POST /auth/restablecer
+// Revisa el código del correo, cambia la contraseña y deja la sesión iniciada.
+authRouter.post('/restablecer', async (req, res) => {
+  const datos = (req.body ?? {}) as { email?: unknown; codigo?: unknown; password?: unknown };
+  const codigo = typeof datos.codigo === 'string' ? datos.codigo.trim() : '';
+
+  const errores = juntarErrores({
+    email: validarCorreo(datos.email),
+    codigo:
+      codigo === ''
+        ? 'Escribe el código que te llegó al correo'
+        : PATRON_CODIGO.test(codigo)
+          ? null
+          : 'El código son solo números, revisa el correo',
+    password: validarPassword(datos.password),
+  });
+  if (errores) {
+    res.status(400).json({ error: 'Revisa los datos del formulario', campos: errores });
+    return;
+  }
+
+  const email = (datos.email as string).trim().toLowerCase();
+  const password = datos.password as string;
+
+  const verificado = await crearClienteSesion().auth.verifyOtp({
+    email,
+    token: codigo,
+    type: 'recovery',
+  });
+  if (verificado.error || !verificado.data.session || !verificado.data.user) {
+    res.status(400).json({
+      error: 'El código no es válido o ya venció',
+      campos: { codigo: 'El código no es válido o ya venció. Pide uno nuevo.' },
+    });
+    return;
+  }
+
+  const cambio = await supabase.auth.admin.updateUserById(verificado.data.user.id, { password });
+  if (cambio.error) {
+    if (cambio.error.code === 'weak_password') {
+      res.status(400).json({
+        error: 'La contraseña es muy débil',
+        campos: { password: 'La contraseña es muy débil, usa una más larga o con más variedad' },
+      });
+      return;
+    }
+    if (cambio.error.code === 'same_password') {
+      res.status(400).json({
+        error: 'La contraseña nueva es igual a la anterior',
+        campos: { password: 'Usa una contraseña distinta a la anterior' },
+      });
+      return;
+    }
+    throw cambio.error;
+  }
+
+  // La sesión que dio el código sigue siendo válida: el usuario entra directo.
+  await responderSesion(res, verificado.data.session);
+});

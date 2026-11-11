@@ -1,8 +1,8 @@
 // Supabase falso en memoria para las pruebas.
 // Imita solo lo que usa el backend: consultas encadenadas (select, eq, lt, gt,
 // in, order, limit, single, maybeSingle, insert, update, upsert) y las
-// funciones de auth (createUser, deleteUser, signInWithPassword,
-// refreshSession y getUser).
+// funciones de auth (createUser, deleteUser, updateUserById, signInWithPassword,
+// refreshSession, getUser, resetPasswordForEmail y verifyOtp).
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 type Fila = Record<string, unknown>;
@@ -52,6 +52,8 @@ export class BaseFalsa {
     progreso_niveles: [],
     intentos_retos: [],
   };
+  // Códigos de recuperación "enviados por correo" (correo -> código).
+  codigosRecuperacion = new Map<string, string>();
   private siguienteId: Record<string, number> = {};
   private ultimaHora = 0;
 
@@ -296,6 +298,39 @@ export function crearSupabaseFalso() {
         usuarios.delete(id);
         return { data: null, error: null };
       },
+      async updateUserById(id: string, cambios: { password?: string }) {
+        const usuario = usuarios.get(id);
+        if (!usuario) return { data: { user: null }, error: { status: 404, message: 'No existe' } };
+        if (cambios.password !== undefined) {
+          if (cambios.password === usuario.password) {
+            return {
+              data: { user: null },
+              error: { code: 'same_password', status: 422, message: 'Misma contraseña' },
+            };
+          }
+          usuario.password = cambios.password;
+        }
+        return { data: { user: { id: usuario.id, email: usuario.email } }, error: null };
+      },
+    },
+    // Como Supabase: no dice si el correo existe. Solo "envía" el código si hay cuenta.
+    async resetPasswordForEmail(email: string) {
+      if ([...usuarios.values()].some((u) => u.email === email)) {
+        base.codigosRecuperacion.set(email, String(100000 + contador));
+      }
+      return { data: {}, error: null };
+    },
+    async verifyOtp({ email, token, type }: { email: string; token: string; type: string }) {
+      const usuario = [...usuarios.values()].find((u) => u.email === email);
+      if (type !== 'recovery' || !usuario || base.codigosRecuperacion.get(email) !== token) {
+        return {
+          data: { session: null, user: null },
+          error: { code: 'otp_expired', status: 403, message: 'Token has expired or is invalid' },
+        };
+      }
+      base.codigosRecuperacion.delete(email); // cada código sirve una sola vez
+      const session = crearSesion(usuario);
+      return { data: { session, user: session.user }, error: null };
     },
     async signInWithPassword({ email, password }: { email: string; password: string }) {
       const usuario = [...usuarios.values()].find((u) => u.email === email);

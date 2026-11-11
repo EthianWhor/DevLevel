@@ -40,6 +40,7 @@ Las pruebas levantan la API real en un puerto libre y le hacen peticiones HTTP, 
 |---|---|
 | `test/auth.test.ts` | Registro, login, refresh, rutas protegidas sin token, `GET /me` y `PATCH /me` |
 | `test/retos.test.ts` | `POST /retos/:id/responder` y `POST /niveles/:id/completar` (estrellas, XP, subida de nivel, racha, repetir niveles, niveles bloqueados) |
+| `test/recuperar.test.ts` | `POST /auth/recuperar` y `POST /auth/restablecer` (no revela si el correo existe, código incorrecto, código de un solo uso) |
 | `test/hechizos.test.ts` | `GET /hechizos` (bloqueados sin contenido, desbloqueo al completar, progreso por usuario) |
 | `test/progreso.test.ts` | Reglas puras de `lib/progreso.ts` (nivel por XP, estrellas, racha con fechas de Colombia) |
 
@@ -68,7 +69,8 @@ backend/
     │   └── requiere-sesion.ts  Valida el token de las rutas protegidas
     └── routes/
         ├── health.ts     GET /health
-        ├── auth.ts       POST /auth/register, /auth/login, /auth/refresh
+        ├── auth.ts       POST /auth/register, /auth/login, /auth/refresh,
+        │                 /auth/recuperar, /auth/restablecer
         ├── me.ts         GET /me, PATCH /me
         ├── mapa.ts       GET /mapa
         ├── retos.ts      POST /retos/:id/responder
@@ -99,6 +101,8 @@ En el plan gratis el servicio se duerme tras 15 minutos sin uso y la primera pet
 | `POST /auth/register` | Listo | Crea la cuenta y el perfil, y devuelve la sesión |
 | `POST /auth/login` | Listo | Inicia sesión y devuelve el token |
 | `POST /auth/refresh` | Listo | Renueva el token con el `refreshToken` |
+| `POST /auth/recuperar` | Listo | Envía al correo un código para cambiar la contraseña |
+| `POST /auth/restablecer` | Listo | Cambia la contraseña con el código y deja la sesión iniciada |
 | `GET /me` | Listo | Devuelve el perfil del usuario (requiere sesión) |
 | `PATCH /me` | Listo | Actualiza nombre de héroe y avatar (requiere sesión) |
 | `GET /mapa` | Listo | Unidades y niveles con su estado para el usuario (requiere sesión) |
@@ -230,6 +234,52 @@ Content-Type: application/json
 **Respuesta `200 OK`**: igual a la de login, con un token nuevo. Cada `refreshToken` se puede usar una sola vez, así que la app debe guardar el nuevo.
 
 **Errores**: `400` si falta el `refreshToken`, `401` si ya no es válido (`{ "error": "La sesión expiró, vuelve a iniciar sesión" }`).
+
+### `POST /auth/recuperar`
+
+Pide a Supabase que envíe al correo un código para cambiar la contraseña. Responde siempre lo mismo, exista o no la cuenta, para no revelar qué correos están registrados.
+
+**Petición**
+
+```json
+{ "email": "heroe@correo.com" }
+```
+
+**Respuesta `200 OK`**
+
+```json
+{ "mensaje": "Si el correo tiene una cuenta, te enviamos un código para cambiar la contraseña." }
+```
+
+**Errores:** `400` si el correo no es válido (con `campos.email`) y `429` si se pidió otro código hace menos de un minuto.
+
+**Configuración necesaria en Supabase** (una sola vez): en **Authentication → Emails → Reset Password**, la plantilla debe incluir el código con `{{ .Token }}`, por ejemplo:
+
+```html
+<h2>Cambia tu contraseña de DevLevel</h2>
+<p>Escribe este código en la app: <strong>{{ .Token }}</strong></p>
+<p>Si no lo pediste, ignora este correo.</p>
+```
+
+Con el servicio de correo incluido en el plan gratis, Supabase solo envía correos a los miembros del equipo del proyecto y unos pocos por hora. Para enviarlos a cualquier usuario hay que configurar un SMTP propio en **Authentication → Emails → SMTP Settings**.
+
+### `POST /auth/restablecer`
+
+Revisa el código del correo, cambia la contraseña y devuelve la sesión iniciada (la misma respuesta que `POST /auth/login`). Cada código sirve una sola vez.
+
+**Petición**
+
+```json
+{ "email": "heroe@correo.com", "codigo": "123456", "password": "nuevaClave123" }
+```
+
+**Errores**
+
+| Código | Cuándo | Ejemplo |
+|---|---|---|
+| `400` | Faltan datos o tienen mal formato | `{ "error": "Revisa los datos del formulario", "campos": { "codigo": "Escribe el código que te llegó al correo" } }` |
+| `400` | El código no es válido o venció | `{ "error": "El código no es válido o ya venció", "campos": { "codigo": "El código no es válido o ya venció. Pide uno nuevo." } }` |
+| `400` | La contraseña nueva es igual a la anterior | `{ "error": "La contraseña nueva es igual a la anterior", "campos": { "password": "Usa una contraseña distinta a la anterior" } }` |
 
 ### `GET /me` (requiere sesión)
 
