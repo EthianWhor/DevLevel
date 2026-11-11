@@ -5,4 +5,4 @@ export * as mapaApi from './mapa';
 export * from './niveles';
 export * from './retos';
 export * from './completar';
-
+export * from './hechizos';

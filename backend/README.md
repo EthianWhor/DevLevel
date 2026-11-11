@@ -40,6 +40,7 @@ Las pruebas levantan la API real en un puerto libre y le hacen peticiones HTTP, 
 |---|---|
 | `test/auth.test.ts` | Registro, login, refresh, rutas protegidas sin token, `GET /me` y `PATCH /me` |
 | `test/retos.test.ts` | `POST /retos/:id/responder` y `POST /niveles/:id/completar` (estrellas, XP, subida de nivel, racha, repetir niveles, niveles bloqueados) |
+| `test/hechizos.test.ts` | `GET /hechizos` (bloqueados sin contenido, desbloqueo al completar, progreso por usuario) |
 | `test/progreso.test.ts` | Reglas puras de `lib/progreso.ts` (nivel por XP, estrellas, racha con fechas de Colombia) |
 
 ## Base de datos
@@ -71,7 +72,8 @@ backend/
         ├── me.ts         GET /me, PATCH /me
         ├── mapa.ts       GET /mapa
         ├── retos.ts      POST /retos/:id/responder
-        └── completar.ts  POST /niveles/:id/completar
+        ├── completar.ts  POST /niveles/:id/completar
+        └── hechizos.ts   GET /hechizos
 ```
 
 ## Despliegue en Render
@@ -102,6 +104,7 @@ En el plan gratis el servicio se duerme tras 15 minutos sin uso y la primera pet
 | `GET /mapa` | Listo | Unidades y niveles con su estado para el usuario (requiere sesión) |
 | `POST /retos/:id/responder` | Listo | Revisa una respuesta, guarda el intento y devuelve la explicación (requiere sesión) |
 | `POST /niveles/:id/completar` | Listo | Calcula XP, estrellas, racha y subida de nivel (requiere sesión) |
+| `GET /hechizos` | Listo | Libro de hechizos: los conceptos desbloqueados y los que faltan (requiere sesión) |
 
 ### Formato general
 
@@ -438,6 +441,63 @@ Authorization: Bearer <token>
 | `403` | El nivel está bloqueado | `{ "error": "Este nivel todavía está bloqueado" }` |
 | `404` | El nivel no existe | `{ "error": "El nivel no existe" }` |
 | `409` | Faltan retos por acertar | `{ "error": "Responde correctamente todos los retos del nivel antes de completarlo", "retosPendientes": [3] }` |
+
+### `GET /hechizos` (requiere sesión)
+
+Devuelve el Libro de hechizos. Cada nivel enseña un concepto que se guarda como hechizo la primera vez que el usuario completa ese nivel. Vienen los 15 hechizos agrupados por unidad:
+
+- Si `desbloqueado` es `true`, trae el nombre, la descripción y el concepto del nivel para repasarlo.
+- Si es `false`, solo dice qué nivel hay que completar (`orden` y `nivelTitulo`); el resto llega en `null` para no adelantar el contenido.
+
+**Respuesta `200 OK`** (recortada)
+
+```json
+{
+  "unidades": [
+    {
+      "id": 1,
+      "orden": 1,
+      "titulo": "Pensar en pasos",
+      "hechizos": [
+        {
+          "nivelId": 1,
+          "orden": 1,
+          "nivelTitulo": "¿Qué es un algoritmo?",
+          "desbloqueado": true,
+          "estrellas": 3,
+          "nombre": "Hechizo del Camino",
+          "descripcion": "Convierte un problema en una lista de pasos que se pueden seguir.",
+          "conceptoTitulo": "Un algoritmo es una receta",
+          "conceptoTexto": "Un algoritmo es una lista de pasos claros...",
+          "conceptoEjemplo": "INICIO
+  Hervir agua
+  ...
+FIN"
+        },
+        {
+          "nivelId": 2,
+          "orden": 2,
+          "nivelTitulo": "El orden importa",
+          "desbloqueado": false,
+          "estrellas": null,
+          "nombre": null,
+          "descripcion": null,
+          "conceptoTitulo": null,
+          "conceptoTexto": null,
+          "conceptoEjemplo": null
+        }
+      ]
+    }
+  ],
+  "resumen": { "desbloqueados": 1, "total": 15 }
+}
+```
+
+**Errores**
+
+| Código | Cuándo | Ejemplo |
+|---|---|---|
+| `401` | Sin sesión o token vencido | `{ "error": "Debes iniciar sesión" }` |
 
 ### Probar con curl
 

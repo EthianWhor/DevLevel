@@ -112,3 +112,29 @@ export type RespuestaNivel = {
 };
 
 export type RespuestaReto = number | number[];
+
+export type Hechizo = {
+  nivelId: number;
+  orden: number;
+  nivelTitulo: string;
+  desbloqueado: boolean;
+  estrellas: number | null;
+  // Llegan en null mientras el hechizo está bloqueado.
+  nombre: string | null;
+  descripcion: string | null;
+  conceptoTitulo: string | null;
+  conceptoTexto: string | null;
+  conceptoEjemplo: string | null;
+};
+
+export type UnidadHechizos = {
+  id: number;
+  orden: number;
+  titulo: string;
+  hechizos: Hechizo[];
+};
+
+export type RespuestaHechizos = {
+  unidades: UnidadHechizos[];
+  resumen: { desbloqueados: number; total: number };
+};
