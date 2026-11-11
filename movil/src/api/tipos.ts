@@ -1,4 +1,5 @@
 // Tipos de las respuestas del backend. Deben coincidir con backend/README.md.
+import type { Equipo, ErrorLectura, Mazmorra, Objeto } from '@/juego/tipos';
 
 export type Avatar = 'explorador' | 'mago' | 'guerrero';
 
@@ -11,6 +12,7 @@ export type Perfil = {
   rachaActual: number;
   rachaMaxima: number;
   ultimaActividad: string | null;
+  equipo: Equipo;
 };
 
 export type Usuario = {
@@ -96,6 +98,7 @@ export type ResultadoNivel = {
   racha: { actual: number; maxima: number; cambio: string };
   hechizoDesbloqueado: { nombre: string; descripcion: string } | null;
   siguienteNivelId: number | null;
+  objetoGanado: ObjetoGanado | null;
   perfil: Perfil;
 };
 export type RespuestaNivel = {
@@ -108,7 +111,7 @@ export type RespuestaNivel = {
     conceptoEjemplo: string | null;
     xpRecompensa: number;
   };
-  retos: RetoPublico[];
+  retos: (RetoPublico | RetoMazmorra)[];
 };
 
 export type RespuestaReto = number | number[];
@@ -138,3 +141,45 @@ export type RespuestaHechizos = {
   unidades: UnidadHechizos[];
   resumen: { desbloqueados: number; total: number };
 };
+
+// ---------- Mazmorras ----------
+
+export type RetoMazmorra = {
+  id: number;
+  orden: number;
+  tipo: 'mazmorra';
+  enunciado: string;
+  codigo: string | null;
+  opciones: Mazmorra;
+  pista: string;
+};
+
+export type ResultadoMazmorra = {
+  retoId: number;
+  nivelId: number;
+  correcta: boolean;
+  motivo: string | null;
+  error: ErrorLectura | null;
+  objetivosCumplidos: boolean[];
+  resultado: {
+    vida: number;
+    vidaMax: number;
+    energiaRestante: number;
+    monedas: number;
+    monedasTotales: number;
+    instrucciones: number;
+  } | null;
+  explicacion: string;
+  pista: string | null;
+};
+
+export type ObjetoGanado = Objeto & { nivelId: number };
+
+export type ObjetoInventario = Objeto & { nivelId: number | null; obtenidoAt: string };
+
+export type RespuestaInventario = {
+  objetos: ObjetoInventario[];
+  equipo: Equipo;
+};
+
+export type PistaAvanzada = { lineas: string; completa: boolean };

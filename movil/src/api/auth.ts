@@ -1,4 +1,5 @@
 import { pedir } from './cliente';
+import type { Equipo } from '@/juego/tipos';
 import type { Avatar, RespuestaMe, RespuestaSesion } from './tipos';
 
 export function registrar(email: string, password: string) {
@@ -30,6 +31,9 @@ export function obtenerMe(token: string) {
   return pedir<RespuestaMe>('/me', { token });
 }
 
-export function actualizarMe(token: string, cambios: { nombreHeroe?: string; avatar?: Avatar }) {
+export function actualizarMe(
+  token: string,
+  cambios: { nombreHeroe?: string; avatar?: Avatar; equipo?: Partial<Equipo> },
+) {
   return pedir<RespuestaMe>('/me', { metodo: 'PATCH', cuerpo: cambios, token });
 }

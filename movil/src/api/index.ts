@@ -6,3 +6,4 @@ export * from './niveles';
 export * from './retos';
 export * from './completar';
 export * from './hechizos';
+export * from './inventario';

@@ -10,6 +10,7 @@ import {
   responderReto,
   type RespuestaNivel,
   type RespuestaReto,
+  type RetoPublico,
   type ResultadoNivel,
   type ResultadoReto,
 } from '@/api';
@@ -116,7 +117,7 @@ export default function NivelScreen() {
       ) : fase === 'retos' ? (
         <Reto
           key={datos.retos[indice].id}
-          reto={datos.retos[indice]}
+          reto={datos.retos[indice] as RetoPublico}
           numero={indice + 1}
           total={datos.retos.length}
           enviando={enviando}
