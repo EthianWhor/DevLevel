@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { esErrorApi, obtenerHechizos, type Hechizo, type RespuestaHechizos } from '@/api';
 import { BarraProgreso } from '@/components/ui/barra-progreso';
+import { BarraSuperior } from '@/components/retro/barra-superior';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { useAuth } from '@/context/auth-context';
 import { AlturaLinea, AreaTactilMinima, Colores, Espacio, Fuentes, Radio, Tamanos } from '@/theme';
@@ -53,6 +54,7 @@ export default function HechizosScreen() {
 
   return (
     <SafeAreaView style={estilos.pantalla} edges={['top', 'left', 'right']}>
+      <BarraSuperior titulo="Grimorio Lógico" />
       {cargando ? (
         <View style={estilos.centro}>
           <ActivityIndicator
@@ -91,7 +93,7 @@ export default function HechizosScreen() {
             />
           }>
           <Text style={estilos.titulo} accessibilityRole="header">
-            Libro de hechizos
+            📖 Libro de hechizos
           </Text>
 
           <View style={estilos.progreso}>
@@ -267,8 +269,9 @@ const estilos = StyleSheet.create({
   progreso: {
     gap: Espacio.sm,
     backgroundColor: Colores.superficie,
-    borderColor: Colores.borde,
-    borderWidth: 2,
+    borderColor: Colores.azulMana,
+    borderWidth: 3,
+    borderBottomWidth: 6,
     borderRadius: Radio.md,
     padding: Espacio.md,
   },
@@ -307,13 +310,15 @@ const estilos = StyleSheet.create({
   tarjeta: {
     minHeight: AreaTactilMinima,
     backgroundColor: Colores.superficie,
-    borderColor: Colores.borde,
-    borderWidth: 2,
+    borderColor: Colores.bordePixel,
+    borderWidth: 3,
+    borderBottomWidth: 6,
+    borderRightWidth: 6,
     borderRadius: Radio.md,
     padding: Espacio.md,
     gap: Espacio.xs,
   },
-  tarjetaAbierta: { borderColor: Colores.oro },
+  tarjetaAbierta: { borderColor: Colores.azulMana },
   tarjetaBloqueada: { borderStyle: 'dashed' },
   presionada: { opacity: 0.85 },
   filaEtiquetas: { flexDirection: 'row', justifyContent: 'space-between', gap: Espacio.sm },

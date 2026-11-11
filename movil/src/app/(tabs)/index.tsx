@@ -13,8 +13,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { esErrorApi, mapaApi, type NivelMapa, type RespuestaMapa } from '@/api';
 import { MapaReino } from '@/components/mapa/mapa-reino';
+import { BarraSuperior } from '@/components/retro/barra-superior';
 import { NodoNivel } from '@/components/mapa/nodo-nivel';
-import { datosAvatar } from '@/constants/avatares';
 import { AreaTactilMinima, Retro } from '@/constants/retro';
 import { useAuth } from '@/context/auth-context';
 import { useReducirMovimiento } from '@/hooks/use-reducir-movimiento';
@@ -56,23 +56,14 @@ export default function MapaScreen() {
     router.push({ pathname: '/nivel/[id]', params: { id: String(nivel.id) } });
   }
 
-  const avatar = datosAvatar(perfil?.avatar);
 
   return (
     <SafeAreaView style={styles.pantalla} edges={['top', 'left', 'right']}>
-      {/* Encabezado con el héroe */}
-      <View style={styles.encabezado} accessible accessibilityRole="header">
-        <Text style={styles.avatar} importantForAccessibility="no" accessibilityElementsHidden>
-          {avatar?.simbolo ?? '🧙'}
+      <BarraSuperior />
+      <View style={styles.subBarra}>
+        <Text style={styles.estadisticas} numberOfLines={1}>
+          {perfil?.nombreHeroe ?? 'Héroe'} · {perfil?.xp ?? 0} XP · Racha {perfil?.rachaActual ?? 0} 🔥
         </Text>
-        <View style={styles.datosHeroe}>
-          <Text style={styles.nombre} numberOfLines={1}>
-            {perfil?.nombreHeroe ?? 'Héroe'}
-          </Text>
-          <Text style={styles.estadisticas}>
-            Nivel {perfil?.nivel ?? 1} · {perfil?.xp ?? 0} XP · Racha {perfil?.rachaActual ?? 0} 🔥
-          </Text>
-        </View>
         <Pressable
           onPress={() => setVista(vista === 'reino' ? 'lista' : 'reino')}
           accessibilityRole="button"
@@ -178,6 +169,17 @@ const styles = StyleSheet.create({
     borderBottomColor: Retro.borde,
   },
   avatar: { fontSize: 32, lineHeight: 40 },
+  subBarra: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+    backgroundColor: Retro.superficie,
+    borderBottomWidth: 2,
+    borderBottomColor: Retro.bordePixel,
+  },
   botonVista: {
     minHeight: AreaTactilMinima,
     minWidth: AreaTactilMinima,
