@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BarraSuperior } from '@/components/retro/barra-superior';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { FilaSwitch } from '@/components/ui/fila-switch';
 import { Tarjeta } from '@/components/ui/tarjeta';
@@ -24,6 +25,7 @@ export default function ConfiguracionScreen() {
 
   return (
     <SafeAreaView style={estilos.pantalla} edges={['top', 'left', 'right']}>
+      <BarraSuperior titulo="Ajustes" />
       <ScrollView contentContainerStyle={estilos.contenido} showsVerticalScrollIndicator={false}>
         <Text style={estilos.titulo} accessibilityRole="header">
           Configuración

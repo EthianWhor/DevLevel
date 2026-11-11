@@ -12,6 +12,9 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Sprite } from '@/components/pixel/sprite';
+import { PALETA_HEROE, spriteHeroe } from '@/components/pixel/sprites';
+
 import { authApi, esErrorApi, type Avatar } from '@/api';
 import { AVATARES } from '@/constants/avatares';
 import { AreaTactilMinima, Retro } from '@/constants/retro';
@@ -94,9 +97,9 @@ export default function PersonajeScreen() {
                   accessibilityState={{ checked: seleccionado }}
                   accessibilityLabel={`${opcion.nombre}. Habilidad: ${opcion.habilidad}. ${opcion.descripcion}`}
                   style={[styles.tarjeta, seleccionado && styles.tarjetaSeleccionada]}>
-                  <Text style={styles.simbolo} importantForAccessibility="no" accessibilityElementsHidden>
-                    {opcion.simbolo}
-                  </Text>
+                  <View style={styles.retrato} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
+                    <Sprite mapa={spriteHeroe('sur').mapa} paleta={PALETA_HEROE[opcion.id]} tamano={52} />
+                  </View>
                   <View style={styles.textosTarjeta}>
                     <Text style={styles.nombreClase}>{opcion.nombre}</Text>
                     <Text style={styles.habilidad}>Habilidad: {opcion.habilidad}</Text>
@@ -185,7 +188,7 @@ const styles = StyleSheet.create({
     borderColor: Retro.borde,
   },
   tarjetaSeleccionada: { borderColor: Retro.oro, borderWidth: 4, backgroundColor: Retro.superficieAlta },
-  simbolo: { fontSize: 36, lineHeight: 44 },
+  retrato: { borderWidth: 2, borderColor: '#1E293B', backgroundColor: '#0F172A', padding: 2 },
   textosTarjeta: { flex: 1, gap: 4 },
   nombreClase: { color: Retro.texto, fontSize: 18, lineHeight: 24, fontWeight: '700' },
   habilidad: { color: Retro.verde, fontSize: 14, lineHeight: 20, fontWeight: '600' },
