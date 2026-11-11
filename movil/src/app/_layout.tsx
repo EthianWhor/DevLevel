@@ -1,17 +1,20 @@
 import { DarkTheme, ThemeProvider, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { SpaceGrotesk_500Medium, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
 import { Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import { JetBrainsMono_400Regular } from '@expo-google-fonts/jetbrains-mono';
 
+import { PantallaSplash } from '@/components/pantalla-splash';
 import { Retro } from '@/constants/retro';
 import { AuthProvider, useAuth } from '@/context/auth-context';
+import { OnboardingProvider, useOnboarding } from '@/context/onboarding-context';
 import { PreferenciasProvider } from '@/context/preferencias-context';
 
-// El splash nativo se queda visible hasta saber si hay sesión guardada.
+// El splash nativo se queda visible hasta que cargan las fuentes; después
+// sigue el splash animado de la app.
 SplashScreen.preventAutoHideAsync();
 
 const temaNavegacion = {
@@ -29,8 +32,12 @@ const temaNavegacion = {
 // Redirección según la sesión: las pantallas dentro de cada Stack.Protected
 // solo existen cuando su guard es verdadero. Si el usuario cierra sesión,
 // expo-router lo saca de las pantallas protegidas y lo lleva al login.
+// Sin sesión, la primera vez se muestra el Onboarding y después el login.
 function Navegacion() {
   const { estado } = useAuth();
+  const { visto: onboardingVisto } = useOnboarding();
+  const [splashTerminado, setSplashTerminado] = useState(false);
+  const alTerminarSplash = useCallback(() => setSplashTerminado(true), []);
 
   const [fuentesCargadas, errorFuentes] = useFonts({
     SpaceGrotesk_500Medium,
@@ -43,16 +50,26 @@ function Navegacion() {
   const fuentesListas = fuentesCargadas || errorFuentes !== null;
 
   useEffect(() => {
-    if (estado !== 'cargando' && fuentesListas) {
-      SplashScreen.hideAsync();
-    }
-  }, [estado, fuentesListas]);
+    if (fuentesListas) SplashScreen.hideAsync();
+  }, [fuentesListas]);
 
-  if (estado === 'cargando' || !fuentesListas) return null;
+  if (!fuentesListas) return null;
+
+  // El splash animado se queda hasta que termina su animación y se sabe si
+  // hay sesión guardada (eso puede tardar si Render está despertando).
+  if (!splashTerminado || estado === 'cargando' || onboardingVisto === null) {
+    return <PantallaSplash onTerminar={alTerminarSplash} />;
+  }
 
   return (
     <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: Retro.fondo } }}>
-      <Stack.Protected guard={estado === 'sin-sesion'}>
+      <Stack.Protected guard={estado === 'sin-sesion' && !onboardingVisto}>
+        <Stack.Screen name="onboarding" />
+      </Stack.Protected>
+
+      {/* Login solo después de la introducción: expo-router manda a la primera
+          ruta disponible, así que no pueden estar las dos a la vez. */}
+      <Stack.Protected guard={estado === 'sin-sesion' && onboardingVisto === true}>
         <Stack.Screen name="login" />
       </Stack.Protected>
 
@@ -69,11 +86,13 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={temaNavegacion}>
       <StatusBar style="light" />
-         <AuthProvider>
-          <PreferenciasProvider>
+      <AuthProvider>
+        <PreferenciasProvider>
+          <OnboardingProvider>
             <Navegacion />
-          </PreferenciasProvider>
-        </AuthProvider>
+          </OnboardingProvider>
+        </PreferenciasProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
