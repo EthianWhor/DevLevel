@@ -4,6 +4,7 @@
 -- Se puede volver a ejecutar: primero borra las tablas y el tipo.
 -- =============================================================
 
+drop table if exists public.inventario cascade;
 drop table if exists public.intentos_retos cascade;
 drop table if exists public.progreso_niveles cascade;
 drop table if exists public.retos cascade;
@@ -26,6 +27,8 @@ create table public.profiles (
   racha_actual     integer not null default 0 check (racha_actual >= 0),
   racha_maxima     integer not null default 0 check (racha_maxima >= 0),
   ultima_actividad date,
+  -- Objetos equipados en la mazmorra: arma, armadura y amuleto (id o null).
+  equipo           jsonb not null default '{"arma": null, "armadura": null, "amuleto": null}'::jsonb,
   created_at       timestamptz not null default now()
 );
 
@@ -65,7 +68,8 @@ create table public.niveles (
 --   completar       -> opciones: palabras posibles,  respuesta: 0   (índice)
 -- La columna "respuesta" NUNCA se envía a la app: solo la usa el backend.
 -- -------------------------------------------------------------
-create type public.tipo_reto as enum ('opcion_multiple', 'ordenar', 'completar');
+--   mazmorra        -> opciones: la mazmorra (mapa, energía, objetivos...), respuesta: { solucion, solucionExtras }
+create type public.tipo_reto as enum ('opcion_multiple', 'ordenar', 'completar', 'mazmorra');
 
 create table public.retos (
   id                   serial primary key,
@@ -104,7 +108,20 @@ create table public.intentos_retos (
   reto_id    integer not null references public.retos (id) on delete cascade,
   respuesta  jsonb not null,
   correcto   boolean not null,
+  detalle    jsonb, -- resultado de una mazmorra: vida, monedas, objetivos cumplidos
   created_at timestamptz not null default now()
+);
+
+-- -------------------------------------------------------------
+-- inventario: objetos que ganó cada jugador (normales y míticos).
+-- -------------------------------------------------------------
+create table public.inventario (
+  user_id     uuid not null references public.profiles (id) on delete cascade,
+  objeto_id   text not null,
+  nivel_id    smallint references public.niveles (id) on delete set null,
+  mitico      boolean not null default false,
+  obtenido_at timestamptz not null default now(),
+  primary key (user_id, objeto_id)
 );
 
 create index intentos_retos_user_reto_idx on public.intentos_retos (user_id, reto_id);
@@ -121,3 +138,4 @@ alter table public.niveles          enable row level security;
 alter table public.retos            enable row level security;
 alter table public.progreso_niveles enable row level security;
 alter table public.intentos_retos   enable row level security;
+alter table public.inventario       enable row level security;

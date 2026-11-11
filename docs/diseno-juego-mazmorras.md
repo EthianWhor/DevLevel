@@ -189,7 +189,9 @@ Las instrucciones `invocar_rayo()`, `volar()` y `atravesar()` solo se pueden usa
 
 ### 4.3 Equilibrio
 
-El objetivo principal de **todas** las mazmorras se puede cumplir sin objetos. Una prueba automática lo garantiza: cada mazmorra trae una solución de referencia que gana sin equipo, y otra que cumple los dos extras.
+El objetivo principal de **todas** las mazmorras se puede cumplir sin objetos. Una prueba automática lo garantiza: cada mazmorra trae una solución de referencia que gana sin equipo, y otra que cumple los dos extras usando **solo objetos normales de mazmorras anteriores**. Así los objetos sirven para algo (vencer a los caballeros, no recibir daño) sin que nadie quede atascado.
+
+Como el caballero (vida 3, daño 2) no se puede vencer sin recibir daño hasta tener un arma de ataque 3, en el nivel 9 el segundo extra es `monedas` en lugar de `sinDanio`.
 
 ## 5. Contenido: las 15 mazmorras
 
@@ -203,7 +205,7 @@ El objetivo principal de **todas** las mazmorras se puede cumplir sin objetos. U
 | 6 | Cambiar valores | La Cripta del Esqueleto | bloques | caballero | derrotarTodos, maxInstrucciones | Espada de bronce |
 | 7 | Si… entonces | La Bifurcación | mixto | goblins | sinChoques, monedas | Pergamino del sabio |
 | 8 | Si no | El Puente Dudoso | mixto | orco | sinDanio, maxInstrucciones | Casco de hierro |
-| 9 | Varias condiciones | El Torreón de las Decisiones | mixto | orcos, caballero | derrotarTodos, sinDanio | Lanza larga |
+| 9 | Varias condiciones | El Torreón de las Decisiones | mixto | orco, caballero | derrotarTodos, monedas | Lanza larga |
 | 10 | Repetir N veces | El Túnel Largo | texto | — | maxInstrucciones, monedas | Lupa del explorador |
 | 11 | Repetir mientras | El Río Sin Fin | texto | goblins | maxInstrucciones, sinChoques | Escudo rúnico |
 | 12 | Recorrer una lista | La Galería de Cofres | texto | orcos, caballero | monedas, derrotarTodos | Hacha de guerra |
