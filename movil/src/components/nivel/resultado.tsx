@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, Vibration } from 'react-native';
 
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { Tarjeta } from '@/components/ui/tarjeta';
+import { usePreferencias } from '@/context/preferencias-context';
 import { AlturaLinea, Colores, Espacio, Fuentes, Tamanos } from '@/theme';
 
 type Props = {
@@ -14,9 +15,12 @@ type Props = {
 };
 
 export function Resultado({ correcta, explicacion, esUltimo, onContinuar, onReintentar }: Props) {
+  const { preferencias } = usePreferencias();
+
   useEffect(() => {
+    if (!preferencias.vibracion) return;
     Vibration.vibrate(correcta ? 80 : [0, 120, 80, 120]);
-  }, [correcta]);
+  }, [correcta, preferencias.vibracion]);
 
   const titulo = correcta ? '✔ ¡Correcto!' : '✖ Casi, intenta otra vez';
 
