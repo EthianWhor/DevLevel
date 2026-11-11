@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "mafotts-team",
     "name": "DevLevel",
     "slug": "movil",
     "version": "1.0.0",
