@@ -4,6 +4,7 @@ import type { AddressInfo } from 'node:net';
 import { crearApp } from '../src/app';
 import { usarClienteDePrueba } from '../src/lib/supabase';
 import { crearSupabaseFalso, type BaseFalsa } from './supabase-falso';
+import type { Mazmorra, ObjetivoExtra } from '../src/lib/mazmorra/tipos';
 
 export type Servidor = Awaited<ReturnType<typeof iniciarServidor>>;
 
@@ -127,3 +128,38 @@ export async function responderBienNivel1(servidor: Servidor, token: string) {
 }
 
 export const esperar = (ms: number) => new Promise((resolver) => setTimeout(resolver, ms));
+
+// Reemplaza los retos de un nivel por una mazmorra de prueba (tipo 'mazmorra').
+export function cargarMazmorra(
+  base: BaseFalsa,
+  nivelId: number,
+  retoId: number,
+  datos: { mapa: string[]; objetivosExtra: ObjetivoExtra[]; objeto: string; solucion: string },
+) {
+  base.tablas.retos = base.tablas.retos.filter((r) => r.nivel_id !== nivelId);
+  const mazmorra: Mazmorra = {
+    nombre: 'Mazmorra de prueba',
+    historia: '',
+    modo: 'texto',
+    mapa: datos.mapa,
+    direccionInicial: 'este',
+    energia: 20,
+    instrucciones: [],
+    objetivosExtra: datos.objetivosExtra,
+    objeto: datos.objeto,
+    pista: 'Pista de prueba',
+  };
+  base.tablas.retos.push({
+    id: retoId,
+    nivel_id: nivelId,
+    orden: 1,
+    tipo: 'mazmorra',
+    enunciado: mazmorra.nombre,
+    codigo: null,
+    opciones: mazmorra,
+    respuesta: { solucion: datos.solucion, solucionExtras: datos.solucion },
+    explicacion_correcta: '¡Saliste!',
+    explicacion_error: 'No llegaste',
+    pista: mazmorra.pista,
+  });
+}

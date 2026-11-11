@@ -1,4 +1,6 @@
 import { supabase } from './supabase';
+import { aEquipo } from './equipo';
+import type { Equipo } from './mazmorra/tipos';
 
 // Fila de la tabla profiles tal como viene de Postgres.
 export type FilaPerfil = {
@@ -10,6 +12,7 @@ export type FilaPerfil = {
   racha_actual: number;
   racha_maxima: number;
   ultima_actividad: string | null;
+  equipo: unknown;
 };
 
 // Perfil que se envía a la app (camelCase, igual que el resto de la API).
@@ -22,10 +25,11 @@ export type Perfil = {
   rachaActual: number;
   rachaMaxima: number;
   ultimaActividad: string | null;
+  equipo: Equipo;
 };
 
 export const COLUMNAS_PERFIL =
-  'id, nombre_heroe, avatar, xp, nivel, racha_actual, racha_maxima, ultima_actividad';
+  'id, nombre_heroe, avatar, xp, nivel, racha_actual, racha_maxima, ultima_actividad, equipo';
 
 export function aPerfil(fila: FilaPerfil): Perfil {
   return {
@@ -37,6 +41,7 @@ export function aPerfil(fila: FilaPerfil): Perfil {
     rachaActual: fila.racha_actual,
     rachaMaxima: fila.racha_maxima,
     ultimaActividad: fila.ultima_actividad,
+    equipo: aEquipo(fila.equipo),
   };
 }
 

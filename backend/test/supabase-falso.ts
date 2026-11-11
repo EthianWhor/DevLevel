@@ -22,6 +22,7 @@ const LLAVES_PRIMARIAS: Record<string, string[]> = {
   retos: ['id'],
   progreso_niveles: ['user_id', 'nivel_id'],
   intentos_retos: ['id'],
+  inventario: ['user_id', 'objeto_id'],
 };
 
 // Divide "a, b, rel (c, d)" en partes respetando los paréntesis.
@@ -51,6 +52,7 @@ export class BaseFalsa {
     retos: [],
     progreso_niveles: [],
     intentos_retos: [],
+    inventario: [],
   };
   // Códigos de recuperación "enviados por correo" (correo -> código).
   codigosRecuperacion = new Map<string, string>();
@@ -244,6 +246,7 @@ class Consulta implements PromiseLike<Resultado> {
         racha_actual: 0,
         racha_maxima: 0,
         ultima_actividad: null,
+        equipo: { arma: null, armadura: null, amuleto: null },
         created_at: this.base.ahora(),
         ...fila,
       };
@@ -252,6 +255,7 @@ class Consulta implements PromiseLike<Resultado> {
       fila.id ??= this.base.nuevoId(this.tabla);
     }
     if (this.tabla === 'intentos_retos') fila.created_at ??= this.base.ahora();
+    if (this.tabla === 'inventario') fila.obtenido_at ??= this.base.ahora();
     if (this.tabla === 'progreso_niveles') fila.completado_at ??= this.base.ahora();
     return fila;
   }

@@ -40,6 +40,9 @@ Las pruebas levantan la API real en un puerto libre y le hacen peticiones HTTP, 
 |---|---|
 | `test/auth.test.ts` | Registro, login, refresh, rutas protegidas sin token, `GET /me` y `PATCH /me` |
 | `test/retos.test.ts` | `POST /retos/:id/responder` y `POST /niveles/:id/completar` (estrellas, XP, subida de nivel, racha, repetir niveles, niveles bloqueados) |
+| `test/lector.test.ts`, `test/simulador.test.ts`, `test/objetos.test.ts` | Motor de mazmorras: lenguaje, simulación, combate, objetos y sorteo de míticos |
+| `test/contenido.test.ts` | Las 15 mazmorras se ganan sin objetos y sus extras se pueden cumplir |
+| `test/mazmorras.test.ts` | `responder` y `completar` con mazmorras, inventario, equipo y pista avanzada |
 | `test/recuperar.test.ts` | `POST /auth/recuperar` y `POST /auth/restablecer` (no revela si el correo existe, código incorrecto, código de un solo uso) |
 | `test/hechizos.test.ts` | `GET /hechizos` (bloqueados sin contenido, desbloqueo al completar, progreso por usuario) |
 | `test/progreso.test.ts` | Reglas puras de `lib/progreso.ts` (nivel por XP, estrellas, racha con fechas de Colombia) |
@@ -60,6 +63,9 @@ backend/
     ├── app.ts            Arma la app de Express y registra las rutas
     ├── config/env.ts     Lee y valida las variables de entorno
     ├── lib/
+    │   ├── mazmorra/     Motor del juego: lector del pseudocódigo, simulador,
+    │   │                 objetos y las 15 mazmorras (copia idéntica en movil/src/juego)
+    │   ├── equipo.ts     Equipo del jugador verificado contra su inventario
     │   ├── supabase.ts   Cliente de Supabase con la llave secreta
     │   ├── perfil.ts     Lectura del perfil y conversión a camelCase
     │   ├── avatares.ts   Avatares permitidos
@@ -75,7 +81,8 @@ backend/
         ├── mapa.ts       GET /mapa
         ├── retos.ts      POST /retos/:id/responder
         ├── completar.ts  POST /niveles/:id/completar
-        └── hechizos.ts   GET /hechizos
+        ├── hechizos.ts   GET /hechizos
+        └── inventario.ts GET /inventario
 ```
 
 ## Despliegue en Render
@@ -108,6 +115,8 @@ En el plan gratis el servicio se duerme tras 15 minutos sin uso y la primera pet
 | `GET /mapa` | Listo | Unidades y niveles con su estado para el usuario (requiere sesión) |
 | `POST /retos/:id/responder` | Listo | Revisa una respuesta, guarda el intento y devuelve la explicación (requiere sesión) |
 | `POST /niveles/:id/completar` | Listo | Calcula XP, estrellas, racha y subida de nivel (requiere sesión) |
+| `GET /inventario` | Listo | Objetos ganados (normales y míticos) y el equipo puesto (requiere sesión) |
+| `GET /retos/:id/pista-avanzada` | Listo | Pista avanzada de una mazmorra con el Pergamino del sabio o el Ojo de Odín (requiere sesión) |
 | `GET /hechizos` | Listo | Libro de hechizos: los conceptos desbloqueados y los que faltan (requiere sesión) |
 
 ### Formato general
@@ -548,6 +557,34 @@ FIN"
 | Código | Cuándo | Ejemplo |
 |---|---|---|
 | `401` | Sin sesión o token vencido | `{ "error": "Debes iniciar sesión" }` |
+
+### Mazmorras (retos de tipo `mazmorra`)
+
+Desde la migración `supabase/migracion-mazmorras.sql`, cada nivel tiene **un** reto de tipo `mazmorra`: el jugador arma un programa en pseudocódigo y el backend lo ejecuta con el motor de `src/lib/mazmorra/`. El diseño completo está en `docs/diseno-juego-mazmorras.md`.
+
+**Para cargar las mazmorras en Supabase** (una vez): ejecutar `supabase/migracion-mazmorras.sql` y después `supabase/seed-mazmorras.sql`. Si se cambia `src/lib/mazmorra/contenido.ts`, regenerar el seed con `npm run seed:mazmorras`.
+
+**`POST /retos/:id/responder` con una mazmorra.** Petición `{ "programa": "adelante()
+adelante()" }`. El backend usa el equipo guardado del jugador (solo lo que de verdad tiene en `inventario`), simula y guarda el intento con su `detalle`:
+
+```json
+{
+  "retoId": 46, "nivelId": 1, "correcta": true, "motivo": null, "error": null,
+  "objetivosCumplidos": [true, false],
+  "resultado": { "vida": 3, "vidaMax": 3, "energiaRestante": 5, "monedas": 1, "monedasTotales": 1, "instrucciones": 6 },
+  "explicacion": "¡Saliste de la mazmorra!", "pista": null
+}
+```
+
+Si el texto tiene un error, `correcta` es `false` y `error` trae `{ "linea": 2, "mensaje": "Línea 2: ..." }`. Si no gana, `motivo` explica por qué ("Te quedaste sin energía", "Perdiste toda tu vida"...).
+
+**`POST /niveles/:id/completar` con una mazmorra.** Exige un intento ganador. Estrellas = 1 + objetivos extra cumplidos en el mejor intento. Si cumplió todos los extras y no tiene el objeto de la mazmorra, lo gana; con probabilidad `10 % × 0,8^k` (k = míticos que ya tiene) recibe en su lugar un mítico. La respuesta agrega `objetoGanado: { id, nombre, espacio, efecto, mitico, nivelId } | null`.
+
+**`GET /inventario`** → `{ "objetos": [{ "id": "daga_madera", "nombre": "Daga de madera", "espacio": "arma", "efecto": "+1 de ataque", "mitico": false, "nivelId": 2 }], "equipo": { "arma": "daga_madera", "armadura": null, "amuleto": null } }`
+
+**`PATCH /me` con `equipo`**: `{ "equipo": { "arma": "daga_madera", "amuleto": null } }`. Solo objetos del inventario y cada uno en su espacio; si no, `400` con `campos.equipo`. El perfil ahora incluye `equipo`.
+
+**`GET /retos/:id/pista-avanzada`**: con el Pergamino del sabio → `{ "lineas": "primeras 2 líneas", "completa": false }`; con el Ojo de Odín → la solución completa; sin ninguno → `403`.
 
 ### Probar con curl
 

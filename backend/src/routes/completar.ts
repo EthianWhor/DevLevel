@@ -10,6 +10,10 @@ import {
   nivelPorXp,
   resumirIntentos,
 } from '../lib/progreso';
+import { azar } from '../lib/azar';
+import { equipoValido, leerInventario } from '../lib/equipo';
+import { OBJETOS, estadisticas, sortearObjeto } from '../lib/mazmorra/objetos';
+import type { Mazmorra, Objeto } from '../lib/mazmorra/tipos';
 import { requiereSesion, usuarioDe } from '../middleware/requiere-sesion';
 
 export const completarRouter = Router();
@@ -54,7 +58,7 @@ completarRouter.post('/:id/completar', requiereSesion, async (req, res) => {
   }
 
   const [retos, progresoPrevio] = await Promise.all([
-    supabase.from('retos').select('id').eq('nivel_id', id).order('orden'),
+    supabase.from('retos').select('id, tipo, opciones').eq('nivel_id', id).order('orden'),
     supabase
       .from('progreso_niveles')
       .select('estrellas, completado_at')
@@ -65,7 +69,8 @@ completarRouter.post('/:id/completar', requiereSesion, async (req, res) => {
   if (retos.error) throw retos.error;
   if (progresoPrevio.error) throw progresoPrevio.error;
 
-  const retoIds = (retos.data as { id: number }[]).map((r) => r.id);
+  const filasRetos = retos.data as { id: number; tipo: string; opciones: unknown }[];
+  const retoIds = filasRetos.map((r) => r.id);
   const primeraVez = progresoPrevio.data === null;
 
   if (retoIds.length === 0) {
@@ -77,7 +82,7 @@ completarRouter.post('/:id/completar', requiereSesion, async (req, res) => {
   // partida (los posteriores a la última vez que se completó).
   let consultaIntentos = supabase
     .from('intentos_retos')
-    .select('reto_id, correcto')
+    .select('reto_id, correcto, detalle')
     .eq('user_id', usuario.id)
     .in('reto_id', retoIds);
   if (progresoPrevio.data) {
@@ -85,26 +90,74 @@ completarRouter.post('/:id/completar', requiereSesion, async (req, res) => {
   }
   const intentos = await consultaIntentos.order('created_at');
   if (intentos.error) throw intentos.error;
+  const filasIntentos = intentos.data as { reto_id: number; correcto: boolean; detalle: unknown }[];
 
-  const { errores, faltantes } = resumirIntentos(
-    retoIds,
-    intentos.data as { reto_id: number; correcto: boolean }[],
-  );
+  const mazmorra = filasRetos.find((r) => r.tipo === 'mazmorra');
+  let errores: number;
+  let estrellas: number;
+  let extrasCompletos = false;
 
-  if (faltantes.length > 0) {
-    res.status(409).json({
-      error: 'Responde correctamente todos los retos del nivel antes de completarlo',
-      retosPendientes: faltantes,
-    });
-    return;
+  if (mazmorra) {
+    // Mazmorra: cuenta el mejor intento ganador. Estrellas = 1 por ganar
+    // + 1 por cada objetivo extra cumplido en ese intento.
+    const ganadores = filasIntentos.filter((i) => i.correcto);
+    if (ganadores.length === 0) {
+      res.status(409).json({
+        error: 'Gana la mazmorra antes de completar el nivel',
+        retosPendientes: [mazmorra.id],
+      });
+      return;
+    }
+    const cumplidos = (i: { detalle: unknown }) =>
+      (((i.detalle ?? {}) as { objetivosCumplidos?: boolean[] }).objetivosCumplidos ?? []).filter(Boolean).length;
+    const mejor = Math.max(...ganadores.map(cumplidos));
+    const totalExtras = ((mazmorra.opciones ?? {}) as Mazmorra).objetivosExtra?.length ?? 0;
+    estrellas = Math.min(3, 1 + mejor);
+    extrasCompletos = totalExtras > 0 && mejor >= totalExtras;
+    errores = filasIntentos.filter((i) => !i.correcto).length;
+  } else {
+    const resumen = resumirIntentos(retoIds, filasIntentos);
+    if (resumen.faltantes.length > 0) {
+      res.status(409).json({
+        error: 'Responde correctamente todos los retos del nivel antes de completarlo',
+        retosPendientes: resumen.faltantes,
+      });
+      return;
+    }
+    errores = resumen.errores;
+    estrellas = calcularEstrellas(errores);
   }
 
-  const estrellas = calcularEstrellas(errores);
   const mejoresEstrellas = Math.max(estrellas, progresoPrevio.data?.estrellas ?? 0);
 
   // XP solo la primera vez: repetir un nivel sirve para mejorar las estrellas,
-  // no para acumular XP sin límite.
-  const xpGanada = primeraVez ? nivel.xp_recompensa : 0;
+  // no para acumular XP sin límite. La Corona del Rey Lógico da +50 %.
+  const equipo = await equipoValido(usuario.id);
+  const xpGanada = primeraVez
+    ? Math.round(nivel.xp_recompensa * (1 + estadisticas(equipo).xpExtra))
+    : 0;
+
+  // Objeto de la mazmorra: se gana al cumplir todos los extras si todavía no
+  // se tiene. Con suerte sale un mítico en su lugar.
+  let objetoGanado: (Objeto & { nivelId: number }) | null = null;
+  if (mazmorra && extrasCompletos) {
+    const objetoNormal = (mazmorra.opciones as Mazmorra).objeto;
+    const inventario = await leerInventario(usuario.id);
+    const poseidos = new Set(inventario.map((f) => f.objeto_id));
+    if (!poseidos.has(objetoNormal)) {
+      const miticos = inventario.filter((f) => f.mitico).map((f) => f.objeto_id);
+      const ganado = sortearObjeto(objetoNormal, miticos, azar);
+      const objeto = OBJETOS[ganado];
+      const insertado = await supabase.from('inventario').insert({
+        user_id: usuario.id,
+        objeto_id: ganado,
+        nivel_id: id,
+        mitico: objeto.mitico,
+      });
+      if (insertado.error) throw insertado.error;
+      objetoGanado = { ...objeto, nivelId: id };
+    }
+  }
 
   const perfilAntes = await obtenerOCrearPerfil(usuario.id);
   const hoy = fechaLocal(new Date());
@@ -173,6 +226,7 @@ completarRouter.post('/:id/completar', requiereSesion, async (req, res) => {
       ? { nombre: nivel.hechizo_nombre, descripcion: nivel.hechizo_descripcion }
       : null,
     siguienteNivelId: siguiente.data?.id ?? null,
+    objetoGanado,
     perfil,
   });
 });
