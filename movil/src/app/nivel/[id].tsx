@@ -7,22 +7,20 @@ import {
   completarNivel,
   esErrorApi,
   obtenerNivel,
-  responderReto,
   type RespuestaNivel,
-  type RespuestaReto,
-  type RetoPublico,
   type ResultadoNivel,
-  type ResultadoReto,
+  type RetoMazmorra,
 } from '@/api';
+import { PantallaMazmorra } from '@/components/mazmorra/pantalla-mazmorra';
 import { Concepto } from '@/components/nivel/concepto';
-import { Reto } from '@/components/nivel/reto';
-import { Resultado } from '@/components/nivel/resultado';
 import { SubidaNivel } from '@/components/nivel/subida-nivel';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { useAuth } from '@/context/auth-context';
 import { AlturaLinea, Colores, Espacio, Fuentes, Tamanos } from '@/theme';
 
-type Fase = 'concepto' | 'retos' | 'resultado' | 'subida';
+// Un nivel: primero el Concepto, después la Mazmorra que se resuelve
+// programando y al final la Subida de nivel con las recompensas.
+type Fase = 'concepto' | 'mazmorra' | 'subida';
 
 export default function NivelScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -32,9 +30,7 @@ export default function NivelScreen() {
   const [error, setError] = useState<string | null>(null);
   const [cargando, setCargando] = useState(true);
   const [fase, setFase] = useState<Fase>('concepto');
-  const [indice, setIndice] = useState(0);
-  const [enviando, setEnviando] = useState(false);
-  const [resultado, setResultado] = useState<ResultadoReto | null>(null);
+  const [terminando, setTerminando] = useState(false);
   const [resultadoNivel, setResultadoNivel] = useState<ResultadoNivel | null>(null);
 
   const cargar = useCallback(async () => {
@@ -53,46 +49,22 @@ export default function NivelScreen() {
     cargar();
   }, [cargar]);
 
-  async function responder(respuesta: RespuestaReto) {
-    if (!datos) return;
-    setEnviando(true);
+  const reto = datos?.retos.find((r): r is RetoMazmorra => r.tipo === 'mazmorra') ?? null;
+
+  async function terminar() {
+    if (!datos || terminando) return;
+    setTerminando(true);
     try {
-      const reto = datos.retos[indice];
-      setResultado(await conSesion((token) => responderReto(reto.id, respuesta, token)));
-      setFase('resultado');
+      const final = await conSesion((token) => completarNivel(datos.nivel.id, token));
+      // El backend ya devuelve el perfil actualizado (XP, nivel y racha).
+      actualizarPerfilLocal(final.perfil);
+      setResultadoNivel(final);
+      setFase('subida');
     } catch (e) {
-      setError(esErrorApi(e) ? e.message : 'No se pudo enviar la respuesta.');
+      setError(esErrorApi(e) ? e.message : 'No se pudo completar el nivel.');
     } finally {
-      setEnviando(false);
+      setTerminando(false);
     }
-  }
-
-  async function continuar() {
-    if (!datos) return;
-    if (indice + 1 >= datos.retos.length) {
-      if (enviando) return;
-      setEnviando(true);
-      try {
-        const final = await conSesion((token) => completarNivel(datos.nivel.id, token));
-        // El backend ya devuelve el perfil actualizado (XP, nivel y racha).
-        actualizarPerfilLocal(final.perfil);
-        setResultadoNivel(final);
-        setFase('subida');
-      } catch (e) {
-        setError(esErrorApi(e) ? e.message : 'No se pudo completar el nivel.');
-      } finally {
-        setEnviando(false);
-      }
-      return;
-    }
-    setIndice(indice + 1);
-    setResultado(null);
-    setFase('retos');
-  }
-
-  function reintentar() {
-    setResultado(null);
-    setFase('retos');
   }
 
   return (
@@ -108,22 +80,23 @@ export default function NivelScreen() {
           <BotonPrincipal titulo="Reintentar" onPress={cargar} />
           <BotonPrincipal titulo="Volver al mapa" onPress={() => router.back()} />
         </View>
+      ) : !reto ? (
+        <View style={estilos.centro}>
+          <Text style={estilos.texto} accessibilityRole="alert">
+            ⚠ Este nivel todavía no tiene su mazmorra. Pide que se cargue el contenido nuevo.
+          </Text>
+          <BotonPrincipal titulo="Volver al mapa" onPress={() => router.back()} />
+        </View>
       ) : fase === 'concepto' ? (
         <Concepto
           nivel={datos.nivel}
-          totalRetos={datos.retos.length}
-          onEmpezar={() => setFase('retos')}
+          resumen={`Te espera la mazmorra "${reto.opciones.nombre}". Al salir ganas ${datos.nivel.xpRecompensa} XP.`}
+          textoBoton="⚔ Entrar a la mazmorra"
+          onEmpezar={() => setFase('mazmorra')}
         />
-      ) : fase === 'retos' ? (
-        <Reto
-          key={datos.retos[indice].id}
-          reto={datos.retos[indice] as RetoPublico}
-          numero={indice + 1}
-          total={datos.retos.length}
-          enviando={enviando}
-          onResponder={responder}
-        />
-      ) : fase === 'subida' && resultadoNivel ? (
+      ) : fase === 'mazmorra' ? (
+        <PantallaMazmorra reto={reto} onTerminar={terminar} terminando={terminando} />
+      ) : resultadoNivel ? (
         <SubidaNivel
           resultado={resultadoNivel}
           onVolverMapa={() => router.back()}
@@ -131,15 +104,7 @@ export default function NivelScreen() {
             router.replace({ pathname: '/nivel/[id]', params: { id: String(siguienteId) } })
           }
         />
-      ) : (
-        <Resultado
-          correcta={resultado?.correcta ?? false}
-          explicacion={resultado?.explicacion ?? ''}
-          esUltimo={indice + 1 >= datos.retos.length}
-          onContinuar={continuar}
-          onReintentar={reintentar}
-        />
-      )}
+      ) : null}
     </SafeAreaView>
   );
 }

@@ -7,11 +7,13 @@ import { Colores, Espacio, Fuentes, Tamanos, AlturaLinea } from '@/theme';
 
 type Props = {
   nivel: RespuestaNivel['nivel'];
-  totalRetos: number;
+  // Texto de lo que viene después del concepto y del botón para empezar.
+  resumen: string;
+  textoBoton: string;
   onEmpezar: () => void;
 };
 
-export function Concepto({ nivel, totalRetos, onEmpezar }: Props) {
+export function Concepto({ nivel, resumen, textoBoton, onEmpezar }: Props) {
   return (
     <ScrollView contentContainerStyle={estilos.contenido}>
       <Text style={estilos.etiqueta}>{`Nivel ${nivel.orden}`}</Text>
@@ -36,13 +38,13 @@ export function Concepto({ nivel, totalRetos, onEmpezar }: Props) {
       ) : null}
 
       <Text style={estilos.texto}>
-        {`Te esperan ${totalRetos} retos. Al terminar ganas ${nivel.xpRecompensa} XP.`}
+        {resumen}
       </Text>
 
       <BotonPrincipal
-        titulo="Empezar retos"
+        titulo={textoBoton}
         onPress={onEmpezar}
-        pista="Abre el primer reto de este nivel"
+        pista="Empieza el reto de este nivel"
       />
     </ScrollView>
   );

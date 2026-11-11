@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Animated, Easing, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import type { ResultadoNivel } from '@/api';
+import { ICONO_OBJETO } from '@/components/pixel/sprites';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { useReducirMovimiento } from '@/hooks/use-reducir-movimiento';
 import { AlturaLinea, AreaTactilMinima, Colores, Espacio, Fuentes, Radio, Tamanos } from '@/theme';
@@ -208,6 +209,22 @@ export function SubidaNivel({ resultado, onVolverMapa, onSiguienteNivel }: Props
           </View>
         ) : null}
 
+        {/* Objeto ganado al cumplir todos los objetivos extra. Los míticos van en rojo. */}
+        {resultado.objetoGanado ? (
+          <View
+            style={[estilos.tarjeta, resultado.objetoGanado.mitico ? estilos.tarjetaMitica : estilos.tarjetaHechizo]}
+            accessible
+            accessibilityLabel={`${resultado.objetoGanado.mitico ? 'Objeto mítico' : 'Objeto'} ganado: ${resultado.objetoGanado.nombre}. ${resultado.objetoGanado.efecto}. Equípalo desde tu Perfil o en la próxima mazmorra.`}>
+            {resultado.objetoGanado.mitico ? <Text style={estilos.etiquetaMitica}>★ MÍTICO ★</Text> : null}
+            <Text style={estilos.subtitulo}>🎁 ¡Ganaste un objeto!</Text>
+            <Text style={[estilos.nombreHechizo, resultado.objetoGanado.mitico && { color: '#EF4444' }]}>
+              {ICONO_OBJETO[resultado.objetoGanado.id] ?? '✦'} {resultado.objetoGanado.nombre}
+            </Text>
+            <Text style={estilos.texto}>{resultado.objetoGanado.efecto}</Text>
+            <Text style={estilos.textoApagado}>Equípalo con 🎒 Equipo en la próxima mazmorra.</Text>
+          </View>
+        ) : null}
+
         {resultado.siguienteNivelId !== null ? (
           <BotonPrincipal
             titulo="Siguiente nivel"
@@ -290,6 +307,16 @@ const estilos = StyleSheet.create({
     gap: Espacio.sm,
   },
   tarjetaHechizo: { borderColor: Colores.oro },
+  tarjetaMitica: { borderColor: '#EF4444', borderWidth: 3 },
+  etiquetaMitica: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: Espacio.sm,
+    backgroundColor: '#EF4444',
+    color: '#ffffff',
+    fontFamily: Fuentes.codigo,
+    fontSize: Tamanos.pequeno,
+    letterSpacing: 1,
+  },
   xpGanada: {
     fontFamily: Fuentes.titulo,
     fontSize: Tamanos.titulo,
