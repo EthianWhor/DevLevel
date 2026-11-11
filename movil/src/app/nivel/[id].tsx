@@ -10,20 +10,22 @@ import {
   responderReto,
   type RespuestaNivel,
   type RespuestaReto,
+  type ResultadoNivel,
   type ResultadoReto,
 } from '@/api';
 import { Concepto } from '@/components/nivel/concepto';
 import { Reto } from '@/components/nivel/reto';
 import { Resultado } from '@/components/nivel/resultado';
+import { SubidaNivel } from '@/components/nivel/subida-nivel';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { useAuth } from '@/context/auth-context';
 import { AlturaLinea, Colores, Espacio, Fuentes, Tamanos } from '@/theme';
 
-type Fase = 'concepto' | 'retos' | 'resultado';
+type Fase = 'concepto' | 'retos' | 'resultado' | 'subida';
 
 export default function NivelScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { conSesion, recargarPerfil } = useAuth();
+  const { conSesion, actualizarPerfilLocal } = useAuth();
 
   const [datos, setDatos] = useState<RespuestaNivel | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +34,7 @@ export default function NivelScreen() {
   const [indice, setIndice] = useState(0);
   const [enviando, setEnviando] = useState(false);
   const [resultado, setResultado] = useState<ResultadoReto | null>(null);
+  const [resultadoNivel, setResultadoNivel] = useState<ResultadoNivel | null>(null);
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -66,12 +69,18 @@ export default function NivelScreen() {
   async function continuar() {
     if (!datos) return;
     if (indice + 1 >= datos.retos.length) {
+      if (enviando) return;
+      setEnviando(true);
       try {
-        await conSesion((token) => completarNivel(datos.nivel.id, token));
-        await recargarPerfil();
-        router.back();
+        const final = await conSesion((token) => completarNivel(datos.nivel.id, token));
+        // El backend ya devuelve el perfil actualizado (XP, nivel y racha).
+        actualizarPerfilLocal(final.perfil);
+        setResultadoNivel(final);
+        setFase('subida');
       } catch (e) {
         setError(esErrorApi(e) ? e.message : 'No se pudo completar el nivel.');
+      } finally {
+        setEnviando(false);
       }
       return;
     }
@@ -112,6 +121,14 @@ export default function NivelScreen() {
           total={datos.retos.length}
           enviando={enviando}
           onResponder={responder}
+        />
+      ) : fase === 'subida' && resultadoNivel ? (
+        <SubidaNivel
+          resultado={resultadoNivel}
+          onVolverMapa={() => router.back()}
+          onSiguienteNivel={(siguienteId) =>
+            router.replace({ pathname: '/nivel/[id]', params: { id: String(siguienteId) } })
+          }
         />
       ) : (
         <Resultado
