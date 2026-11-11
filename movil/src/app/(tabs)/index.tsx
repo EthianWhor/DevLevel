@@ -12,10 +12,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { esErrorApi, mapaApi, type NivelMapa, type RespuestaMapa } from '@/api';
+import { MapaReino } from '@/components/mapa/mapa-reino';
 import { NodoNivel } from '@/components/mapa/nodo-nivel';
 import { datosAvatar } from '@/constants/avatares';
 import { AreaTactilMinima, Retro } from '@/constants/retro';
 import { useAuth } from '@/context/auth-context';
+import { useReducirMovimiento } from '@/hooks/use-reducir-movimiento';
 
 // Mapa de niveles: muestra las 5 unidades y el camino de niveles con su estado
 // (completado, actual o bloqueado) según GET /mapa.
@@ -25,6 +27,9 @@ export default function MapaScreen() {
   const [cargando, setCargando] = useState(true);
   const [refrescando, setRefrescando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Mapa del reino o lista simple (más fácil de recorrer con TalkBack).
+  const [vista, setVista] = useState<'reino' | 'lista'>('reino');
+  const reducirMovimiento = useReducirMovimiento() ?? false;
 
   const cargar = useCallback(async () => {
     setError(null);
@@ -68,6 +73,13 @@ export default function MapaScreen() {
             Nivel {perfil?.nivel ?? 1} · {perfil?.xp ?? 0} XP · Racha {perfil?.rachaActual ?? 0} 🔥
           </Text>
         </View>
+        <Pressable
+          onPress={() => setVista(vista === 'reino' ? 'lista' : 'reino')}
+          accessibilityRole="button"
+          accessibilityLabel={vista === 'reino' ? 'Ver como lista' : 'Ver el mapa del reino'}
+          style={styles.botonVista}>
+          <Text style={styles.textoBotonVista}>{vista === 'reino' ? '☰ Lista' : '🗺 Mapa'}</Text>
+        </Pressable>
       </View>
 
       {cargando ? (
@@ -90,6 +102,13 @@ export default function MapaScreen() {
             <Text style={styles.textoBoton}>Reintentar</Text>
           </Pressable>
         </View>
+      ) : vista === 'reino' && mapa && mapa.unidades.length > 0 ? (
+        <MapaReino
+          unidades={mapa.unidades}
+          avatar={perfil?.avatar ?? 'explorador'}
+          reducirMovimiento={reducirMovimiento}
+          onEntrar={abrirNivel}
+        />
       ) : (
         <ScrollView
           contentContainerStyle={styles.contenido}
@@ -159,6 +178,16 @@ const styles = StyleSheet.create({
     borderBottomColor: Retro.borde,
   },
   avatar: { fontSize: 32, lineHeight: 40 },
+  botonVista: {
+    minHeight: AreaTactilMinima,
+    minWidth: AreaTactilMinima,
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    borderWidth: 2,
+    borderColor: '#1e293b',
+    backgroundColor: '#0f172a',
+  },
+  textoBotonVista: { color: Retro.texto, fontSize: 14, fontWeight: '700' },
   datosHeroe: { flex: 1 },
   nombre: { color: Retro.oro, fontSize: 20, lineHeight: 26, fontWeight: '700' },
   estadisticas: { color: Retro.textoSecundario, fontSize: 14, lineHeight: 20 },
