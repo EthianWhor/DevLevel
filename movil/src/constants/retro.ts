@@ -16,6 +16,13 @@ export const Retro = {
   verde: '#4de082', // secondary: completado / XP
   error: '#ffb4ab', // texto de error (10.9:1 sobre fondo)
   azulMana: '#3B82F6',
+  // Colores del DESIGN.md de Retro-Logic que faltaban.
+  vidaRojo: '#EF4444', // health-red: daño, peligro y objetos míticos (4.9:1 sobre fondo)
+  manaClaro: '#93c5fd', // texto azul maná legible (9.6:1 sobre fondo)
+  cian: '#00f1ff', // tertiary-container
+  mazmorra: '#0F172A', // dungeon-black: fondo de escenarios y editores
+  bordePixel: '#1E293B', // border-pixel: bordes gruesos de marcos
+  oroClaro: '#fff6a0', // brillo superior del bisel dorado
 } as const;
 
 export const AreaTactilMinima = 48;

@@ -26,11 +26,15 @@ export function Tarjeta({ children, onPress, etiqueta }: Props) {
 }
 
 const estilos = StyleSheet.create({
+  // Marco pixel de Retro-Logic: borde grueso y escalón abajo a la derecha
+  // (simula la sombra dura del diseño, sin difuminar).
   tarjeta: {
-    backgroundColor: Colores.superficie,
-    borderColor: Colores.borde,
-    borderWidth: 2,
-    borderRadius: Radio.md,
+    backgroundColor: Colores.superficieAlta,
+    borderColor: Colores.bordePixel,
+    borderWidth: 3,
+    borderBottomWidth: 7,
+    borderRightWidth: 7,
+    borderRadius: Radio.sm,
     padding: Espacio.md,
   },
 });
