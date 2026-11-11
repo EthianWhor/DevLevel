@@ -200,7 +200,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 **Tatiana (app)**
 - [x] Pantalla Concepto (explicación del nivel antes de los retos) — Hecho por: Tatiana Mayorga · Commit: 6951482
 - [x] Pantalla Reto con los 3 tipos ... — Hecho por: Tatiana Mayorga · Commit: d9dac8e
-- [ ] Pantalla Resultado: correcto o incorrecto con ícono + texto + vibración, explicación y botones Continuar / Intentar de nuevo — Hecho por: ______ · Commit: ______
+- [x] Pantalla Resultado: correcto o incorrecto con ícono + texto + vibración, explicación y botones Continuar / Intentar de nuevo — Hecho por: Tatiana Mayorga· Commit: df110b3
 
 ### Martes 10 de noviembre — Progreso y accesibilidad
 
