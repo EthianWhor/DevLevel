@@ -205,9 +205,9 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 ### Martes 10 de noviembre — Progreso y accesibilidad
 
 **Ethian**
-- [ ] Pantalla Subida de nivel con animación y versión estática si "Reducir movimiento" está activo — Hecho por: ______ · Commit: ______
-- [ ] Pantalla Perfil (XP, nivel, racha, niveles completados) — Hecho por: ______ · Commit: ______
-- [ ] `GET /hechizos` en el backend y pantalla Libro de hechizos en la app — Hecho por: ______ · Commit: ______
+- [x] Pantalla Subida de nivel con animación y versión estática si "Reducir movimiento" está activo — Hecho por: Ethian White · Commit: 1fec44d
+- [x] Pantalla Perfil (XP, nivel, racha, niveles completados) — Hecho por: Ethian White · Commit: 1d4b9a4
+- [x] `GET /hechizos` en el backend y pantalla Libro de hechizos en la app — Hecho por: Ethian White · Commit: c67befd
 
 **Tatiana**
 - [ ] Pantalla Configuración y accesibilidad (reducir movimiento, sonido, vibración, cerrar sesión) — Hecho por: ______ · Commit: ______
