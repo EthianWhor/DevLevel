@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "movil",
+    "name": "DevLevel",
     "slug": "movil",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "movil",
-    "userInterfaceStyle": "automatic",
+    "scheme": "devlevel",
+    "userInterfaceStyle": "dark",
     "ios": {
       "icon": "./assets/expo.icon"
     },
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#161308",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
