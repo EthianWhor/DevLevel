@@ -175,8 +175,8 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 **Tatiana**
 - [x] Cliente de la API en `movil/src/api/` (URL desde `EXPO_PUBLIC_API_URL`, manejo de errores de red) — Hecho por: Ethian White · Commit: 0b2d2f9
 - [x] `AuthContext` con el token guardado en `expo-secure-store` y redirección según haya sesión o no — Hecho por: Ethian White · Commit: 2da7e87
-- [ ] Pantallas Splash y Onboarding — Hecho por: ______ · Commit: ______
-- [ ] Pantalla Login / Registro conectada al backend, con errores debajo de cada campo (ícono + texto) — Hecho por: ______ · Commit: ______
+- [x] Pantallas Splash y Onboarding — Hecho por: Ethian White · Commit: f3006f8
+- [x] Pantalla Login / Registro conectada al backend, con errores debajo de cada campo (ícono + texto) — Hecho por: Ethian White · Commit: 5c3726f
 
 ### Domingo 8 de noviembre — Mapa y contenido
 
