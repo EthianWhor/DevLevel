@@ -2,7 +2,7 @@
 
 API en Node + Express + TypeScript. Es el único punto de acceso a Supabase: la app móvil nunca se conecta directo a la base de datos.
 
-**URL pública (Render):** _pendiente_
+**URL pública (Render):** https://devlevel-api.onrender.com
 
 ## Requisitos
 
