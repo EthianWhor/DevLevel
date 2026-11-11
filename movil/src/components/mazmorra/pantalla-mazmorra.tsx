@@ -79,6 +79,14 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
 
   useEffect(() => () => temporizadores.current.forEach(clearTimeout), []);
 
+  // Si cambia el equipo (más vida o energía), la mazmorra vuelve al inicio
+  // con las estadísticas nuevas.
+  useEffect(() => {
+    setEstado(inicial);
+    setHud({ vida: stats.vidaMax, energia: energiaInicial, monedas: 0 });
+    setResultado(null);
+  }, [inicial, stats.vidaMax, energiaInicial]);
+
   const tieneLupa = equipo.amuleto === 'lupa_explorador';
   const camino = useMemo(() => (tieneLupa ? caminoMasCorto(mazmorra) : undefined), [tieneLupa, mazmorra]);
   const tienePistaAvanzada = equipo.amuleto === 'pergamino_sabio' || equipo.amuleto === 'ojo_odin';
