@@ -1,6 +1,7 @@
 import { DarkTheme, ThemeProvider, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { useCallback, useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { SpaceGrotesk_500Medium, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
@@ -87,13 +88,16 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={temaNavegacion}>
       <StatusBar style="light" />
-      <AuthProvider>
-        <PreferenciasProvider>
-          <OnboardingProvider>
-            <Navegacion />
-          </OnboardingProvider>
-        </PreferenciasProvider>
-      </AuthProvider>
+      {/* Mantiene visible el campo donde se escribe cuando se abre el teclado. */}
+      <KeyboardProvider>
+        <AuthProvider>
+          <PreferenciasProvider>
+            <OnboardingProvider>
+              <Navegacion />
+            </OnboardingProvider>
+          </PreferenciasProvider>
+        </AuthProvider>
+      </KeyboardProvider>
     </ThemeProvider>
   );
 }

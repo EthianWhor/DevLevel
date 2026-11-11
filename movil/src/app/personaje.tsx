@@ -2,15 +2,14 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import {
   ActivityIndicator,
-  KeyboardAvoidingView,
   Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { authApi, esErrorApi, type Avatar } from '@/api';
@@ -68,10 +67,11 @@ export default function PersonajeScreen() {
 
   return (
     <SafeAreaView style={styles.pantalla}>
-      <KeyboardAvoidingView
+      <KeyboardAwareScrollView
         style={styles.pantalla}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={styles.contenido} keyboardShouldPersistTaps="handled">
+        contentContainerStyle={styles.contenido}
+        keyboardShouldPersistTaps="handled"
+        bottomOffset={24}>
           <Text style={styles.titulo} accessibilityRole="header">
             Selecciona tu clase
           </Text>
@@ -153,8 +153,7 @@ export default function PersonajeScreen() {
               <Text style={styles.textoBoton}>▶ COMENZAR AVENTURA</Text>
             )}
           </Pressable>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

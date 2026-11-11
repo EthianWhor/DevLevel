@@ -1,15 +1,13 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import {
-  KeyboardAvoidingView,
-  Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
   type TextInput,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { authApi, esErrorApi } from '@/api';
@@ -140,10 +138,11 @@ export default function RecuperarScreen() {
         <Text style={estilos.marca}>DevLevel</Text>
       </View>
 
-      <KeyboardAvoidingView
+      <KeyboardAwareScrollView
         style={estilos.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={estilos.contenido} keyboardShouldPersistTaps="handled">
+        contentContainerStyle={estilos.contenido}
+        keyboardShouldPersistTaps="handled"
+        bottomOffset={24}>
           <View style={estilos.tarjeta}>
             <Text style={estilos.titulo} accessibilityRole="header">
               Recuperar contraseña
@@ -295,8 +294,7 @@ export default function RecuperarScreen() {
               </>
             )}
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
