@@ -210,7 +210,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 - [x] `GET /hechizos` en el backend y pantalla Libro de hechizos en la app — Hecho por: Ethian White · Commit: c67befd
 
 **Tatiana**
-- [ ] Pantalla Configuración y accesibilidad (reducir movimiento, sonido, vibración, cerrar sesión) — Hecho por: ______ · Commit: ______
+- [x] Pantalla Configuración y accesibilidad (reducir movimiento, sonido, vibración, cerrar sesión) — Hecho por: Tatiana Mayorga · Commit: abd2714
 - [ ] Revisión de accesibilidad en todas las pantallas: `accessibilityLabel`, `accessibilityRole`, `accessibilityState`, `hitSlop`, escalado de fuente, `lineHeight` y contraste — Hecho por: ______ · Commit: ______
 - [ ] Instalar y configurar `eslint-plugin-react-native-a11y` y corregir lo que reporte — Hecho por: ______ · Commit: ______
 - [ ] Borrador de la matriz de trazabilidad en `docs/` (cada mejora prometida en la Fase 2, el archivo donde está y cómo se probó) — Hecho por: ______ · Commit: ______
