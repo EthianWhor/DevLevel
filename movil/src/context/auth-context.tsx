@@ -25,6 +25,8 @@ type ValorAuth = {
   perfil: Perfil | null;
   iniciarSesion: (email: string, password: string) => Promise<void>;
   registrarse: (email: string, password: string) => Promise<void>;
+  // Cambia la contraseña con el código del correo y deja la sesión iniciada.
+  restablecerContrasena: (email: string, codigo: string, password: string) => Promise<void>;
   cerrarSesion: () => Promise<void>;
   // Ejecuta una petición con el token. Si el backend responde 401, renueva
   // el token una vez y reintenta; si tampoco funciona, cierra la sesión.
@@ -146,6 +148,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [aplicarRespuesta],
   );
 
+  const restablecerContrasena = useCallback(
+    async (email: string, codigo: string, password: string) => {
+      await aplicarRespuesta(await authApi.restablecerContrasena(email, codigo, password));
+    },
+    [aplicarRespuesta],
+  );
+
   // Al abrir la app: si hay una sesión guardada, se valida con GET /me.
   useEffect(() => {
     let cancelado = false;
@@ -188,12 +197,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       perfil,
       iniciarSesion,
       registrarse,
+      restablecerContrasena,
       cerrarSesion,
       conSesion,
       recargarPerfil,
       actualizarPerfilLocal: setPerfil,
     }),
-    [estado, usuario, perfil, iniciarSesion, registrarse, cerrarSesion, conSesion, recargarPerfil],
+    [
+      estado,
+      usuario,
+      perfil,
+      iniciarSesion,
+      registrarse,
+      restablecerContrasena,
+      cerrarSesion,
+      conSesion,
+      recargarPerfil,
+    ],
   );
 
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>;

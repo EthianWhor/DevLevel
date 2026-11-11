@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import {
   KeyboardAvoidingView,
@@ -199,6 +200,18 @@ export default function LoginScreen() {
                 submitBehavior={esRegistro ? 'submit' : 'blurAndSubmit'}
               />
 
+              {!esRegistro ? (
+                <Pressable
+                  onPress={() =>
+                    router.push({ pathname: '/recuperar', params: { email: email.trim() } })
+                  }
+                  accessibilityRole="link"
+                  accessibilityHint="Te enviamos un código al correo para crear una contraseña nueva"
+                  style={estilos.olvido}>
+                  <Text style={estilos.textoOlvido}>¿Olvidaste tu contraseña?</Text>
+                </Pressable>
+              ) : null}
+
               {esRegistro ? (
                 <CampoTexto
                   ref={refConfirmar}
@@ -344,6 +357,19 @@ const estilos = StyleSheet.create({
   },
   textoPestanaActiva: { color: Colores.oro },
   formulario: { gap: Espacio.md },
+  olvido: {
+    alignSelf: 'flex-end',
+    minHeight: AreaTactilMinima,
+    justifyContent: 'center',
+    marginTop: -Espacio.sm,
+  },
+  textoOlvido: {
+    fontFamily: Fuentes.cuerpoNegrita,
+    fontSize: Tamanos.pequeno,
+    lineHeight: AlturaLinea.pequeno,
+    color: '#93c5fd',
+    textDecorationLine: 'underline',
+  },
   aviso: {
     flexDirection: 'row',
     gap: Espacio.sm,

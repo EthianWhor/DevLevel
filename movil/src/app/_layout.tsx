@@ -71,6 +71,7 @@ function Navegacion() {
           ruta disponible, así que no pueden estar las dos a la vez. */}
       <Stack.Protected guard={estado === 'sin-sesion' && onboardingVisto === true}>
         <Stack.Screen name="login" />
+        <Stack.Screen name="recuperar" />
       </Stack.Protected>
 
       <Stack.Protected guard={estado === 'con-sesion'}>
