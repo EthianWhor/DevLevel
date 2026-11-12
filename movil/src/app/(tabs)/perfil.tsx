@@ -4,7 +4,7 @@ import { ActivityIndicator, Pressable, RefreshControl, ScrollView, StyleSheet, T
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { esErrorApi, mapaApi, obtenerInventario, type ObjetoInventario, type RespuestaMapa } from '@/api';
-import { SelectorEquipo } from '@/components/mazmorra/selector-equipo';
+import { PanelEquipo } from '@/components/heroe/panel-equipo';
 import { Sprite } from '@/components/pixel/sprite';
 import { ICONO_OBJETO, PALETA_HEROE, spriteHeroe } from '@/components/pixel/sprites';
 import { BarraSegmentada } from '@/components/retro/barra-segmentada';
@@ -175,13 +175,8 @@ export default function PerfilScreen() {
           )}
         </MarcoPixel>
 
-        {/* Equipo puesto */}
-        <SelectorEquipo
-          equipo={perfil.equipo}
-          resumen={[perfil.equipo.arma, perfil.equipo.armadura, perfil.equipo.amuleto]
-            .filter((id): id is string => Boolean(id))
-            .map((id) => OBJETOS[id]?.nombre ?? id)}
-        />
+        {/* Equipo: silueta del héroe con sus casillas. */}
+        <PanelEquipo objetos={objetos} />
 
         {/* Niveles completados */}
         <MarcoPixel titulo="Niveles completados" icono="✔">

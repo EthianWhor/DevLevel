@@ -23,13 +23,13 @@ import { EditorTexto } from '@/components/mazmorra/editor-texto';
 import { Escenario, describirMazmorra, estadoInicial, type EstadoEscena } from '@/components/mazmorra/escenario';
 import { Hud } from '@/components/mazmorra/hud';
 import { Objetivos } from '@/components/mazmorra/objetivos';
-import { SelectorEquipo } from '@/components/mazmorra/selector-equipo';
+import { PanelEquipo } from '@/components/heroe/panel-equipo';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { useAuth } from '@/context/auth-context';
 import { usePreferencias } from '@/context/preferencias-context';
 import { useReducirMovimiento } from '@/hooks/use-reducir-movimiento';
 import { bloquesATexto, type Bloque } from '@/juego/bloques';
-import { EQUIPO_VACIO, OBJETOS, estadisticas } from '@/juego/objetos';
+import { EQUIPO_VACIO, estadisticas } from '@/juego/objetos';
 import { caminoMasCorto, ejecutarTexto, leerMapa } from '@/juego/simulador';
 import type { Paso } from '@/juego/tipos';
 import { AlturaLinea, AreaTactilMinima, Colores, Espacio, Fuentes, Tamanos } from '@/theme';
@@ -82,6 +82,8 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
   const scroll = useRef<ComponentRef<typeof KeyboardAwareScrollView>>(null);
   const yEscena = useRef(0);
   const yResultado = useRef(0);
+  // Se activa al recibir el resultado: el panel baja cuando ya midió su posición.
+  const irAlResultado = useRef(false);
   const irA = (y: number) => scroll.current?.scrollTo({ y: Math.max(0, y - 8), animated: !reducirMovimiento });
 
   useEffect(() => () => temporizadores.current.forEach(clearTimeout), []);
@@ -128,7 +130,7 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
     setCorriendo(true);
     // Se cierra el teclado y se sube al escenario para ver al héroe moverse.
     Keyboard.dismiss();
-    irA(yEscena.current);
+    temporizadores.current.push(setTimeout(() => irA(yEscena.current), 60));
 
     const local = ejecutarTexto(mazmorra, programa, equipo);
     const pasos = local.resultado?.pasos ?? [];
@@ -153,7 +155,7 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
       setResultado(final);
       setLineaActiva(null);
       // Al terminar, se baja al panel de resultado (cuando ya se dibujó).
-      setTimeout(() => irA(yResultado.current), 120);
+      irAlResultado.current = true;
       AccessibilityInfo.announceForAccessibility(
         final.correcta ? '¡Saliste de la mazmorra!' : `No lo lograste. ${final.error?.mensaje ?? final.motivo ?? ''}`,
       );
@@ -244,13 +246,7 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
         </View>
       ) : null}
       {verEquipo ? (
-        <SelectorEquipo
-          onCerrar={() => setVerEquipo(false)}
-          equipo={equipo}
-          resumen={[equipo.arma, equipo.armadura, equipo.amuleto]
-            .filter((id): id is string => Boolean(id))
-            .map((id) => OBJETOS[id]?.nombre ?? id)}
-        />
+        <PanelEquipo />
       ) : null}
 
       <Objetivos objetivos={mazmorra.objetivosExtra} gano={resultado?.correcta ?? null} cumplidos={resultado?.objetivosCumplidos ?? null} />
@@ -300,6 +296,10 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
           accessibilityLiveRegion="polite"
           onLayout={(e) => {
             yResultado.current = e.nativeEvent.layout.y;
+            if (irAlResultado.current) {
+              irAlResultado.current = false;
+              irA(yResultado.current);
+            }
           }}>
           {resultado.correcta ? (
             <>
