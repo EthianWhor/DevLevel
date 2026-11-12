@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text } from 'react-native';
 import type { RespuestaNivel } from '@/api';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { Tarjeta } from '@/components/ui/tarjeta';
+import { GuiaNivel } from './guia-nivel';
 import { Colores, Espacio, Fuentes, Tamanos, AlturaLinea } from '@/theme';
 
 type Props = {
@@ -36,6 +37,8 @@ export function Concepto({ nivel, resumen, textoBoton, onEmpezar }: Props) {
           </Text>
         </Tarjeta>
       ) : null}
+
+      <GuiaNivel nivelOrden={nivel.orden} />
 
       <Text style={estilos.texto}>
         {resumen}

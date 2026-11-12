@@ -95,7 +95,7 @@ export default function NivelScreen() {
           onEmpezar={() => setFase('mazmorra')}
         />
       ) : fase === 'mazmorra' ? (
-        <PantallaMazmorra reto={reto} onTerminar={terminar} terminando={terminando} />
+        <PantallaMazmorra reto={reto} nivelOrden={datos.nivel.orden} onTerminar={terminar} terminando={terminando} />
       ) : resultadoNivel ? (
         <SubidaNivel
           resultado={resultadoNivel}

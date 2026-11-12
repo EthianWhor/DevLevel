@@ -32,17 +32,19 @@ import { bloquesATexto, type Bloque } from '@/juego/bloques';
 import { EQUIPO_VACIO, estadisticas } from '@/juego/objetos';
 import { caminoMasCorto, ejecutarTexto, leerMapa } from '@/juego/simulador';
 import type { Paso } from '@/juego/tipos';
+import { GuiaNivelPlegable } from '@/components/nivel/guia-nivel';
 import { AlturaLinea, AreaTactilMinima, Colores, Espacio, Fuentes, Tamanos } from '@/theme';
 
 const MS_POR_PASO = 320;
 
 type Props = {
   reto: RetoMazmorra;
+  nivelOrden: number;
   onTerminar: () => Promise<void>;
   terminando: boolean;
 };
 
-export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
+export function PantallaMazmorra({ reto, nivelOrden, onTerminar, terminando }: Props) {
   const mazmorra = reto.opciones;
   const { perfil, conSesion } = useAuth();
   const { preferencias } = usePreferencias();
@@ -191,6 +193,7 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
         </Text>
       </View>
       <Text style={estilos.historia}>{mazmorra.historia}</Text>
+      <GuiaNivelPlegable nivelOrden={nivelOrden} />
 
       <View
         style={estilos.escena}
