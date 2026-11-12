@@ -30,19 +30,19 @@ Resultado: ✅ cumple · ⚠️ cumple con observaciones · ❌ no cumple. Tomar
 | D-12 | Subida de nivel | Terminar un nivel | Lee estrellas, XP, racha, hechizo nuevo y objeto ganado | ✅ |  |
 | D-13 | Héroe → Equipo 📷 | Tocar una casilla y equipar un objeto | La casilla dice su espacio y qué tiene; los botones dicen "Equipar …" o "Quitar …" | ✅ |  |
 | D-14 | Ajustes | Activar y desactivar cada opción | Cada interruptor dice su nombre y si está activado | ✅ |  |
-| D-15 | Toda la app 📷 | Letra del sistema al máximo | Ningún texto se corta ni se monta sobre otro; los botones siguen siendo tocables | — No probado | Pendiente: letra del sistema al máximo |
-| D-16 | Subida de nivel y mazmorra | Con "Quitar animaciones" activado | La subida de nivel se muestra estática y el héroe salta al resultado sin animarse | — No probado | Pendiente: "Quitar animaciones" |
-| D-17 | Toda la app | Tocar botones pequeños (↑, ↓, 🗑, casillas de equipo) | Se tocan sin esfuerzo y sin activar el botón de al lado | — No probado | Pendiente |
+| D-15 | Toda la app 📷 | Letra del sistema al máximo | Ningún texto se corta ni se monta sobre otro; los botones siguen siendo tocables | ⚠️ | Todo el texto crece y se puede leer. Observaciones: en el mapa, la etiqueta de un nivel se monta sobre el letrero de la región, y la pestaña "HECHIZOS" se parte en dos líneas. Capturas en `auditoria-dispositivo/d15-*.jpeg` |
+| D-16 | Subida de nivel y mazmorra | Con "Quitar animaciones" activado | La subida de nivel se muestra estática y el héroe salta al resultado sin animarse | ✅ | El héroe salta directo al final sin animarse |
+| D-17 | Toda la app | Tocar botones pequeños (↑, ↓, 🗑, casillas de equipo) | Se tocan sin esfuerzo y sin activar el botón de al lado | ✅ | ↑, ↓, 🗑 y las casillas de equipo responden al primer toque |
 | D-18 | Toda la app | Orden de lectura | TalkBack recorre cada pantalla de arriba hacia abajo, sin saltos ni elementos repetidos | ✅ |  |
 
 ## Resumen
 
 | Resultado | Cantidad |
 |---|---|
-| ✅ Cumple | 13 |
-| ⚠️ Con observaciones | 0 |
+| ✅ Cumple | 15 |
+| ⚠️ Con observaciones | 1 (D-15) |
 | ❌ No cumple | 1 (D-02) |
-| No probado | 4 (D-01, D-15, D-16, D-17) |
+| No probado | 1 (D-01) |
 
 ### Hallazgo D-02 y corrección propuesta
 

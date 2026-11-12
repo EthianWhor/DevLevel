@@ -85,9 +85,10 @@ Prueba manual del APK final (commit `cec5fcf`) instalado en un celular Android, 
 
 | Resultado | Cantidad | Pruebas |
 |---|---|---|
-| ✅ Cumple | 13 | Campos del login, mapa, pestañas, guía "Cómo se usa", descripción del escenario, paleta de bloques, edición de líneas, anuncio del resultado, error de escritura, subida de nivel, equipo, ajustes y orden de lectura |
+| ✅ Cumple | 15 | Campos del login, mapa, pestañas, guía "Cómo se usa", descripción del escenario, paleta de bloques, edición de líneas, anuncio del resultado, error de escritura, subida de nivel, equipo, ajustes, orden de lectura, "Quitar animaciones" y botones pequeños |
+| ⚠️ Con observaciones | 1 | D-15: con la letra al máximo todo se lee, pero en el mapa una etiqueta de nivel se monta sobre el letrero de la región y la pestaña "HECHIZOS" se parte en dos líneas |
 | ❌ No cumple | 1 | D-02: error del login sin anuncio automático |
-| No probado | 4 | Onboarding, letra al máximo, "Quitar animaciones" y tamaño de los botones pequeños |
+| No probado | 1 | Onboarding |
 
 **Lo que funcionó:** TalkBack lee cada elemento con su nombre y su tipo (botón, pestaña, campo, encabezado), anuncia por sí solo el resultado de cada ejecución de la mazmorra y describe el escenario en texto: dónde está el héroe, hacia dónde mira y qué tiene enfrente. Toda la mazmorra se puede jugar solo con toques y deslizamientos, sin arrastrar.
 
@@ -118,6 +119,6 @@ Prueba manual del APK final (commit `cec5fcf`) instalado en un celular Android, 
 - **Render en plan gratis:** la primera petición después de 15 minutos sin uso tarda unos 50 segundos. Antes de la demo hay que abrir `/health` para despertar el servicio.
 - **No hay pruebas automáticas de interfaz** en la app: las pantallas se validaron con los casos funcionales manuales y con la revisión estática. La lógica de la app que no es visual (el motor y los bloques) sí se prueba de forma automática desde el backend.
 - **Errores del login sin anuncio automático en TalkBack** (hallazgo D-02 de la auditoría): el error se ve y se puede leer deslizando, pero no se anuncia solo.
-- **Pruebas en dispositivo pendientes:** letra del sistema al máximo, "Quitar animaciones" y tamaño de los botones pequeños solo se revisaron en el código, no en el celular.
+- **Letra del sistema al máximo** (hallazgo D-15): en el mapa, una etiqueta de nivel se monta sobre el letrero de la región, y la pestaña "HECHIZOS" se parte en dos líneas.
 - **Solo Android:** el proyecto se compila para Android con EAS; no se probó ni se entrega una versión de iOS.
 - **Dos peticiones simultáneas de "completar" del mismo nivel** podrían procesarse a la vez. La app lo evita deshabilitando el botón mientras espera la respuesta, pero el backend no lo bloquea por sí mismo.

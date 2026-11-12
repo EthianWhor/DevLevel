@@ -42,7 +42,7 @@ La verificación se apoyó en seis métodos complementarios:
 3. **Recorrido funcional.** Navegación por todas las pantallas del flujo del juego, desde el registro hasta el perfil, sin fallos.
 4. **Verificación de comportamiento.** Prueba manual de que los interruptores de Configuración producen un efecto observable.
 5. **Verificación de persistencia.** Prueba manual de que las preferencias se conservan tras recargar la aplicación.
-6. **Auditoría en dispositivo con TalkBack.** Auditoría realizada por Ethian White en un celular Android personal con el APK final instalado. Los resultados están en `docs/auditoria-dispositivo.md`. Trece de las dieciocho pruebas pasaron; una presentó un hallazgo (D-02, errores de login no anunciados automáticamente) y cuatro no se probaron por restricción de tiempo (D-01, D-15, D-16, D-17).
+6. **Auditoría en dispositivo con TalkBack.** Auditoría realizada por Ethian White en un celular Android personal con el APK final instalado. Los resultados están en `docs/auditoria-dispositivo.md`. Quince de las dieciocho pruebas pasaron; una cumple con observaciones (D-15, letra al máximo: una etiqueta del mapa se superpone y una pestaña se parte en dos líneas), una presentó un hallazgo (D-02, errores de login no anunciados automáticamente) y una no se probó (D-01, onboarding).
 
 ### Criterio de asignación de estado
 

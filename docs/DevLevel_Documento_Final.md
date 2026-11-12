@@ -110,16 +110,16 @@ La accesibilidad se abordó como una decisión de arquitectura desde los compone
 | A-01 | Roles en botones, tarjetas, encabezados, pestañas y switches | 4.1.2, 1.3.1 | `components/ui/*`, `components/app-tabs.tsx` | Código, lint y TalkBack | ✅ |
 | A-02 | Etiquetas y pistas en las acciones | 4.1.2, 2.5.3 | `components/ui/*`, `components/mazmorra/*` | Código y TalkBack | ✅ |
 | A-03 | Estados anunciados (deshabilitado, activado, seleccionado, expandido) | 4.1.2 | `boton-principal.tsx`, `fila-switch.tsx`, `editor-bloques.tsx`, `panel-equipo.tsx` | TalkBack | ✅ |
-| A-04 | Área táctil mínima de 48 dp | 2.5.8 | `theme/espaciado.ts` y componentes | Código | ✅ |
+| A-04 | Área táctil mínima de 48 dp | 2.5.8 | `theme/espaciado.ts` y componentes | Código y dispositivo (D-17) | ✅ |
 | A-05 | Nada exige arrastrar | 2.5.1, 2.5.7 | `components/mazmorra/editor-bloques.tsx` | TalkBack (D-08 y D-09) | ✅ |
 | A-06 | Resultado con ícono, texto y vibración, no solo color | 1.4.1 | `components/mazmorra/pantalla-mazmorra.tsx` | Código y dispositivo | ✅ |
 | A-07 | Anuncio automático del resultado | 4.1.3 | `pantalla-mazmorra.tsx`, `subida-nivel.tsx` | TalkBack (D-10) | ✅ |
 | A-08 | Progreso anunciado como "N de M" | 4.1.2 | `barra-progreso.tsx`, `subida-nivel.tsx` | Código | ✅ |
-| A-09 | Escalado de fuente y `lineHeight` explícito | 1.4.4 | `theme/tipografia.ts` | Código | ✅ |
+| A-09 | Escalado de fuente y `lineHeight` explícito | 1.4.4 | `theme/tipografia.ts` | Código y dispositivo (D-15) | ⚠️ Se lee, con 2 superposiciones menores |
 | A-10 | Niveles bloqueados con candado y texto; contraste 4,5:1 | 1.4.1, 1.4.3 | `components/mapa/*`, `constants/retro.ts` | Código y cálculo de contraste | ✅ |
 | A-11 | Imágenes con descripción | 1.1.1 | `app/onboarding.tsx` | Código | ✅ |
 | A-12 | Errores de formulario bajo cada campo, con ícono y texto | 3.3.1, 1.4.1 | `app/login.tsx`, `components/ui/campo-texto.tsx` | Dispositivo (D-02) | ⚠️ Se ve, pero no se anuncia solo |
-| A-13 | Reducir movimiento (app y sistema) con versiones estáticas | 2.3.3 | `hooks/use-reducir-movimiento.ts`, `subida-nivel.tsx`, `pantalla-mazmorra.tsx` | Código | ✅ |
+| A-13 | Reducir movimiento (app y sistema) con versiones estáticas | 2.3.3 | `hooks/use-reducir-movimiento.ts`, `subida-nivel.tsx`, `pantalla-mazmorra.tsx` | Código y dispositivo (D-16) | ✅ |
 | A-14 | Análisis estático de accesibilidad sin advertencias | Transversal | `movil/eslint.config.js` (`eslint-plugin-react-native-a11y`) | `npm run lint` | ✅ |
 | A-15 | Botón de peligro (cerrar sesión) accesible | 4.1.2 | `boton-principal.tsx`, `app/(tabs)/configuracion.tsx` | Código y TalkBack | ✅ |
 | A-16 | Preferencias persistidas con efecto real | 2.3.3, 1.4.2 | `context/preferencias-context.tsx` | Código y dispositivo | ✅ |
@@ -146,7 +146,7 @@ Detalle y capturas: `docs/casos-de-prueba.md`.
 
 ### 4.2 Auditoría de accesibilidad en dispositivo
 
-Se recorrió el APK final en un celular Android con TalkBack (`docs/auditoria-dispositivo.md`): **13 pruebas cumplen, 1 no cumple y 4 quedan sin probar** (onboarding, letra al máximo, quitar animaciones y botones pequeños). TalkBack lee cada elemento con su nombre y tipo, describe el escenario, anuncia el resultado de cada ejecución y toda la mazmorra se juega con toques. **Hallazgo D-02:** el error del login se ve bajo el campo, pero TalkBack no lo anuncia solo, porque Android no lee una región viva que aparece por primera vez. La corrección (anunciar el error con `announceForAccessibility`) queda para la siguiente versión.
+Se recorrió el APK final en un celular Android con TalkBack, con la letra del sistema al máximo y con "Quitar animaciones" (`docs/auditoria-dispositivo.md`): **15 pruebas cumplen, 1 cumple con observaciones, 1 no cumple y 1 queda sin probar** (onboarding). Con "Quitar animaciones" el héroe salta directo al resultado, y los botones pequeños responden al primer toque. TalkBack lee cada elemento con su nombre y tipo, describe el escenario, anuncia el resultado de cada ejecución y toda la mazmorra se juega con toques. **Hallazgo D-02:** el error del login se ve bajo el campo, pero TalkBack no lo anuncia solo, porque Android no lee una región viva que aparece por primera vez. La corrección (anunciar el error con `announceForAccessibility`) queda para la siguiente versión. **Hallazgo D-15:** con la letra al máximo todo se lee, pero en el mapa una etiqueta de nivel se monta sobre el letrero de la región y la pestaña "HECHIZOS" se parte en dos líneas.
 
 ### 4.3 Rendimiento
 
@@ -163,13 +163,13 @@ Se recorrió el APK final en un celular Android con TalkBack (`docs/auditoria-di
 
 **Lecciones aprendidas.** La accesibilidad funciona mejor como decisión de arquitectura que como capa final: al ponerla en los componentes base, cada pantalla nueva la heredó. Separar al cliente de la base de datos con una API propia nos permitió que el servidor fuera la autoridad del juego. Trabajar con Git en paralelo exigió comunicación constante, commits pequeños e integrar con rebase.
 
-**Alcance logrado.** El producto cumple la visión de la Fase 1: un camino único por niveles, en español, para aprender lógica jugando. Se entregó un APK funcional de punta a punta con autenticación y recuperación de contraseña, 15 mazmorras jugables con editor de bloques y de texto, combate, 25 reliquias, progreso con XP y rachas, y preferencias de accesibilidad. Las 16 mejoras de accesibilidad del Segundo Corte quedaron implementadas, con una observación en A-12.
+**Alcance logrado.** El producto cumple la visión de la Fase 1: un camino único por niveles, en español, para aprender lógica jugando. Se entregó un APK funcional de punta a punta con autenticación y recuperación de contraseña, 15 mazmorras jugables con editor de bloques y de texto, combate, 25 reliquias, progreso con XP y rachas, y preferencias de accesibilidad. Las 16 mejoras de accesibilidad del Segundo Corte quedaron implementadas, con observaciones en A-09 y A-12.
 
 **Retos superados.** Convertir los niveles de cuestionario en mazmorras jugables sin perder el contenido pedagógico. Diseñar un lenguaje y un motor deterministas compartidos entre la app y el servidor. Hacer un editor de bloques accesible sin arrastrar. Desplegar el backend en Render con Supabase y RLS.
 
-**Limitaciones.** Los errores del login no se anuncian solos con TalkBack (D-02). Quedan pruebas en dispositivo sin hacer (letra al máximo y quitar animaciones). Los contrastes se calcularon sobre el tema y no sobre la app instalada. No hubo pruebas con usuarios con discapacidad. Solo hay versión de Android, y Render gratis tarda en despertar.
+**Limitaciones.** Los errores del login no se anuncian solos con TalkBack (D-02). Con la letra al máximo, una etiqueta del mapa se superpone y una pestaña se parte en dos líneas (D-15). Los contrastes se calcularon sobre el tema y no sobre la app instalada. No hubo pruebas con usuarios con discapacidad. Solo hay versión de Android, y Render gratis tarda en despertar.
 
-**Trabajo futuro.** Corregir D-02 y completar la auditoría en dispositivo. Agregar retroalimentación con IA que explique los errores en lenguaje natural. Dar soporte a iOS y VoiceOver, y agregar audio real a la preferencia de sonido. Hacer pruebas con usuarios y crear nuevos módulos de contenido.
+**Trabajo futuro.** Corregir D-02 y D-15, y completar la auditoría con el onboarding y Accessibility Scanner. Agregar retroalimentación con IA que explique los errores en lenguaje natural. Dar soporte a iOS y VoiceOver, y agregar audio real a la preferencia de sonido. Hacer pruebas con usuarios y crear nuevos módulos de contenido.
 
 ---
 
