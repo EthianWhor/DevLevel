@@ -213,7 +213,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 - [x] Pantalla Configuración y accesibilidad (reducir movimiento, sonido, vibración, cerrar sesión) — Hecho por: Tatiana Mayorga · Commit: abd2714
 - [ ] Revisión de accesibilidad en todas las pantallas: `accessibilityLabel`, `accessibilityRole`, `accessibilityState`, `hitSlop`, escalado de fuente, `lineHeight` y contraste — Hecho por: ______ · Commit: ______
 - [x] Instalar y configurar `eslint-plugin-react-native-a11y` y corregir lo que reporte — Hecho por: Tatiana Mayorga · Commit: 317ae34
-- [x] Borrador de la matriz de trazabilidad en `docs/` (cada mejora prometida en la Fase 2, el archivo donde está y cómo se probó) — Hecho por: Tatiana Mayorga · Commit: 70e8f08
+- [x] Borrador de la matriz de trazabilidad en `docs/` (cada mejora prometida en la Fase 2, el archivo donde está y cómo se probó) — Hecho por: Tatiana Mayorga · Commit: 5b80834
 
 ### Miércoles 11 de noviembre — Pruebas, documento y APK final
 
