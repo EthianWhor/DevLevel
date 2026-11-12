@@ -233,7 +233,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 
 ### Jueves 12 de noviembre — Entrega (sin tareas nuevas)
 
-- [ ] Unir las secciones del documento y exportarlo a PDF en `docs/`
+- [x] Unir las secciones del documento y exportarlo a PDF en `docs/` — Hecho por: Ethian White · Commit: 6877512
 - [ ] Subir la entrega a la plataforma **antes del mediodía** (margen sobre las 5:00 PM)
 - [ ] Instalar el APK final en el celular de la demo
 - [ ] Despertar el backend de Render antes de la sustentación
