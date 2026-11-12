@@ -81,9 +81,17 @@ Las pruebas encontraron estos problemas antes de la entrega. Cada uno se corrigi
 
 ## 4.5 Auditoría de accesibilidad en dispositivo
 
-<!-- PENDIENTE: completar con los resultados de la prueba en el celular con el APK final (ver auditoria-dispositivo.md). -->
+Prueba manual del APK final (commit `cec5fcf`) instalado en un celular Android, recorriendo la app con TalkBack activado. La lista completa, con lo que se esperaba en cada pantalla, está en [`auditoria-dispositivo.md`](auditoria-dispositivo.md).
 
-Prueba manual sobre el APK final instalado en un celular Android, con TalkBack activado, la letra grande del sistema y la opción "Quitar animaciones". La lista de verificación completa está en [`auditoria-dispositivo.md`](auditoria-dispositivo.md).
+| Resultado | Cantidad | Pruebas |
+|---|---|---|
+| ✅ Cumple | 13 | Campos del login, mapa, pestañas, guía "Cómo se usa", descripción del escenario, paleta de bloques, edición de líneas, anuncio del resultado, error de escritura, subida de nivel, equipo, ajustes y orden de lectura |
+| ❌ No cumple | 1 | D-02: error del login sin anuncio automático |
+| No probado | 4 | Onboarding, letra al máximo, "Quitar animaciones" y tamaño de los botones pequeños |
+
+**Lo que funcionó:** TalkBack lee cada elemento con su nombre y su tipo (botón, pestaña, campo, encabezado), anuncia por sí solo el resultado de cada ejecución de la mazmorra y describe el escenario en texto: dónde está el héroe, hacia dónde mira y qué tiene enfrente. Toda la mazmorra se puede jugar solo con toques y deslizamientos, sin arrastrar.
+
+**Hallazgo D-02:** al tocar Entrar con los campos vacíos, el error aparece debajo del campo con ⚠ y texto, pero TalkBack no lo anuncia solo. Android no lee una región viva (`accessibilityLiveRegion`) que aparece por primera vez, solo cuando cambia. La corrección, que queda para la siguiente versión, es anunciar los errores con `AccessibilityInfo.announceForAccessibility` al fallar la validación, como ya se hace con el resultado de la mazmorra.
 
 ## 4.6 Rendimiento
 
@@ -102,11 +110,14 @@ Prueba manual sobre el APK final instalado en un celular Android, con TalkBack a
 
 - **Arranque en frío:** con el servicio dormido, la primera petición tardó 13,9 s en esta medición; Render indica que puede llegar a unos 50 s. La app espera hasta 60 s antes de mostrar un error.
 - **Ejecución del hechizo:** `responder` es la ruta más lenta porque lee el reto y el equipo, ejecuta el programa y guarda el intento. Aun así, la app no hace esperar al jugador: mientras llega la respuesta ya está animando al héroe con su propia simulación (sección 2.5.1). Cada paso de la animación dura 320 ms, así que con 2 pasos o más la respuesta suele llegar antes de que termine la animación.
+- **Tamaño del APK:** 108 MB (113.292.341 bytes), generado con el perfil `preview` de EAS.
 - **Motor de mazmorras:** el programa más largo del juego se ejecuta en unos 0,2 ms, y un ciclo infinito se corta en el límite de 500 pasos en unos 0,1 ms. El costo del motor es despreciable frente al de la red.
 
 ## 4.7 Limitaciones conocidas
 
 - **Render en plan gratis:** la primera petición después de 15 minutos sin uso tarda unos 50 segundos. Antes de la demo hay que abrir `/health` para despertar el servicio.
 - **No hay pruebas automáticas de interfaz** en la app: las pantallas se validaron con los casos funcionales manuales y con la revisión estática. La lógica de la app que no es visual (el motor y los bloques) sí se prueba de forma automática desde el backend.
+- **Errores del login sin anuncio automático en TalkBack** (hallazgo D-02 de la auditoría): el error se ve y se puede leer deslizando, pero no se anuncia solo.
+- **Pruebas en dispositivo pendientes:** letra del sistema al máximo, "Quitar animaciones" y tamaño de los botones pequeños solo se revisaron en el código, no en el celular.
 - **Solo Android:** el proyecto se compila para Android con EAS; no se probó ni se entrega una versión de iOS.
 - **Dos peticiones simultáneas de "completar" del mismo nivel** podrían procesarse a la vez. La app lo evita deshabilitando el botón mientras espera la respuesta, pero el backend no lo bloquea por sí mismo.
