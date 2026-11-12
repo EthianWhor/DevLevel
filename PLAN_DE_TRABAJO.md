@@ -218,7 +218,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 ### Miércoles 11 de noviembre — Pruebas, documento y APK final
 
 **Ethian**
-- [ ] Generar el APK final con EAS y probar el flujo completo en un celular — Hecho por: ______ · Commit: ______
+- [x] Generar el APK final con EAS y probar el flujo completo en un celular — Hecho por: Ethian White · Commit: cec5fcf
 - [x] README completo en la raíz (instalación, variables de entorno, arquitectura, cómo ejecutar, resumen de accesibilidad) — Hecho por: Ethian White · Commit: 7891ab2
 - [x] Casos de prueba funcionales ejecutados (flujos principales y errores de red/validación), con resultados — Hecho por: Ethian White · Commit: 26e9844
 - [x] Documento final, secciones 1 (visión y estado del arte) y 2 (arquitectura, con diagrama) — Hecho por: Ethian White · Commit: e4efcf3
