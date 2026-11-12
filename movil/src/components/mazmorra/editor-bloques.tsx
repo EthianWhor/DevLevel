@@ -19,6 +19,8 @@ import { AlturaLinea, AreaTactilMinima, Colores, Espacio, Fuentes, Tamanos } fro
 
 const SENSORES: Sensor[] = ['hay_enemigo', 'hay_muro', 'hay_pincho', 'hay_moneda', 'en_salida'];
 const ACCIONES = ['adelante', 'girar_izquierda', 'girar_derecha', 'saltar', 'atacar', 'recoger'];
+// Nombres que puede tener una variable en el editor de bloques.
+const NOMBRES_VARIABLE = ['pasos', 'largo', 'veces'];
 
 const ETIQUETA_PALETA: Record<string, string> = {
   adelante: 'adelante()',
@@ -46,7 +48,7 @@ type Props = {
   deshabilitado: boolean;
 };
 
-function crearBloque(id: string, variables: string[]): Bloque | null {
+function crearBloque(id: string): Bloque | null {
   if (ACCIONES.includes(id)) return { id: nuevoId(), tipo: 'accion', accion: id };
   if (id === 'repetir') return { id: nuevoId(), tipo: 'repetir', veces: 3, cuerpo: [] };
   if (id === 'si') {
@@ -55,10 +57,9 @@ function crearBloque(id: string, variables: string[]): Bloque | null {
   if (id === 'mientras') {
     return { id: nuevoId(), tipo: 'mientras', condicion: { sensor: 'en_salida', negada: true }, cuerpo: [] };
   }
-  if (id === 'variable') {
-    const nombre = variables.includes('pasos') ? (variables.includes('largo') ? 'veces' : 'largo') : 'pasos';
-    return { id: nuevoId(), tipo: 'asignar', variable: nombre, valor: 2 };
-  }
+  // Siempre empieza como "pasos"; con el botón "nombre ⟳" se cambia a otra
+  // variable. Así se puede volver a darle valor a pasos más abajo.
+  if (id === 'variable') return { id: nuevoId(), tipo: 'asignar', variable: 'pasos', valor: 2 };
   return null;
 }
 
@@ -114,7 +115,7 @@ export function EditorBloques({ bloques, onCambiar, instrucciones, lineaActiva, 
   const seleccionado = seleccion ? buscar(bloques, seleccion.id) : null;
 
   function agregar(idPaleta: string) {
-    const nuevo = crearBloque(idPaleta, variables);
+    const nuevo = crearBloque(idPaleta);
     if (!nuevo) return;
     let siguiente: Bloque[];
     if (!seleccion || !seleccionado) {
@@ -134,11 +135,23 @@ export function EditorBloques({ bloques, onCambiar, instrucciones, lineaActiva, 
     onCambiar(actualizar(bloques, seleccion.id, cambio));
   }
 
+  // Elegir el FIN de un bloque (seleccion sin rama sobre una estructura)
+  // agrega después del bloque, afuera de él.
+  const esEstructura = (b: Bloque | null) => !!b && b.tipo !== 'accion' && b.tipo !== 'asignar';
   const destino = !seleccion
     ? 'al final del hechizo'
     : seleccion.rama
       ? `dentro de la línea ${lineaPorId.get(seleccion.id) ?? '?'}`
-      : `después de la línea ${lineaPorId.get(seleccion.id) ?? '?'}`;
+      : esEstructura(seleccionado)
+        ? `después del FIN del bloque de la línea ${lineaPorId.get(seleccion.id) ?? '?'}`
+        : `después de la línea ${lineaPorId.get(seleccion.id) ?? '?'}`;
+
+  // Opciones del REPETIR: un número fijo o cualquiera de las variables.
+  function siguienteVeces(actual: number | string): number | string {
+    const opciones: (number | string)[] = [3, ...variables];
+    const i = typeof actual === 'number' ? 0 : opciones.indexOf(actual);
+    return opciones[(i + 1) % opciones.length];
+  }
 
   return (
     <View style={estilos.editor}>
@@ -168,15 +181,18 @@ export function EditorBloques({ bloques, onCambiar, instrucciones, lineaActiva, 
           const numero = f.esFin || f.rama === 'sino' ? '' : String(linea);
           const activa = !f.esFin && f.rama !== 'sino' && lineaActiva === linea;
           const conError = !f.esFin && f.rama !== 'sino' && lineaError === linea;
-          const elegida =
-            seleccion?.id === f.id && !f.esFin && (f.rama === 'sino' ? seleccion.rama === 'sino' : seleccion.rama !== 'sino');
+          const elegida = seleccion?.id === f.id && (f.esFin ? !seleccion.rama : seleccion.rama === f.rama);
           return (
             <Pressable
               key={f.clave}
-              disabled={deshabilitado || f.esFin}
-              onPress={() => setSeleccion(elegida ? null : { id: f.id, rama: f.rama })}
+              disabled={deshabilitado}
+              onPress={() => setSeleccion(elegida ? null : f.esFin ? { id: f.id } : { id: f.id, rama: f.rama })}
               accessibilityRole="button"
-              accessibilityLabel={`${numero ? `Línea ${numero}: ` : ''}${f.texto}${conError ? '. Tiene un error' : ''}`}
+              accessibilityLabel={
+                f.esFin
+                  ? `FIN del bloque de la línea ${linea}. Tócalo para agregar después del bloque`
+                  : `${numero ? `Línea ${numero}: ` : ''}${f.texto}${conError ? '. Tiene un error' : ''}`
+              }
               accessibilityState={{ selected: elegida }}
               style={[estilos.fila, elegida && estilos.filaElegida, activa && estilos.filaActiva, conError && estilos.filaError]}>
               <Text style={estilos.numero}>{numero}</Text>
@@ -208,16 +224,32 @@ export function EditorBloques({ bloques, onCambiar, instrucciones, lineaActiva, 
             </>
           ) : null}
           {seleccionado.tipo === 'repetir' && variables.length > 0 ? (
-            <Herramienta
-              texto={typeof seleccionado.veces === 'number' ? `usar ${variables[0]}` : 'usar número'}
-              etiqueta={typeof seleccionado.veces === 'number' ? `Repetir según la variable ${variables[0]}` : 'Repetir un número fijo de veces'}
-              onPress={() => cambiar((b) => (b.tipo === 'repetir' ? { ...b, veces: typeof b.veces === 'number' ? variables[0] : 3 } : b))}
-            />
+            (() => {
+              const proxima = siguienteVeces(seleccionado.veces);
+              return (
+                <Herramienta
+                  texto={typeof proxima === 'number' ? 'usar número' : `usar ${proxima}`}
+                  etiqueta={typeof proxima === 'number' ? 'Repetir un número fijo de veces' : `Repetir según la variable ${proxima}`}
+                  onPress={() => cambiar((b) => (b.tipo === 'repetir' ? { ...b, veces: siguienteVeces(b.veces) } : b))}
+                />
+              );
+            })()
           ) : null}
           {seleccionado.tipo === 'asignar' ? (
             <>
               <Herramienta texto="−" etiqueta="Restar 1" onPress={() => cambiar((b) => (b.tipo === 'asignar' ? { ...b, valor: Math.max(0, b.valor - 1) } : b))} />
               <Herramienta texto="+" etiqueta="Sumar 1" onPress={() => cambiar((b) => (b.tipo === 'asignar' ? { ...b, valor: Math.min(99, b.valor + 1) } : b))} />
+              <Herramienta
+                texto="nombre ⟳"
+                etiqueta={`Cambiar el nombre de la variable ${seleccionado.variable}`}
+                onPress={() =>
+                  cambiar((b) =>
+                    b.tipo === 'asignar'
+                      ? { ...b, variable: NOMBRES_VARIABLE[(NOMBRES_VARIABLE.indexOf(b.variable) + 1) % NOMBRES_VARIABLE.length] }
+                      : b,
+                  )
+                }
+              />
             </>
           ) : null}
           {seleccionado.tipo === 'si' || seleccionado.tipo === 'mientras' ? (
