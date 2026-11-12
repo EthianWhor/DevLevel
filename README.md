@@ -11,6 +11,7 @@ Proyecto final de **Desarrollo de Aplicaciones Móviles**, Universidad de La Sab
 
 - **API pública:** https://devlevel-api.onrender.com (salud: `/health`)
 - **APK de Android:** se genera con EAS (ver [Generar el APK](#generar-el-apk)).
+- **Documento técnico final:** [`docs/DevLevel_Documento_Final.pdf`](docs/DevLevel_Documento_Final.pdf) (versión Markdown en [`docs/DevLevel_Documento_Final.md`](docs/DevLevel_Documento_Final.md)).
 
 ---
 
