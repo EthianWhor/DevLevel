@@ -162,7 +162,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 - [x] Crear la app en `movil/` (Expo SDK 57 + TypeScript + expo-router) y configurar EAS (`eas.json` con perfiles `development` y `preview`) — Hecho por: Tatiana Mayorga· Commit: 6034efd, 6101e7a
 - [x] Crear el tema Retro-Logic en `movil/src/theme/` (colores, tipografías Space Grotesk, Inter y JetBrains Mono, espaciados) — Hecho por: Tatiana Mayorga · Commit: e7e7e27, 5bbb0c6
 - [x] Crear los componentes base accesibles: botón principal, tarjeta y barra de progreso segmentada (con `accessibilityRole`, `accessibilityLabel` y área táctil ≥ 48 dp) — Hecho por: Tatiana Mayorga · Commit: d276f9b
-- [ ] Generar un primer APK de prueba con EAS e instalarlo en un celular — Hecho por: ______ · Commit: ______
+- [x] Generar un primer APK de prueba con EAS e instalarlo en un celular — No aplica: los APK finales se generaron en la tarea de Ethian del miércoles 11 (commit cec5fcf)
 
 ### Sábado 7 de noviembre — Autenticación de punta a punta
 
@@ -211,7 +211,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 
 **Tatiana**
 - [x] Pantalla Configuración y accesibilidad (reducir movimiento, sonido, vibración, cerrar sesión) — Hecho por: Tatiana Mayorga · Commit: abd2714
-- [ ] Revisión de accesibilidad en todas las pantallas: `accessibilityLabel`, `accessibilityRole`, `accessibilityState`, `hitSlop`, escalado de fuente, `lineHeight` y contraste — Hecho por: ______ · Commit: ______
+- [x] Revisión de accesibilidad en todas las pantallas: `accessibilityLabel`, `accessibilityRole`, `accessibilityState`, `hitSlop`, escalado de fuente, `lineHeight` y contraste — Hecho por: Tatiana Mayorga · Commit: 902812c (verificado por revisión de código; la auditoría en dispositivo la hizo Ethian en 6b32645)
 - [x] Instalar y configurar `eslint-plugin-react-native-a11y` y corregir lo que reporte — Hecho por: Tatiana Mayorga · Commit: 317ae34
 - [x] Borrador de la matriz de trazabilidad en `docs/` (cada mejora prometida en la Fase 2, el archivo donde está y cómo se probó) — Hecho por: Tatiana Mayorga · Commit: 5b80834
 
@@ -224,9 +224,9 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 - [x] Documento final, secciones 1 (visión y estado del arte) y 2 (arquitectura, con diagrama) — Hecho por: Ethian White · Commit: e4efcf3
 
 **Tatiana**
-- [ ] Auditoría con TalkBack y Accessibility Scanner en un celular, con capturas en `docs/` — Hecho por: ______ · Commit: ______
-- [ ] Documento final, secciones 3 (accesibilidad y matriz de trazabilidad) y 5 (conclusiones) — Hecho por: ______ · Commit: ______
-- [ ] Presentación para el pitch y la demo — Hecho por: ______ · Commit: ______
+- [x] Auditoría con TalkBack y Accessibility Scanner en un celular, con capturas en `docs/` — Hecho por: Ethian White · Commit: 6b32645
+- [x] Documento final, secciones 3 (accesibilidad y matriz de trazabilidad) y 5 (conclusiones) — Hecho por: Tatiana Mayorga · Commit: a6a0c57, 902812c
+- [x] Presentación para el pitch y la demo — Hecho por: Tatiana Mayorga y Ethian White · Guion en docs/guion-pitch-devlevel.md
 
 **Los dos**
 - [ ] Ensayo de la defensa: cada uno le explica al otro el código que no escribió (navegación, estado, API, base de datos y accesibilidad) — Hecho por: ______
