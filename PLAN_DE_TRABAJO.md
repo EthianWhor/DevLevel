@@ -220,7 +220,7 @@ Se construyen a partir del diseño de Stitch (`diseno/stitch/`), recortado a lo 
 **Ethian**
 - [ ] Generar el APK final con EAS y probar el flujo completo en un celular — Hecho por: ______ · Commit: ______
 - [x] README completo en la raíz (instalación, variables de entorno, arquitectura, cómo ejecutar, resumen de accesibilidad) — Hecho por: Ethian White · Commit: 7891ab2
-- [ ] Casos de prueba funcionales ejecutados (flujos principales y errores de red/validación), con resultados — Hecho por: ______ · Commit: ______
+- [x] Casos de prueba funcionales ejecutados (flujos principales y errores de red/validación), con resultados — Hecho por: Ethian White · Commit: 26e9844
 - [ ] Documento final, secciones 1 (visión y estado del arte) y 2 (arquitectura, con diagrama) — Hecho por: ______ · Commit: ______
 
 **Tatiana**
