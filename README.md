@@ -177,6 +177,8 @@ Al terminar, EAS entrega el enlace de descarga del `.apk`. Se instala en Android
 
 Las pruebas del backend levantan la API real, pero usan una base de datos falsa en memoria: no necesitan `.env`, no tocan los datos reales y funcionan sin internet.
 
+Los casos de prueba funcionales ejecutados contra el sistema desplegado (flujos principales y errores de red y validación), con sus resultados y capturas, están en [`docs/casos-de-prueba.md`](docs/casos-de-prueba.md).
+
 ---
 
 ## Accesibilidad
