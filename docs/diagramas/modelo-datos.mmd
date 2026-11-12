@@ -1,0 +1,62 @@
+erDiagram
+  AUTH_USERS ||--|| PROFILES : "tiene"
+  PROFILES ||--o{ PROGRESO_NIVELES : "completa"
+  PROFILES ||--o{ INTENTOS_RETOS : "intenta"
+  PROFILES ||--o{ INVENTARIO : "gana"
+  UNIDADES ||--|{ NIVELES : "agrupa"
+  NIVELES ||--|{ RETOS : "contiene"
+  NIVELES ||--o{ PROGRESO_NIVELES : ""
+  RETOS ||--o{ INTENTOS_RETOS : ""
+  NIVELES |o--o{ INVENTARIO : "otorga"
+
+  PROFILES {
+    uuid id PK
+    text nombre_heroe
+    text avatar
+    int xp
+    int nivel
+    int racha_actual
+    int racha_maxima
+    date ultima_actividad
+    jsonb equipo
+  }
+  UNIDADES {
+    smallint id PK
+    smallint orden
+    text titulo
+  }
+  NIVELES {
+    smallint id PK
+    smallint unidad_id FK
+    text concepto_texto
+    text hechizo_nombre
+    int xp_recompensa
+  }
+  RETOS {
+    int id PK
+    smallint nivel_id FK
+    enum tipo
+    jsonb opciones
+    jsonb respuesta
+    text pista
+  }
+  PROGRESO_NIVELES {
+    uuid user_id PK
+    smallint nivel_id PK
+    smallint estrellas
+    timestamptz completado_at
+  }
+  INTENTOS_RETOS {
+    bigint id PK
+    uuid user_id FK
+    int reto_id FK
+    jsonb respuesta
+    bool correcto
+    jsonb detalle
+  }
+  INVENTARIO {
+    uuid user_id PK
+    text objeto_id PK
+    smallint nivel_id FK
+    bool mitico
+  }

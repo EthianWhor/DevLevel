@@ -1,0 +1,16 @@
+flowchart LR
+  INICIO(["Abrir la app"]) --> SPLASH["Splash<br/>(restaura la sesión)"]
+  SPLASH -->|"primera vez"| ONB["Onboarding<br/>(3 pantallas)"]
+  ONB --> LOGIN["Login /<br/>Crear cuenta"]
+  SPLASH -->|"sin sesión"| LOGIN
+  LOGIN <-->|"olvidé la<br/>contraseña"| REC["Recuperar con<br/>código por correo"]
+  LOGIN -->|"sin personaje"| PJ["Selección de<br/>personaje"]
+  PJ --> TABS
+  LOGIN -->|"con personaje"| TABS
+  SPLASH -->|"con sesión"| TABS["Pestañas<br/>Mapa · Hechizos ·<br/>Héroe · Ajustes"]
+  TABS -->|"tocar un nivel<br/>disponible"| CON["Concepto"]
+  CON --> MAZ["Mazmorra"]
+  MAZ --> SUB["Subida<br/>de nivel"]
+  SUB -->|"siguiente nivel"| CON
+  SUB -->|"volver al mapa"| TABS
+  TABS -->|"cerrar sesión"| LOGIN

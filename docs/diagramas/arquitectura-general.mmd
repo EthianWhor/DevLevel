@@ -1,0 +1,38 @@
+flowchart LR
+  subgraph CEL["Celular Android (APK)"]
+    direction TB
+    UI["Pantallas<br/>expo-router"]
+    CTX["Estado global<br/>React Context:<br/>sesión, preferencias,<br/>onboarding"]
+    MOTORA["Motor de mazmorras<br/>(copia para la animación)"]
+    API_C["Cliente HTTP<br/>src/api"]
+    SS[("expo-secure-store<br/>token de sesión")]
+    AS[("AsyncStorage<br/>preferencias")]
+    UI --> CTX
+    UI --> MOTORA
+    CTX --> API_C
+    CTX --> SS
+    CTX --> AS
+  end
+
+  subgraph RENDER["Render (Node + Express + TypeScript)"]
+    direction TB
+    MW["Middleware<br/>requiereSesion"]
+    RUTAS["Rutas<br/>auth, me, mapa, niveles,<br/>retos, completar,<br/>inventario, hechizos"]
+    MOTORB["Motor de mazmorras<br/>(autoridad del juego)"]
+    REGLAS["Reglas de progreso<br/>XP, estrellas, racha,<br/>objetos y míticos"]
+    MW --> RUTAS
+    RUTAS --> MOTORB
+    RUTAS --> REGLAS
+  end
+
+  subgraph SUPA["Supabase"]
+    direction TB
+    AUTH["Auth<br/>usuarios y contraseñas"]
+    DB[("PostgreSQL<br/>RLS activo, sin políticas")]
+    SMTP["Correo SMTP<br/>código de recuperación"]
+  end
+
+  API_C -- "HTTPS + JSON<br/>Authorization: Bearer token" --> MW
+  RUTAS -- "llave secreta<br/>(solo en el servidor)" --> AUTH
+  RUTAS -- "llave secreta" --> DB
+  AUTH --> SMTP

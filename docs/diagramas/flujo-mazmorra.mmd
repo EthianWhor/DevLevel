@@ -1,0 +1,28 @@
+sequenceDiagram
+  actor J as Jugador
+  participant A as App
+  participant MA as Motor en la app
+  participant B as Backend (Render)
+  participant MB as Motor en el backend
+  participant S as Supabase
+
+  J->>A: Arma el hechizo (bloques o texto) y toca Ejecutar
+  A->>MA: Simula el programa con el equipo puesto
+  MA-->>A: Pasos del héroe
+  par Animación en la app
+    A-->>J: El héroe se mueve paso a paso
+  and Revisión en el servidor
+    A->>B: POST /retos/:id/responder (solo el texto del programa)
+    B->>S: Lee el reto y el equipo guardado (filtrado por el inventario)
+    B->>MB: Simula de nuevo con el equipo real
+    MB-->>B: Ganó o perdió, motivo y objetivos cumplidos
+    B->>S: Guarda el intento con su detalle
+    B-->>A: Resultado, explicación y pista
+  end
+  A-->>J: Resultado que decidió el backend (y aviso a TalkBack)
+  J->>A: Toca Terminar nivel
+  A->>B: POST /niveles/:id/completar
+  B->>S: Busca el mejor intento ganador de esta partida
+  B->>B: Estrellas, XP (solo la primera vez), racha y sorteo del objeto
+  B->>S: Guarda progreso, perfil, inventario y equipo
+  B-->>A: Subida de nivel, hechizo nuevo y objeto ganado
