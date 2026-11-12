@@ -20,12 +20,15 @@ La meta no es formar programadores profesionales. Es que una persona sin experie
 
 **Problema.** Aprender a programar por cuenta propia suele ser abrumador. No faltan recursos, sobran: llegan al mismo tiempo lenguajes, instalaciones, frameworks y teoría, cuando al inicio lo que la persona necesita es aprender a pensar. El formato dominante, el curso en línea masivo, tiene tasas de finalización de apenas el 5 % al 15 % de los inscritos (Jordan, 2015). Las personas sí quieren aprender; lo que falla es el formato.
 
-**Público objetivo** (definido en la Fase 1 y sin cambios):
+**Público objetivo.** Las dos primeras personas vienen de la Fase 1; la tercera se agregó en la Fase 2, con la propuesta de accesibilidad:
 
 | Persona | Perfil | Meta | Dolor |
 |---|---|---|---|
 | Primaria | Estudiante de colegio o primeros semestres, 13 a 25 años, sin experiencia | Aprender a programar de forma eficiente y divertida | Intentó con tutoriales o cursos gratuitos y se abrumó la primera semana |
 | Secundaria | Joven profesional de 22 a 30 años, buen usuario digital | Entender la lógica del código para organizar su trabajo o automatizar tareas pequeñas | No tiene tiempo para un curso largo y formal |
+| Con necesidades de accesibilidad | Estudiante de 19 años con baja visión que usa TalkBack y la letra grande del sistema; sensible a las animaciones rápidas | Aprender lógica en el celular con el mismo camino que sus compañeros | Las apps de programación dependen de arrastrar bloques, de colores sin texto y de animaciones que no se pueden detener, y su lector de pantalla no sabe qué hay en el escenario |
+
+Para la tercera persona, la versión entregada no exige arrastrar: todo se hace con toques. Cada estado se comunica con texto además de color, la mazmorra se describe en texto para el lector de pantalla y el resultado de cada ejecución se anuncia solo. Además, la opción Reducir movimiento cambia las animaciones por versiones estáticas (detalle en la sección 3).
 
 ## 1.3 De la propuesta al producto entregado
 

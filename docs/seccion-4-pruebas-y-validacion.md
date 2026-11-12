@@ -17,7 +17,8 @@ Las pruebas se organizaron en cuatro niveles, de lo más automático a lo más c
 | 1. Revisión estática | Tipos en la app y en el backend; reglas de accesibilidad en la app | TypeScript (`tsc`), ESLint con `eslint-plugin-react-native-a11y` | Antes de cada commit |
 | 2. Pruebas automáticas | API completa, reglas del juego y motor de mazmorras | `node:test` sobre la API real con una base de datos falsa en memoria | Antes de cada commit al backend |
 | 3. Casos funcionales | El sistema desplegado de punta a punta: app, API en Render y Supabase | Script de peticiones HTTP y pruebas manuales en la app | Al cerrar la versión final |
-| 4. Accesibilidad | Lector de pantalla, áreas táctiles, contraste y reducir movimiento | TalkBack, Accessibility Scanner y la matriz de trazabilidad | Sección 3 |
+| 4. Accesibilidad | Lector de pantalla, letra grande, áreas táctiles, contraste y reducir movimiento | TalkBack y ajustes de accesibilidad de Android sobre el APK final (4.5) y la matriz de trazabilidad (sección 3) | Con el APK final |
+| 5. Rendimiento | Tiempos de respuesta de la API, arranque en frío del servidor y costo del motor | Mediciones con un script contra Render y en el computador de desarrollo (4.6) | Al cerrar la versión final |
 
 La regla del equipo fue no subir cambios a `main` sin pasar los niveles 1 y 2, porque Render despliega automáticamente cada cambio.
 
@@ -76,8 +77,34 @@ Las pruebas encontraron estos problemas antes de la entrega. Cada uno se corrigi
 | No quedaba claro cómo equipar un objeto ganado | Prueba en un celular con el APK | Equipo automático si el espacio está vacío (`ccade3b`) y panel con la silueta del héroe y sus casillas (`f875f45`) |
 | Los íconos de las reliquias eran emojis y no seguían el estilo pixel art | Revisión visual | Íconos pixel art de 16×16 para los 25 objetos (`59fd989`) |
 | Avisos de accesibilidad del linter | ESLint con reglas de accesibilidad | Correcciones en los componentes señalados (`317ae34`) |
+| Con bloques no se podían armar las soluciones con todas las ★ de los niveles 4 y 6: no había forma de usar una segunda variable, de volver a darle valor a `pasos` ni de agregar algo después de un REPETIR o SI anidado | Prueba de los niveles con bloques y comentarios de uso ("no se entiende cómo usar la variable") | Tocar el FIN de un bloque agrega después de él, botón "nombre ⟳" en las variables y "usar …" recorre todas las variables (`e58677d`). Además, cada nivel explica qué tocar para usar lo nuevo (`cec5fcf`). Verificado armando con bloques la solución completa del nivel 4: 3 de 3 estrellas |
 
-## 4.5 Limitaciones conocidas
+## 4.5 Auditoría de accesibilidad en dispositivo
+
+<!-- PENDIENTE: completar con los resultados de la prueba en el celular con el APK final (ver auditoria-dispositivo.md). -->
+
+Prueba manual sobre el APK final instalado en un celular Android, con TalkBack activado, la letra grande del sistema y la opción "Quitar animaciones". La lista de verificación completa está en [`auditoria-dispositivo.md`](auditoria-dispositivo.md).
+
+## 4.6 Rendimiento
+
+**Tiempos de respuesta de la API** (Render, plan gratis, medidos el 12 de noviembre de 2026 desde Colombia con el servicio despierto; 7 peticiones por ruta):
+
+| Ruta | Mediana | Mínimo | Máximo |
+|---|---|---|---|
+| `GET /health` | 207 ms | 181 ms | 297 ms |
+| `POST /auth/login` | 427 ms | 382 ms | 507 ms |
+| `GET /me` | 334 ms | 284 ms | 645 ms |
+| `GET /mapa` | 268 ms | 230 ms | 355 ms |
+| `GET /niveles/1` | 344 ms | 281 ms | 431 ms |
+| `POST /retos/:id/responder` (ejecuta el programa en el servidor) | 508 ms | 479 ms | 653 ms |
+| `GET /inventario` | 302 ms | 257 ms | 337 ms |
+| `GET /hechizos` | 283 ms | 254 ms | 304 ms |
+
+- **Arranque en frío:** con el servicio dormido, la primera petición tardó 13,9 s en esta medición; Render indica que puede llegar a unos 50 s. La app espera hasta 60 s antes de mostrar un error.
+- **Ejecución del hechizo:** `responder` es la ruta más lenta porque lee el reto y el equipo, ejecuta el programa y guarda el intento. Aun así, la app no hace esperar al jugador: mientras llega la respuesta ya está animando al héroe con su propia simulación (sección 2.5.1). Cada paso de la animación dura 320 ms, así que con 2 pasos o más la respuesta suele llegar antes de que termine la animación.
+- **Motor de mazmorras:** el programa más largo del juego se ejecuta en unos 0,2 ms, y un ciclo infinito se corta en el límite de 500 pasos en unos 0,1 ms. El costo del motor es despreciable frente al de la red.
+
+## 4.7 Limitaciones conocidas
 
 - **Render en plan gratis:** la primera petición después de 15 minutos sin uso tarda unos 50 segundos. Antes de la demo hay que abrir `/health` para despertar el servicio.
 - **No hay pruebas automáticas de interfaz** en la app: las pantallas se validaron con los casos funcionales manuales y con la revisión estática. La lógica de la app que no es visual (el motor y los bloques) sí se prueba de forma automática desde el backend.

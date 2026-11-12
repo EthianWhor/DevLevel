@@ -100,6 +100,24 @@ El resto del estado es local a cada pantalla. Por ejemplo, el editor de bloques 
 
 Un error de red nunca cierra la sesión del usuario: solo se cierra si el backend responde que la sesión ya no es válida.
 
+### 2.3.5 Rendimiento en vistas complejas
+
+Las vistas más pesadas son el escenario de la mazmorra (hasta 8×8 casillas con sprites, héroe, enemigos y monedas), el mapa del reino (15 niveles con sendero y decoración) y las listas de reliquias y niveles. Las decisiones para que se mantengan fluidas en celulares de gama baja:
+
+| Técnica | Dónde | Efecto |
+|---|---|---|
+| **Sprites como un solo SVG con píxeles agrupados**: los píxeles seguidos del mismo color se unen en un rectángulo | `components/pixel/sprite.tsx` (`svgDeMapa`) | Un personaje de 24×24 (576 píxeles) se dibuja con unas decenas de rectángulos en vez de cientos de vistas |
+| **`memo` y `useMemo` en los sprites** | `Sprite`, `svgDeMapa` | El SVG solo se recalcula si cambian el mapa, la paleta o la orientación |
+| **El terreno se dibuja una sola vez** | `components/mazmorra/escenario.tsx` (`Terreno` con `memo`) | Durante la animación solo se vuelven a dibujar el héroe y los enemigos, no las 64 casillas |
+| **Animaciones con `useNativeDriver: true`** | Movimiento del héroe y números de daño | La animación corre en el hilo nativo y no se traba si JavaScript está ocupado |
+| **La app anima mientras el servidor responde** | `pantalla-mazmorra.tsx` (`Promise.all` de la petición y la animación) | La espera de la red queda escondida detrás de la animación |
+| **Cálculos derivados memorizados** | `useMemo` en el mapa del reino (zonas y sendero), el editor de bloques (texto del hechizo y filas) y la mazmorra (estadísticas del equipo) | No se recalculan en cada render |
+| **Callbacks estables** | `useCallback` en los contextos de sesión y preferencias y en Ajustes | Los componentes hijos no se vuelven a dibujar por recibir una función nueva |
+| **Una sola renovación de sesión a la vez** | `AuthContext` (`renovacionRef`) | Si varias peticiones reciben 401 al mismo tiempo, se hace una sola llamada a `/auth/refresh` y todas esperan esa |
+| **Listas cortas y acotadas** | Reliquias (máximo 25), niveles (15) y líneas del hechizo | Se dibujan con `map` dentro de un `ScrollView`; con estos tamaños no hace falta virtualizar con `FlatList` |
+
+El motor de mazmorras también es liviano: ejecutar el programa más largo del juego (la solución completa de la mazmorra 15) tarda unos 0,2 ms, y un ciclo infinito se corta en el límite de 500 pasos en unos 0,1 ms (medido en el computador de desarrollo con Node 24; las mediciones de la API están en la sección 4).
+
 ## 2.4 Backend
 
 ### 2.4.1 Estructura
