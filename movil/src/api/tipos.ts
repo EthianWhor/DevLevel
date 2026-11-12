@@ -173,7 +173,8 @@ export type ResultadoMazmorra = {
   pista: string | null;
 };
 
-export type ObjetoGanado = Objeto & { nivelId: number };
+// equipado: true si se puso solo porque su espacio estaba vacío.
+export type ObjetoGanado = Objeto & { nivelId: number; equipado: boolean };
 
 export type ObjetoInventario = Objeto & { nivelId: number | null; obtenidoAt: string };
 

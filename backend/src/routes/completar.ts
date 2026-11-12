@@ -13,7 +13,7 @@ import {
 import { azar } from '../lib/azar';
 import { equipoValido, leerInventario } from '../lib/equipo';
 import { OBJETOS, estadisticas, sortearObjeto } from '../lib/mazmorra/objetos';
-import type { Mazmorra, Objeto } from '../lib/mazmorra/tipos';
+import type { Equipo, Mazmorra, Objeto } from '../lib/mazmorra/tipos';
 import { requiereSesion, usuarioDe } from '../middleware/requiere-sesion';
 
 export const completarRouter = Router();
@@ -139,7 +139,9 @@ completarRouter.post('/:id/completar', requiereSesion, async (req, res) => {
 
   // Objeto de la mazmorra: se gana al cumplir todos los extras si todavía no
   // se tiene. Con suerte sale un mítico en su lugar.
-  let objetoGanado: (Objeto & { nivelId: number }) | null = null;
+  let objetoGanado: (Objeto & { nivelId: number; equipado: boolean }) | null = null;
+  // Si el espacio del objeto está vacío, el objeto nuevo se equipa solo.
+  let equipoNuevo: Equipo | null = null;
   if (mazmorra && extrasCompletos) {
     const objetoNormal = (mazmorra.opciones as Mazmorra).objeto;
     const inventario = await leerInventario(usuario.id);
@@ -155,7 +157,9 @@ completarRouter.post('/:id/completar', requiereSesion, async (req, res) => {
         mitico: objeto.mitico,
       });
       if (insertado.error) throw insertado.error;
-      objetoGanado = { ...objeto, nivelId: id };
+      const equipar = equipo[objeto.espacio] === null;
+      if (equipar) equipoNuevo = { ...equipo, [objeto.espacio]: ganado };
+      objetoGanado = { ...objeto, nivelId: id, equipado: equipar };
     }
   }
 
@@ -185,6 +189,7 @@ completarRouter.post('/:id/completar', requiereSesion, async (req, res) => {
       racha_actual: racha,
       racha_maxima: Math.max(perfilAntes.rachaMaxima, racha),
       ultima_actividad: hoy,
+      ...(equipoNuevo ? { equipo: equipoNuevo } : {}),
     })
     .eq('id', usuario.id)
     .select(COLUMNAS_PERFIL)

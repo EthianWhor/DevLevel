@@ -578,7 +578,7 @@ adelante()" }`. El backend usa el equipo guardado del jugador (solo lo que de ve
 
 Si el texto tiene un error, `correcta` es `false` y `error` trae `{ "linea": 2, "mensaje": "Línea 2: ..." }`. Si no gana, `motivo` explica por qué ("Te quedaste sin energía", "Perdiste toda tu vida"...).
 
-**`POST /niveles/:id/completar` con una mazmorra.** Exige un intento ganador. Estrellas = 1 + objetivos extra cumplidos en el mejor intento. Si cumplió todos los extras y no tiene el objeto de la mazmorra, lo gana; con probabilidad `10 % × 0,8^k` (k = míticos que ya tiene) recibe en su lugar un mítico. La respuesta agrega `objetoGanado: { id, nombre, espacio, efecto, mitico, nivelId } | null`.
+**`POST /niveles/:id/completar` con una mazmorra.** Exige un intento ganador. Estrellas = 1 + objetivos extra cumplidos en el mejor intento. Si cumplió todos los extras y no tiene el objeto de la mazmorra, lo gana; con probabilidad `10 % × 0,8^k` (k = míticos que ya tiene) recibe en su lugar un mítico. La respuesta agrega `objetoGanado: { id, nombre, espacio, efecto, mitico, nivelId, equipado } | null`. Si el espacio del objeto estaba vacío, se equipa solo (`equipado: true`).
 
 **`GET /inventario`** → `{ "objetos": [{ "id": "daga_madera", "nombre": "Daga de madera", "espacio": "arma", "efecto": "+1 de ataque", "mitico": false, "nivelId": 2 }], "equipo": { "arma": "daga_madera", "armadura": null, "amuleto": null } }`
 

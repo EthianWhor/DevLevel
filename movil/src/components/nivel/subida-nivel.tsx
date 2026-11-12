@@ -214,14 +214,18 @@ export function SubidaNivel({ resultado, onVolverMapa, onSiguienteNivel }: Props
           <View
             style={[estilos.tarjeta, resultado.objetoGanado.mitico ? estilos.tarjetaMitica : estilos.tarjetaHechizo]}
             accessible
-            accessibilityLabel={`${resultado.objetoGanado.mitico ? 'Objeto mítico' : 'Objeto'} ganado: ${resultado.objetoGanado.nombre}. ${resultado.objetoGanado.efecto}. Equípalo desde tu Perfil o en la próxima mazmorra.`}>
+            accessibilityLabel={`${resultado.objetoGanado.mitico ? 'Objeto mítico' : 'Objeto'} ganado: ${resultado.objetoGanado.nombre}. ${resultado.objetoGanado.efecto}. ${resultado.objetoGanado.equipado ? 'Se equipó automáticamente.' : 'Equípalo en Héroe, sección Equipo.'}`}>
             {resultado.objetoGanado.mitico ? <Text style={estilos.etiquetaMitica}>★ MÍTICO ★</Text> : null}
             <Text style={estilos.subtitulo}>🎁 ¡Ganaste un objeto!</Text>
             <Text style={[estilos.nombreHechizo, resultado.objetoGanado.mitico && { color: '#EF4444' }]}>
               {ICONO_OBJETO[resultado.objetoGanado.id] ?? '✦'} {resultado.objetoGanado.nombre}
             </Text>
             <Text style={estilos.texto}>{resultado.objetoGanado.efecto}</Text>
-            <Text style={estilos.textoApagado}>Equípalo con 🎒 Equipo en la próxima mazmorra.</Text>
+            <Text style={estilos.textoApagado}>
+              {resultado.objetoGanado.equipado
+                ? '✔ Se equipó automáticamente. Puedes cambiarlo en Héroe → Equipo.'
+                : 'Equípalo en Héroe → Equipo cuando quieras.'}
+            </Text>
           </View>
         ) : null}
 

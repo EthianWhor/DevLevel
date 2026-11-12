@@ -258,3 +258,32 @@ test('pista avanzada: el Pergamino muestra 2 líneas y el Ojo de Odín todo', as
     await s.cerrar();
   }
 });
+
+test('mazmorra: el objeto ganado se equipa solo si su espacio está vacío', async () => {
+  const { s, token, id } = await preparar();
+  try {
+    usarAzarDePrueba(() => 0.99);
+    await responder(s, token, GANA_TODO);
+    const { cuerpo } = await completar(s, token);
+    assert.equal(cuerpo.objetoGanado.equipado, true);
+    assert.equal(cuerpo.perfil.equipo.arma, 'daga_madera');
+    assert.equal((s.base.tablas.profiles.find((p) => p.id === id)!.equipo as any).arma, 'daga_madera');
+  } finally {
+    await s.cerrar();
+  }
+});
+
+test('mazmorra: el objeto ganado no reemplaza lo que ya llevas', async () => {
+  const { s, token, id } = await preparar();
+  try {
+    usarAzarDePrueba(() => 0.99);
+    darObjeto(s, id, 'hacha_guerra');
+    s.base.tablas.profiles.find((p) => p.id === id)!.equipo = { arma: 'hacha_guerra', armadura: null, amuleto: null };
+    await responder(s, token, GANA_TODO);
+    const { cuerpo } = await completar(s, token);
+    assert.equal(cuerpo.objetoGanado.equipado, false);
+    assert.equal(cuerpo.perfil.equipo.arma, 'hacha_guerra');
+  } finally {
+    await s.cerrar();
+  }
+});
