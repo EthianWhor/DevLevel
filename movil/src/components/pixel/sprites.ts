@@ -125,32 +125,3 @@ export const PALETA_TERRENO: Paleta = {
   O: '#c9a227',
   Z: '#cbd5e1',
 };
-
-// Íconos de los objetos (emoji dentro de un marco pixel).
-export const ICONO_OBJETO: Record<string, string> = {
-  daga_madera: '🗡️',
-  espada_bronce: '⚔️',
-  lanza_larga: '🔱',
-  hacha_guerra: '🪓',
-  espada_hierro: '🗡️',
-  cota_cuero: '🦺',
-  casco_hierro: '⛑️',
-  capa_viajero: '🧥',
-  escudo_runico: '🛡️',
-  armadura_placas: '🥋',
-  botas_veloces: '👢',
-  anillo_mana: '💍',
-  pergamino_sabio: '📜',
-  lupa_explorador: '🔍',
-  amuleto_vida: '❤️',
-  rayo_zeus: '⚡',
-  martillo_thor: '🔨',
-  egida_atenea: '🛡️',
-  caliz_fenix: '🔥',
-  reloj_cronos: '⏳',
-  ojo_odin: '👁️',
-  sandalias_hermes: '🪽',
-  capa_sombras: '🌑',
-  llave_maestra: '🗝️',
-  corona_rey: '👑',
-};

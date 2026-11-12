@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Animated, Easing, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import type { ResultadoNivel } from '@/api';
-import { ICONO_OBJETO } from '@/components/pixel/sprites';
+import { IconoObjeto } from '@/components/pixel/icono-objeto';
 import { BotonPrincipal } from '@/components/ui/boton-principal';
 import { useReducirMovimiento } from '@/hooks/use-reducir-movimiento';
 import { AlturaLinea, AreaTactilMinima, Colores, Espacio, Fuentes, Radio, Tamanos } from '@/theme';
@@ -217,9 +217,14 @@ export function SubidaNivel({ resultado, onVolverMapa, onSiguienteNivel }: Props
             accessibilityLabel={`${resultado.objetoGanado.mitico ? 'Objeto mítico' : 'Objeto'} ganado: ${resultado.objetoGanado.nombre}. ${resultado.objetoGanado.efecto}. ${resultado.objetoGanado.equipado ? 'Se equipó automáticamente.' : 'Equípalo en Héroe, sección Equipo.'}`}>
             {resultado.objetoGanado.mitico ? <Text style={estilos.etiquetaMitica}>★ MÍTICO ★</Text> : null}
             <Text style={estilos.subtitulo}>🎁 ¡Ganaste un objeto!</Text>
-            <Text style={[estilos.nombreHechizo, resultado.objetoGanado.mitico && { color: '#EF4444' }]}>
-              {ICONO_OBJETO[resultado.objetoGanado.id] ?? '✦'} {resultado.objetoGanado.nombre}
-            </Text>
+            <View style={estilos.filaObjeto}>
+              <View style={[estilos.marcoObjeto, resultado.objetoGanado.mitico && { borderColor: '#EF4444' }]}>
+                <IconoObjeto id={resultado.objetoGanado.id} tamano={48} />
+              </View>
+              <Text style={[estilos.nombreHechizo, estilos.nombreObjeto, resultado.objetoGanado.mitico && { color: '#EF4444' }]}>
+                {resultado.objetoGanado.nombre}
+              </Text>
+            </View>
             <Text style={estilos.texto}>{resultado.objetoGanado.efecto}</Text>
             <Text style={estilos.textoApagado}>
               {resultado.objetoGanado.equipado
@@ -333,6 +338,9 @@ const estilos = StyleSheet.create({
     lineHeight: AlturaLinea.subtitulo,
     color: Colores.texto,
   },
+  filaObjeto: { flexDirection: 'row', alignItems: 'center', gap: Espacio.md },
+  marcoObjeto: { padding: 4, borderWidth: 3, borderColor: Colores.oro, backgroundColor: '#0f172a' },
+  nombreObjeto: { flex: 1 },
   nombreHechizo: {
     fontFamily: Fuentes.titulo,
     fontSize: Tamanos.subtitulo,

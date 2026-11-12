@@ -3,17 +3,19 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 
 import { authApi, esErrorApi, obtenerInventario, type ObjetoInventario } from '@/api';
 import { Sprite } from '@/components/pixel/sprite';
-import { ICONO_OBJETO, PALETA_HEROE, spriteHeroe } from '@/components/pixel/sprites';
+import { IconoObjeto } from '@/components/pixel/icono-objeto';
+import { PALETA_HEROE, spriteHeroe } from '@/components/pixel/sprites';
 import { MarcoPixel } from '@/components/retro/marco-pixel';
 import { useAuth } from '@/context/auth-context';
 import { OBJETOS } from '@/juego/objetos';
 import type { Espacio as EspacioEquipo } from '@/juego/tipos';
 import { AlturaLinea, AreaTactilMinima, Colores, Espacio, Fuentes, Tamanos } from '@/theme';
 
-const ESPACIOS: { id: EspacioEquipo; nombre: string; vacio: string }[] = [
-  { id: 'arma', nombre: 'ARMA', vacio: '⚔' },
-  { id: 'armadura', nombre: 'ARMADURA', vacio: '🛡' },
-  { id: 'amuleto', nombre: 'AMULETO', vacio: '✦' },
+// En la casilla vacía se ve la silueta gris de un objeto de ese espacio.
+const ESPACIOS: { id: EspacioEquipo; nombre: string; silueta: string }[] = [
+  { id: 'arma', nombre: 'ARMA', silueta: 'espada_hierro' },
+  { id: 'armadura', nombre: 'ARMADURA', silueta: 'cota_cuero' },
+  { id: 'amuleto', nombre: 'AMULETO', silueta: 'anillo_mana' },
 ];
 
 type Props = {
@@ -81,9 +83,7 @@ export function PanelEquipo({ objetos: objetosProp }: Props) {
             objeto?.mitico && estilos.casillaMitica,
             elegida && estilos.casillaElegida,
           ]}>
-          <Text style={[estilos.iconoCasilla, !objeto && estilos.iconoVacio]}>
-            {objeto ? ICONO_OBJETO[objeto.id] ?? '✦' : espacio.vacio}
-          </Text>
+          {objeto ? <IconoObjeto id={objeto.id} tamano={44} /> : <IconoObjeto id={espacio.silueta} tamano={40} silueta />}
         </View>
         <Text style={estilos.nombreCasilla}>{espacio.nombre}</Text>
         <Text style={estilos.objetoCasilla} numberOfLines={2}>
@@ -134,7 +134,7 @@ export function PanelEquipo({ objetos: objetosProp }: Props) {
             const puesto = equipo[o.espacio] === o.id;
             return (
               <View key={o.id} style={[estilos.fila, o.mitico && estilos.filaMitica, puesto && estilos.filaPuesta]}>
-                <Text style={estilos.iconoFila}>{ICONO_OBJETO[o.id] ?? '✦'}</Text>
+                <IconoObjeto id={o.id} tamano={36} />
                 <View style={estilos.textosFila}>
                   <Text style={[estilos.nombreFila, o.mitico && { color: Colores.vidaRojo }]}>
                     {o.nombre}
@@ -182,8 +182,6 @@ const estilos = StyleSheet.create({
   casillaVacia: { borderStyle: 'dashed', borderColor: Colores.borde, borderBottomWidth: 3 },
   casillaMitica: { borderColor: Colores.vidaRojo },
   casillaElegida: { backgroundColor: Colores.bordePixel, borderColor: Colores.oroClaro },
-  iconoCasilla: { fontSize: 30 },
-  iconoVacio: { opacity: 0.4, color: Colores.textoSecundario },
   nombreCasilla: { fontFamily: Fuentes.codigo, fontSize: 11, letterSpacing: 1, color: Colores.oro },
   objetoCasilla: { fontFamily: Fuentes.cuerpo, fontSize: 12, lineHeight: 16, color: Colores.texto, textAlign: 'center', maxWidth: 96 },
   error: { fontFamily: Fuentes.cuerpoNegrita, fontSize: Tamanos.pequeno, color: Colores.error },
@@ -200,7 +198,6 @@ const estilos = StyleSheet.create({
   },
   filaMitica: { borderColor: Colores.vidaRojo },
   filaPuesta: { borderColor: Colores.verde },
-  iconoFila: { fontSize: 26 },
   textosFila: { flex: 1 },
   nombreFila: { fontFamily: Fuentes.cuerpoNegrita, fontSize: Tamanos.pequeno, lineHeight: AlturaLinea.pequeno, color: Colores.texto },
   efecto: { fontFamily: Fuentes.cuerpo, fontSize: 13, lineHeight: 18, color: Colores.textoSecundario },

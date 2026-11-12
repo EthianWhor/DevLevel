@@ -6,7 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { esErrorApi, mapaApi, obtenerInventario, type ObjetoInventario, type RespuestaMapa } from '@/api';
 import { PanelEquipo } from '@/components/heroe/panel-equipo';
 import { Sprite } from '@/components/pixel/sprite';
-import { ICONO_OBJETO, PALETA_HEROE, spriteHeroe } from '@/components/pixel/sprites';
+import { IconoCandado, IconoObjeto } from '@/components/pixel/icono-objeto';
+import { PALETA_HEROE, spriteHeroe } from '@/components/pixel/sprites';
 import { BarraSegmentada } from '@/components/retro/barra-segmentada';
 import { BarraSuperior, rango } from '@/components/retro/barra-superior';
 import { MarcoPixel } from '@/components/retro/marco-pixel';
@@ -149,22 +150,27 @@ export default function PerfilScreen() {
                 accessibilityLabel={`${o.nombre}${o.mitico ? ', mítico' : ''}. ${o.efecto}`}
                 accessibilityState={{ selected: elegido?.id === o.id }}
                 style={[estilos.reliquia, o.mitico && estilos.reliquiaMitica, elegido?.id === o.id && estilos.reliquiaElegida]}>
-                <Text style={estilos.iconoReliquia}>{ICONO_OBJETO[o.id] ?? '✦'}</Text>
+                <IconoObjeto id={o.id} tamano={40} />
                 {o.mitico ? <Text style={estilos.mitico}>MÍTICO</Text> : null}
               </Pressable>
             ))}
             {Array.from({ length: Math.min(huecos, 8) }).map((_, i) => (
               <View key={`hueco-${i}`} style={[estilos.reliquia, estilos.hueco]} accessible accessibilityLabel="Reliquia sin descubrir">
-                <Text style={estilos.candado}>🔒</Text>
+                <View style={estilos.candado}>
+                  <IconoCandado tamano={28} />
+                </View>
               </View>
             ))}
           </View>
           {elegido ? (
             <View style={[estilos.detalle, elegido.mitico && { borderColor: Colores.vidaRojo }]} accessibilityLiveRegion="polite">
-              <Text style={[estilos.nombreObjeto, elegido.mitico && { color: Colores.vidaRojo }]}>
-                {ICONO_OBJETO[elegido.id]} {elegido.nombre}
-                {elegido.mitico ? ' · MÍTICO' : ''}
-              </Text>
+              <View style={estilos.filaNombre}>
+                <IconoObjeto id={elegido.id} tamano={32} />
+                <Text style={[estilos.nombreObjeto, elegido.mitico && { color: Colores.vidaRojo }]}>
+                  {elegido.nombre}
+                  {elegido.mitico ? ' · MÍTICO' : ''}
+                </Text>
+              </View>
               <Text style={estilos.texto}>{elegido.efecto}</Text>
               <Text style={estilos.textoApagado}>Espacio: {elegido.espacio}</Text>
             </View>
@@ -256,11 +262,11 @@ const estilos = StyleSheet.create({
   reliquiaMitica: { borderColor: Colores.vidaRojo },
   reliquiaElegida: { borderColor: Colores.oro },
   hueco: { borderStyle: 'dashed', borderColor: Colores.borde, backgroundColor: 'transparent' },
-  iconoReliquia: { fontSize: 28 },
   mitico: { position: 'absolute', bottom: 0, fontSize: 9, color: '#fff', backgroundColor: Colores.vidaRojo, paddingHorizontal: 2 },
-  candado: { fontSize: 18, opacity: 0.6 },
+  candado: { opacity: 0.5 },
+  filaNombre: { flexDirection: 'row', alignItems: 'center', gap: Espacio.sm },
   detalle: { gap: 2, padding: Espacio.sm, borderWidth: 2, borderColor: Colores.oro },
-  nombreObjeto: { fontFamily: Fuentes.cuerpoNegrita, fontSize: Tamanos.cuerpo, color: Colores.oro },
+  nombreObjeto: { flex: 1, fontFamily: Fuentes.cuerpoNegrita, fontSize: Tamanos.cuerpo, color: Colores.oro },
   texto: { fontFamily: Fuentes.cuerpo, fontSize: Tamanos.pequeno, lineHeight: AlturaLinea.pequeno, color: Colores.texto },
   textoApagado: { fontFamily: Fuentes.cuerpo, fontSize: 13, lineHeight: 18, color: Colores.textoApagado },
   filaNivel: { flexDirection: 'row', alignItems: 'center', gap: Espacio.sm, minHeight: AreaTactilMinima },
