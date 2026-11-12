@@ -26,7 +26,7 @@ export function BarraSuperior({ titulo = 'DevLevel' }: { titulo?: string }) {
       accessibilityRole="header"
       accessibilityLabel={`${titulo}. ${perfil?.nombreHeroe ?? 'Héroe'}, nivel ${nivel}, ${rango(nivel).toLowerCase()}`}>
       <View style={estilos.avatar}>
-        <Sprite mapa={spriteHeroe('sur').mapa} paleta={PALETA_HEROE[avatar]} tamano={36} />
+        <Sprite mapa={spriteHeroe('sur', avatar).mapa} paleta={PALETA_HEROE[avatar]} tamano={36} />
       </View>
       <View style={estilos.textos}>
         <Text style={estilos.titulo}>{titulo}</Text>

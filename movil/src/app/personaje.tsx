@@ -98,7 +98,7 @@ export default function PersonajeScreen() {
                   accessibilityLabel={`${opcion.nombre}. Habilidad: ${opcion.habilidad}. ${opcion.descripcion}`}
                   style={[styles.tarjeta, seleccionado && styles.tarjetaSeleccionada]}>
                   <View style={styles.retrato} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-                    <Sprite mapa={spriteHeroe('sur').mapa} paleta={PALETA_HEROE[opcion.id]} tamano={52} />
+                    <Sprite mapa={spriteHeroe('sur', opcion.id).mapa} paleta={PALETA_HEROE[opcion.id]} tamano={52} />
                   </View>
                   <View style={styles.textosTarjeta}>
                     <Text style={styles.nombreClase}>{opcion.nombre}</Text>

@@ -3,140 +3,35 @@
 import type { Avatar } from '@/api';
 import type { Direccion, TipoEnemigo } from '@/juego/tipos';
 import type { Paleta } from './sprite';
+import { ENEMIGOS_24, HEROES_24 } from './sprites-24';
 
 const CONTORNO = '#140f04';
 
-// ---------- Héroe (mismo cuerpo, colores según la clase) ----------
-// A = color principal, a = sombra, T = adorno, S = piel, E = ojos
+// ---------- Héroe y enemigos (24x24, generados en sprites-24.ts) ----------
 
-const HEROE_FRENTE = [
-  '....KKKK....',
-  '...KAAAAK...',
-  '..KAAAAAAK..',
-  '..KASSSSAK..',
-  '..KSESSESK..',
-  '..KSSSSSSK..',
-  '...KTTTTK...',
-  '..KAATTAAK..',
-  '.KSAAAAAASK.',
-  '..KAAAAAAK..',
-  '..KaaKKaaK..',
-  '..KKK..KKK..',
-];
-
-const HEROE_ESPALDA = [
-  '....KKKK....',
-  '...KAAAAK...',
-  '..KAAAAAAK..',
-  '..KAAAAAAK..',
-  '..KAAAAAAK..',
-  '..KaAAAAaK..',
-  '...KTTTTK...',
-  '..KAAAAAAK..',
-  '.KSAAAAAASK.',
-  '..KAAAAAAK..',
-  '..KaaKKaaK..',
-  '..KKK..KKK..',
-];
-
-const HEROE_LADO = [
-  '....KKKK....',
-  '...KAAAAK...',
-  '..KAAAAAAK..',
-  '..KAAASSSK..',
-  '..KAASSESK..',
-  '...KASSSSK..',
-  '...KTTTTK...',
-  '..KAATTAAK..',
-  '..KAAAASSK..',
-  '..KAAAAAAK..',
-  '..KaaKaaK...',
-  '..KKK.KKK...',
-];
-
-const PIEL = { S: '#f1c27d', E: '#1a1a1a', K: CONTORNO };
-
+// Colores de cada clase de héroe.
 export const PALETA_HEROE: Record<Avatar, Paleta> = {
-  explorador: { ...PIEL, A: '#2f8f4e', a: '#1f5e33', T: '#a16207' },
-  mago: { ...PIEL, A: '#7c3aed', a: '#4c1d95', T: '#ffd700' },
-  guerrero: { ...PIEL, A: '#9ca3af', a: '#4b5563', T: '#ef4444' },
+  explorador: HEROES_24.explorador.paleta,
+  mago: HEROES_24.mago.paleta,
+  guerrero: HEROES_24.guerrero.paleta,
 };
 
-// Mapa y si hay que voltearlo para cada dirección.
-export function spriteHeroe(dir: Direccion): { mapa: string[]; espejo: boolean } {
+// Mapa del héroe de esa clase y si hay que voltearlo para cada dirección.
+export function spriteHeroe(dir: Direccion, avatar: Avatar): { mapa: string[]; espejo: boolean } {
+  const { vistas } = HEROES_24[avatar];
   switch (dir) {
     case 'sur':
-      return { mapa: HEROE_FRENTE, espejo: false };
+      return { mapa: vistas.frente, espejo: false };
     case 'norte':
-      return { mapa: HEROE_ESPALDA, espejo: false };
+      return { mapa: vistas.espalda, espejo: false };
     case 'este':
-      return { mapa: HEROE_LADO, espejo: false };
+      return { mapa: vistas.lado, espejo: false };
     case 'oeste':
-      return { mapa: HEROE_LADO, espejo: true };
+      return { mapa: vistas.lado, espejo: true };
   }
 }
 
-// ---------- Enemigos ----------
-
-const GOBLIN = [
-  '............',
-  '............',
-  '..K......K..',
-  '.KGK.KK.KGK.',
-  '..KGGGGGGK..',
-  '..KGRGGRGK..',
-  '..KGGGGGGK..',
-  '...KGWWGK...',
-  '..KBBBBBBK..',
-  '.KGBBBBBBGK.',
-  '..KBBKKBBK..',
-  '..KKK..KKK..',
-];
-
-const ORCO = [
-  '...KKKKKK...',
-  '..KGGGGGGK..',
-  '.KGGGGGGGGK.',
-  '.KGRGGGGRGK.',
-  '.KGGGGGGGGK.',
-  '.KGWGKKGWGK.',
-  '..KGGGGGGK..',
-  '.KMMMMMMMMK.',
-  'KGMMMMMMMMGK',
-  'KGKMMMMMMKGK',
-  '.KKMMKKMMKK.',
-  '..KKK..KKK..',
-];
-
-const CABALLERO = [
-  '...KKKKKK...',
-  '..KXXXXXXK..',
-  '..KXRXXRXK..',
-  '..KXXXXXXK..',
-  '...KXKKXK...',
-  '..KNNNNNNK..',
-  '.KXNNYYNNXK.',
-  '.KXNNNNNNXK.',
-  '.KXNNNNNNXK.',
-  '..KNNKKNNK..',
-  '..KXXKKXXK..',
-  '..KKK..KKK..',
-];
-
-export const SPRITES_ENEMIGO: Record<TipoEnemigo, { mapa: string[]; paleta: Paleta }> = {
-  goblin: {
-    mapa: GOBLIN,
-    paleta: { K: CONTORNO, G: '#4ade80', R: '#ef4444', W: '#f8fafc', B: '#7a4b20' },
-  },
-  orco: {
-    mapa: ORCO,
-    paleta: { K: CONTORNO, G: '#3f7d3a', R: '#fbbf24', W: '#f8fafc', M: '#6b7280' },
-  },
-  caballero: {
-    mapa: CABALLERO,
-    paleta: { K: CONTORNO, X: '#e5e7eb', R: '#ef4444', N: '#1e293b', Y: '#ffd700' },
-  },
-};
+export const SPRITES_ENEMIGO: Record<TipoEnemigo, { mapa: string[]; paleta: Paleta }> = ENEMIGOS_24;
 
 // ---------- Terreno ----------
 

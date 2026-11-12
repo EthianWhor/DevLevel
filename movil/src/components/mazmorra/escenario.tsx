@@ -139,7 +139,7 @@ export function Escenario({ mazmorra, estado, avatar, ancho, reducirMovimiento, 
     Animated.timing(subida, { toValue: 1, duration: 700, useNativeDriver: true }).start();
   }, [danio, reducirMovimiento, subida]);
 
-  const heroe = spriteHeroe(estado.dir);
+  const heroe = spriteHeroe(estado.dir, avatar);
 
   return (
     <View

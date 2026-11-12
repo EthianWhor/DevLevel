@@ -135,7 +135,7 @@ export function MapaReino({ unidades, avatar, reducirMovimiento, onEntrar }: Pro
     return lista;
   }, [zonas]);
 
-  const heroe = spriteHeroe(mirando === 'norte' ? 'sur' : mirando);
+  const heroe = spriteHeroe(mirando === 'norte' ? 'sur' : mirando, avatar);
 
   return (
     <ScrollView ref={scroll} onLayout={() => setListo(true)} contentContainerStyle={{ alignItems: 'center' }}>

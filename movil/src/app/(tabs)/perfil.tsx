@@ -85,7 +85,7 @@ export default function PerfilScreen() {
         <MarcoPixel esquinas>
           <View style={estilos.retrato}>
             <View style={estilos.marcoRetrato} importantForAccessibility="no-hide-descendants">
-              <Sprite mapa={spriteHeroe('sur').mapa} paleta={PALETA_HEROE[perfil.avatar ?? 'explorador']} tamano={112} />
+              <Sprite mapa={spriteHeroe('sur', perfil.avatar ?? 'explorador').mapa} paleta={PALETA_HEROE[perfil.avatar ?? 'explorador']} tamano={112} />
               <Text style={estilos.etiquetaNivel}>NIVEL {perfil.nivel}</Text>
             </View>
             <View style={estilos.datosHeroe} accessible>
