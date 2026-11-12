@@ -114,6 +114,7 @@ export default function OnboardingScreen() {
               accessible
               accessibilityRole="image"
               accessibilityLabel={pagina.descripcionImagen}
+              accessibilityIgnoresInvertColors
             />
           </View>
 

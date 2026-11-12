@@ -177,7 +177,7 @@ export function SubidaNivel({ resultado, onVolverMapa, onSiguienteNivel }: Props
             accessible
             accessibilityRole="progressbar"
             accessibilityLabel={`Experiencia del nivel ${resultado.nivelNuevo}`}
-            accessibilityValue={{ min: 0, max: xpPorNivel, now: xpEnNivel, text: `${xpEnNivel} de ${xpPorNivel} XP` }}>
+            accessibilityValue={{ text: `${xpEnNivel} de ${xpPorNivel} XP` }}>
             <Animated.View
               style={[
                 estilos.barraRelleno,

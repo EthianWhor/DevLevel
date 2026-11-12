@@ -14,7 +14,7 @@ export function BarraProgreso({ total, actual, etiqueta = 'Progreso' }: Props) {
       accessible
       accessibilityRole="progressbar"
       accessibilityLabel={etiqueta}
-      accessibilityValue={{ min: 0, max: total, now: actual, text: `${actual} de ${total}` }}
+      accessibilityValue={{ text: `${actual} de ${total}` }}
       style={estilos.fila}
     >
       {Array.from({ length: total }).map((_, i) => (
