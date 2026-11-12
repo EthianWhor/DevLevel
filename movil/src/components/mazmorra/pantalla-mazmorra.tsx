@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import {
   AccessibilityInfo,
+  Keyboard,
   Pressable,
   StyleSheet,
   Text,
@@ -76,6 +77,12 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
   const [verDescripcion, setVerDescripcion] = useState(false);
   const [verEquipo, setVerEquipo] = useState(false);
   const temporizadores = useRef<ReturnType<typeof setTimeout>[]>([]);
+  // Posiciones en la pantalla para llevar al jugador al escenario al ejecutar
+  // y al panel de resultado al terminar.
+  const scroll = useRef<ComponentRef<typeof KeyboardAwareScrollView>>(null);
+  const yEscena = useRef(0);
+  const yResultado = useRef(0);
+  const irA = (y: number) => scroll.current?.scrollTo({ y: Math.max(0, y - 8), animated: !reducirMovimiento });
 
   useEffect(() => () => temporizadores.current.forEach(clearTimeout), []);
 
@@ -119,6 +126,9 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
     if (corriendo) return; // un solo envío aunque se toque dos veces
     reiniciar();
     setCorriendo(true);
+    // Se cierra el teclado y se sube al escenario para ver al héroe moverse.
+    Keyboard.dismiss();
+    irA(yEscena.current);
 
     const local = ejecutarTexto(mazmorra, programa, equipo);
     const pasos = local.resultado?.pasos ?? [];
@@ -142,6 +152,8 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
       const [final] = await Promise.all([respuesta, animacion]);
       setResultado(final);
       setLineaActiva(null);
+      // Al terminar, se baja al panel de resultado (cuando ya se dibujó).
+      setTimeout(() => irA(yResultado.current), 120);
       AccessibilityInfo.announceForAccessibility(
         final.correcta ? '¡Saliste de la mazmorra!' : `No lo lograste. ${final.error?.mensaje ?? final.motivo ?? ''}`,
       );
@@ -166,7 +178,11 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
   const estrellas = resultado?.correcta ? 1 + resultado.objetivosCumplidos.filter(Boolean).length : 0;
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={estilos.contenido} keyboardShouldPersistTaps="handled" bottomOffset={24}>
+    <KeyboardAwareScrollView
+      ref={scroll}
+      contentContainerStyle={estilos.contenido}
+      keyboardShouldPersistTaps="handled"
+      bottomOffset={24}>
       <View style={estilos.barra}>
         <Text style={estilos.nombre} accessibilityRole="header" numberOfLines={2}>
           Mazmorra: {mazmorra.nombre}
@@ -174,6 +190,11 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
       </View>
       <Text style={estilos.historia}>{mazmorra.historia}</Text>
 
+      <View
+        style={estilos.escena}
+        onLayout={(e) => {
+          yEscena.current = e.nativeEvent.layout.y;
+        }}>
       <Hud
         vida={hud.vida}
         vidaMax={stats.vidaMax}
@@ -191,6 +212,7 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
         camino={camino}
         danio={danio}
       />
+      </View>
 
       <View style={estilos.filaBotones}>
         <BotonChico texto="📋 Describir" etiqueta="Describir la mazmorra en texto" onPress={() => setVerDescripcion((v) => !v)} />
@@ -275,7 +297,10 @@ export function PantallaMazmorra({ reto, onTerminar, terminando }: Props) {
       {resultado ? (
         <View
           style={[estilos.panel, resultado.correcta ? estilos.panelVictoria : estilos.panelDerrota]}
-          accessibilityLiveRegion="polite">
+          accessibilityLiveRegion="polite"
+          onLayout={(e) => {
+            yResultado.current = e.nativeEvent.layout.y;
+          }}>
           {resultado.correcta ? (
             <>
               <Text style={estilos.tituloVictoria}>✔ ¡Saliste de la mazmorra!</Text>
@@ -337,6 +362,7 @@ function BotonChico({ texto, etiqueta, onPress }: { texto: string; etiqueta: str
 
 const estilos = StyleSheet.create({
   contenido: { padding: Espacio.md, gap: Espacio.sm, paddingBottom: Espacio.xl * 2 },
+  escena: { gap: Espacio.sm },
   flex: { flex: 1 },
   barra: { borderWidth: 2, borderColor: '#1e293b', backgroundColor: Colores.superficie, padding: Espacio.sm },
   nombre: { fontFamily: Fuentes.codigo, fontSize: Tamanos.cuerpo, lineHeight: AlturaLinea.cuerpo, color: Colores.texto },
